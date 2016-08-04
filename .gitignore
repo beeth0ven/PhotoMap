@@ -1,0 +1,5 @@
+/Pods/
+Podfile.lock
+PhotoMap.xcworkspace
+*.xcuserstate
+*.DS_Store 
