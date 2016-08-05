@@ -19,18 +19,15 @@ class LoginProvider: NSObject {
     
     static private let _sharedInstance = LoginProvider()
     
-    var pool: AWSCognitoIdentityUserPool!
-    
-    override init() {
-        super.init()
-        
+    lazy var pool: AWSCognitoIdentityUserPool = {
         let serviceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: nil)
         let poolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: "79bl6lftqc428qicgk6ks7sce0", clientSecret: "5ruegj6svqd46u9uvhh2evc3ctgsi7l1k54l9jkepf0plunrqmg", poolId: "us-east-1_Za9P8cJXp")
         AWSCognitoIdentityUserPool.registerCognitoIdentityUserPoolWithConfiguration(serviceConfiguration, userPoolConfiguration: poolConfiguration, forKey: "UserPool")
-        pool = AWSCognitoIdentityUserPool(forKey: "UserPool")
-        let credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: "us-east-1_Za9P8cJXp", identityProviderManager:pool)
-        pool.delegate = self
-    }
+        let result = AWSCognitoIdentityUserPool(forKey: "UserPool")
+        //        let credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: "us-east-1:3979f71a-86df-4e9b-becb-6f8173abb69b", identityProviderManager:pool)
+        result.delegate = self
+        return result
+    }()
 }
 
 extension LoginProvider: AWSCognitoIdentityInteractiveAuthenticationDelegate {
@@ -52,10 +49,12 @@ extension LoginProvider: AWSCognitoIdentityInteractiveAuthenticationDelegate {
 extension LoginProvider: AWSIdentityProvider {
     
     var identityProviderName: String {
+        print(String(self.dynamicType), #function, pool.identityProviderName)
         return pool.identityProviderName
     }
     
     func token() -> AWSTask {
+        print(String(self.dynamicType), #function)
         return pool.token()
     }
 }
@@ -64,6 +63,7 @@ extension LoginProvider: AWSSignInProvider {
     
     var loggedIn: Bool {
         @objc(isLoggedIn) get {
+            print(String(self.dynamicType), #function, currentUser?.signedIn)
             return currentUser?.signedIn ?? false
         }
     }
@@ -78,7 +78,6 @@ extension LoginProvider: AWSSignInProvider {
     
     func login(completionHandler: (AnyObject, NSError) -> Void) {
         print(String(self.dynamicType), #function)
-        currentUser?.getDetails()
         loginViewController.completionHandler = completionHandler
         loginViewController.doLogin()
     }
@@ -101,7 +100,7 @@ extension LoginProvider: AWSSignInProvider {
         return false
     }
     
-    var currentUser: AWSCognitoIdentityUser? {
+    private var currentUser: AWSCognitoIdentityUser? {
         return pool.currentUser()
     }
     

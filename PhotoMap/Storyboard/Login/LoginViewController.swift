@@ -29,8 +29,6 @@ class LoginViewController: UIViewController {
         AWSFacebookSignInProvider.sharedInstance().setPermissions(["public_profile"]);
         AWSGoogleSignInProvider.sharedInstance().setScopes(["profile", "openid"])
         AWSGoogleSignInProvider.sharedInstance().setViewControllerForGoogleSignIn(self)
-
-        
     }
     
     let disposeBag = DisposeBag()
@@ -48,7 +46,7 @@ class LoginViewController: UIViewController {
             .combineLatest(usernameValid, passwordValid) { $0 && $1 }
             .bindTo(loginButton.rx_enabled)
             .addDisposableTo(disposeBag)
-
+        
     }
     
     
@@ -70,6 +68,7 @@ class LoginViewController: UIViewController {
         AWSIdentityManager.defaultIdentityManager().loginWithSignInProvider(signInProvider) { (result, error) in
             switch error {
             case let error? where error.domain != "success":
+                print("Login failed.")
                 Queue.Main.execute { self.title = "\(signInProvider.identityProviderName)登录失败" }
                 print("登录失败:", error.localizedDescription)
             default:
@@ -82,27 +81,79 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController: AWSCognitoIdentityPasswordAuthentication {
     
-
     func doLogin() {
         print(String(self.dynamicType), #function)
-        passwordAuthenticationCompletion?.setResult(AWSCognitoIdentityPasswordAuthenticationDetails(username: usernameTextField.text!, password: passwordTextField.text!))
+        //        passwordAuthenticationCompletion?.setResult(AWSCognitoIdentityPasswordAuthenticationDetails(username: usernameTextField.text!, password: passwordTextField.text!))
+        
+        pool.getUser(usernameTextField.text!).getSession(usernameTextField.text!, password: passwordTextField.text!, validationData: nil).continueWithBlock { task -> AnyObject? in
+            print("pool.getUser().getSession")
+            print("task.result:", task.result)
+            print("task.error:", task.error)
+            
+            if let session = task.result as? AWSCognitoIdentityUserSession {
+                print("session.idToken:", session.idToken?.tokenString)
+                print("session.accessToken:", session.accessToken?.tokenString)
+                print("session.refreshToken:", session.refreshToken?.tokenString)
+                print("session.expirationTime:", session.expirationTime)
+                
+            }
+            
+            switch (task.result, task.error) {
+            case let (_, error?):
+                Queue.Main.execute {
+                    self.completionHandler?("", error)
+                    self.completionHandler = nil
+                }
+            case let (result?, _):
+                Queue.Main.execute {
+                    self.completionHandler?(result, NSError(domain: "success", code: -1, userInfo: nil))
+                    self.completionHandler = nil
+                }
+            default: break
+            }
+            return nil
+        }
+        
     }
     
     func getPasswordAuthenticationDetails(authenticationInput: AWSCognitoIdentityPasswordAuthenticationInput, passwordAuthenticationCompletionSource: AWSTaskCompletionSource) {
         print(String(self.dynamicType), #function)
-
+        
         self.passwordAuthenticationCompletion = passwordAuthenticationCompletionSource
     }
     
     func didCompletePasswordAuthenticationStepWithError(error: NSError?) {
-        print(String(self.dynamicType), #function)
+        print(String(self.dynamicType), #function, error)
         switch error {
         case let error?:
-            Queue.Main.execute { self.completionHandler?("", error) }
+            Queue.Main.execute {
+                self.completionHandler?("", error)
+                self.completionHandler = nil
+            }
         default:
-            Queue.Main.execute { self.completionHandler?("", NSError(domain: "success", code: -1, userInfo: nil)) }
+            break
+            //
+            //            pool.logins().continueWithBlock({ (task) -> AnyObject? in
+            //                Queue.Main.execute {
+            //                    print("pool.logins().continueWithBlock")
+            //                    print("task.result:", task.result)
+            //                    print("task.error:", task.error)
+            //
+            //                    self.completionHandler?(task.result ?? "", task.error ?? NSError(domain: "success", code: -1, userInfo: nil))
+            //                    self.completionHandler = nil
+            //                }
+            //                return nil
+            //            })
+            //            Queue.Main.execute {
+            //                self.completionHandler?("", NSError(domain: "success", code: -1, userInfo: nil))
+            //                self.completionHandler = nil
+            //            }
         }
-
+        
+    }
+    
+    private var pool: AWSCognitoIdentityUserPool! {
+        return LoginProvider.sharedInstance().pool
     }
 }
 

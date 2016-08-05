@@ -110,7 +110,7 @@ class AWSMobileClient: NSObject {
             isInitialized = true
         }
         
-        AWSLogger.defaultLogger().logLevel = .Verbose
+        AWSLogger.defaultLogger().logLevel = .Error
         
         return didFinishLaunching
     }
