@@ -42,35 +42,10 @@ extension Photo {
     static func rx_insert(title title: String, image: UIImage) -> Observable<Photo> {
         
         return  image.rx_saveToS3()
-            .flatMap { key in Photo(title: title, imageS3Key: key).rx_save() }
+            .map { key in Photo(title: title, imageS3Key: key) }
+            .flatMap { $0.rx_save() }
     }
-    
-    func rx_save() -> Observable<Photo> {
-        
-        return Observable.create { observer in
-            
-            self.mapper.save(self) { error in
-                switch error {
-                case let error?:
-                    observer.onError(error)
-                case nil:
-                    observer.onNext(self)
-                    observer.onCompleted()
-                }
-            }
-            
-            return NopDisposable.instance
-            
-            }.observeOn(MainScheduler.instance)
-    }
-    
-    var mapper: AWSDynamoDBObjectMapper {
-        return self.dynamicType.mapper
-    }
-    
-    static var mapper: AWSDynamoDBObjectMapper {
-        return AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-    }
+
 }
 
 extension Photo {
@@ -83,3 +58,4 @@ extension Photo {
         self.creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
     }
 }
+

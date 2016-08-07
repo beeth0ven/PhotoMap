@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */; };
 		45FBD3C71D52EB4100881DC9 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; };
 		45FBD3C81D52EB4100881DC9 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		45FBD3C91D52EB4100881DC9 /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C31D52EB4100881DC9 /* AWSDynamoDB.framework */; };
@@ -101,6 +102,7 @@
 		1DD70E29F7F866BE00000000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		29C00F262075FB7CE001A831 /* Pods-PhotoMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoMap.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoMap/Pods-PhotoMap.release.xcconfig"; sourceTree = "<group>"; };
 		360F7D06CCF31E01A2EEBC65 /* Pods-PhotoMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoMap.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoMap/Pods-PhotoMap.debug.xcconfig"; sourceTree = "<group>"; };
+		4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSDynamoDB+Rx.swift"; sourceTree = "<group>"; };
 		45FBD3C21D52EB4100881DC9 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = PhotoMap/Sdk/Aws/AWSCore.framework; sourceTree = "<group>"; };
 		45FBD3C31D52EB4100881DC9 /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = PhotoMap/Sdk/Aws/AWSDynamoDB.framework; sourceTree = "<group>"; };
 		45FBD3C41D52EB4100881DC9 /* AWSLambda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSLambda.framework; path = PhotoMap/Sdk/Aws/AWSLambda.framework; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 			isa = PBXGroup;
 			children = (
 				45FBD40C1D52F30100881DC9 /* AWSS3+.swift */,
+				4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */,
 			);
 			path = AWS;
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				45FBD4111D52F30100881DC9 /* AWSS3+.swift in Sources */,
 				45FBD3FD1D52F2F200881DC9 /* LoginViewController.swift in Sources */,
 				45FBD3FA1D52F2F200881DC9 /* ConfirmCodeViewController.swift in Sources */,
+				4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */,
 				45FBD3FC1D52F2F200881DC9 /* LoginProvider.swift in Sources */,
 				E7A30F04F215D26B00000000 /* AppDelegate.swift in Sources */,
 				45FBD4031D52F2F200881DC9 /* Phpto.swift in Sources */,
