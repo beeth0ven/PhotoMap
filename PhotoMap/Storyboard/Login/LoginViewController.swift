@@ -29,6 +29,9 @@ class LoginViewController: UIViewController {
         AWSFacebookSignInProvider.sharedInstance().setPermissions(["public_profile"]);
         AWSGoogleSignInProvider.sharedInstance().setScopes(["profile", "openid"])
         AWSGoogleSignInProvider.sharedInstance().setViewControllerForGoogleSignIn(self)
+        
+        usernameTextField.text = pool.getUser().username
+        
     }
     
     let disposeBag = DisposeBag()
@@ -66,6 +69,12 @@ class LoginViewController: UIViewController {
         title = "正在登录 ..."
         
         AWSIdentityManager.defaultIdentityManager().loginWithSignInProvider(signInProvider) { (result, error) in
+            print("loginWithSignInProvider")
+            print("task.result:", result)
+            print("task.error:", error)
+            print("loggedIn:", LoginProvider.sharedInstance().loggedIn)
+            print("identityId:", AWSIdentityManager.defaultIdentityManager().identityId)
+
             switch error {
             case let error? where error.domain != "success":
                 print("Login failed.")
@@ -91,24 +100,43 @@ extension LoginViewController: AWSCognitoIdentityPasswordAuthentication {
             print("task.error:", task.error)
             
             if let session = task.result as? AWSCognitoIdentityUserSession {
+                
                 print("session.idToken:", session.idToken?.tokenString)
                 print("session.accessToken:", session.accessToken?.tokenString)
                 print("session.refreshToken:", session.refreshToken?.tokenString)
                 print("session.expirationTime:", session.expirationTime)
                 
+//                LoginProvider.sharedInstance().credentialsProvider.identityProvider.identityProviderManager?.logins().continueWithBlock { task -> AnyObject? in
+//                    print("credentialsProvider.logins()")
+//                    print("task.result:", task.result)
+//                    print("task.error:", task.error)
+////                    self.completionHandler?(task.result ?? "", task.error ?? NSError(domain: "success", code: -1, userInfo: nil))
+////                    self.completionHandler = nil
+//                    
+//                    LoginProvider.sharedInstance().credentialsProvider.getIdentityId().continueWithBlock({ task -> AnyObject? in
+//                        print("credentialsProvider.getIdentityId")
+//                        print("task.result:", task.result)
+//                        print("task.error:", task.error)
+//                        let token = session.accessToken!.tokenString
+//                        self.completionHandler?([LoginProvider.sharedInstance().identityProviderName: token], NSError(domain: "success", code: -1, userInfo: nil))
+//                        self.completionHandler = nil
+//                        return nil
+//                    })
+//
+//                    return nil
+//                }
+                
+                
             }
             
             switch (task.result, task.error) {
             case let (_, error?):
-                Queue.Main.execute {
-                    self.completionHandler?("", error)
-                    self.completionHandler = nil
-                }
+                self.completionHandler?("", error)
+                self.completionHandler = nil
             case let (result?, _):
-                Queue.Main.execute {
-                    self.completionHandler?(result, NSError(domain: "success", code: -1, userInfo: nil))
-                    self.completionHandler = nil
-                }
+                let token = (result as! AWSCognitoIdentityUserSession).accessToken!.tokenString
+                self.completionHandler?([LoginProvider.sharedInstance().identityProviderName: token], NSError(domain: "success", code: -1, userInfo: nil))
+                self.completionHandler = nil
             default: break
             }
             return nil

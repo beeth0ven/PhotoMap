@@ -19,15 +19,19 @@ class LoginProvider: NSObject {
     
     static private let _sharedInstance = LoginProvider()
     
-    lazy var pool: AWSCognitoIdentityUserPool = {
+    var pool: AWSCognitoIdentityUserPool!
+    var credentialsProvider: AWSCognitoCredentialsProvider!
+    
+    override init() {
+        super.init()
+        
         let serviceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: nil)
         let poolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: "79bl6lftqc428qicgk6ks7sce0", clientSecret: "5ruegj6svqd46u9uvhh2evc3ctgsi7l1k54l9jkepf0plunrqmg", poolId: "us-east-1_Za9P8cJXp")
         AWSCognitoIdentityUserPool.registerCognitoIdentityUserPoolWithConfiguration(serviceConfiguration, userPoolConfiguration: poolConfiguration, forKey: "UserPool")
-        let result = AWSCognitoIdentityUserPool(forKey: "UserPool")
-        //        let credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: "us-east-1:3979f71a-86df-4e9b-becb-6f8173abb69b", identityProviderManager:pool)
-        result.delegate = self
-        return result
-    }()
+        pool = AWSCognitoIdentityUserPool(forKey: "UserPool")
+        credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: "us-east-1:3979f71a-86df-4e9b-becb-6f8173abb69b", identityProviderManager:pool)
+        pool.delegate = self
+    }
 }
 
 extension LoginProvider: AWSCognitoIdentityInteractiveAuthenticationDelegate {
@@ -49,8 +53,8 @@ extension LoginProvider: AWSCognitoIdentityInteractiveAuthenticationDelegate {
 extension LoginProvider: AWSIdentityProvider {
     
     var identityProviderName: String {
-        print(String(self.dynamicType), #function, pool.identityProviderName)
-        return pool.identityProviderName
+        print(String(self.dynamicType), #function, "cognito-idp.us-east-1.amazonaws.com/\(pool.userPoolConfiguration.poolId)")
+        return "cognito-idp.us-east-1.amazonaws.com/\(pool.userPoolConfiguration.poolId)"
     }
     
     func token() -> AWSTask {
