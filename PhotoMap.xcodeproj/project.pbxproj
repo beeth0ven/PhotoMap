@@ -48,6 +48,7 @@
 		45FBD4131D52FB7200881DC9 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 45FBD3DD1D52EBC700881DC9 /* GoogleSignIn.bundle */; };
 		45FBD4151D5326C100881DC9 /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD4141D5326C100881DC9 /* AWSCognitoIdentityProvider.framework */; };
 		45FBD4161D5326C100881DC9 /* AWSCognitoIdentityProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD4141D5326C100881DC9 /* AWSCognitoIdentityProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		45FBD4181D587B1E00881DC9 /* AWSUserSettings+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBD4171D587B1E00881DC9 /* AWSUserSettings+.swift */; };
 		A3FE18D4CAA66A3632C6CC61 /* Pods_PhotoMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A07531829A51A2CC641C00 /* Pods_PhotoMap.framework */; };
 		E7A30F04126EE2D400000000 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E292E1B7F6500000000 /* UIKit.framework */; };
 		E7A30F04242D329B00000000 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29B4CF36DF00000000 /* Images.xcassets */; };
@@ -136,6 +137,7 @@
 		45FBD40C1D52F30100881DC9 /* AWSS3+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSS3+.swift"; sourceTree = "<group>"; };
 		45FBD40E1D52F30100881DC9 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		45FBD4141D5326C100881DC9 /* AWSCognitoIdentityProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognitoIdentityProvider.framework; path = PhotoMap/Sdk/Aws/AWSCognitoIdentityProvider.framework; sourceTree = "<group>"; };
+		45FBD4171D587B1E00881DC9 /* AWSUserSettings+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSUserSettings+.swift"; sourceTree = "<group>"; };
 		D7A07531829A51A2CC641C00 /* Pods_PhotoMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PhotoMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -264,6 +266,7 @@
 			children = (
 				45FBD40C1D52F30100881DC9 /* AWSS3+.swift */,
 				4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */,
+				45FBD4171D587B1E00881DC9 /* AWSUserSettings+.swift */,
 			);
 			path = AWS;
 			sourceTree = "<group>";
@@ -521,6 +524,7 @@
 				45FBD4011D52F2F200881DC9 /* MenuTableViewController.swift in Sources */,
 				45FBD4061D52F2F200881DC9 /* PushNotificationTableViewController.swift in Sources */,
 				45FBD4111D52F30100881DC9 /* AWSS3+.swift in Sources */,
+				45FBD4181D587B1E00881DC9 /* AWSUserSettings+.swift in Sources */,
 				45FBD3FD1D52F2F200881DC9 /* LoginViewController.swift in Sources */,
 				45FBD3FA1D52F2F200881DC9 /* ConfirmCodeViewController.swift in Sources */,
 				4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */,
