@@ -17,19 +17,20 @@ class MenuTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         if !AWSIdentityManager.defaultIdentityManager().loggedIn {
             presentViewController(LoginViewController.navigationController, animated: true, completion: nil)
         }
         
         NSNotificationCenter.defaultCenter().rx_notification(AWSIdentityManagerDidSignInNotification)
-            .subscribeNext { _ in print("接到登录成功通知！") }
+            .doOnNext { _ in print("接到登录成功通知！") }
+            .flatMapLatest { _ in AWSUserDefaults.sharedInstance.rx_synchronize() }
+            .subscribeNext { userDefaults in print("isUserInfoSetted:", userDefaults.isUserInfoSetted) }
             .addDisposableTo(disposeBag)
         
         NSNotificationCenter.defaultCenter().rx_notification(AWSIdentityManagerDidSignOutNotification)
             .subscribeNext { _ in print("接到登出成功通知！") }
             .addDisposableTo(disposeBag)
-        
-//        LoginProvider.sharedInstance().logout()
         
     }
     
@@ -45,5 +46,13 @@ class MenuTableViewController: UITableViewController {
             }
         }
        
+    }
+}
+
+extension AWSUserDefaults {
+    
+    var isUserInfoSetted: Bool {
+        get { return awsUserDefaults.boolForKey("isUserInfoSetted") }
+        set { awsUserDefaults.setBool(newValue, forKey: "isUserInfoSetted") }
     }
 }

@@ -105,12 +105,12 @@ class AWSMobileClient: NSObject {
 
         if (!isInitialized) {
             AWSIdentityManager.defaultIdentityManager().resumeSessionWithCompletionHandler({(result: AnyObject?, error: NSError?) -> Void in
-                print("Result: \(result) \n Error:\(error)")
+//                print("Result: \(result) \n Error:\(error)")
             })
             isInitialized = true
         }
         
-        AWSLogger.defaultLogger().logLevel = .Verbose
+        AWSLogger.defaultLogger().logLevel = .Error
         
         return didFinishLaunching
     }
