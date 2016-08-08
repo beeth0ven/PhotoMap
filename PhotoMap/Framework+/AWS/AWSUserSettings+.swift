@@ -10,31 +10,18 @@ import UIKit
 import AWSCore
 import AWSCognito
 
-struct UserDefaults: AWSUserDefaultsType {
+struct AWSUserDefaults {
     
-    var awsUserDefaults: AWSCognitoDataset
-    
-    var isUserInfoSetted: Bool {
-        get { return awsUserDefaults.boolForKey("isUserInfoSetted") }
-        set { awsUserDefaults.setBool(newValue, forKey: "isUserInfoSetted") }
-    }
+    private let awsUserDefaults: AWSCognitoDataset
 }
 
-
-protocol AWSUserDefaultsType {
-    var awsUserDefaults: AWSCognitoDataset { get set }
-    init(awsUserDefaults: AWSCognitoDataset)
-}
-
-
-
-extension AWSUserDefaultsType {
+extension AWSUserDefaults {
     
-    static func standardUserSetting() -> Self {
+    static func standardUserDefaults() -> AWSUserDefaults {
         return self.init(awsUserDefaults: AWSCognito.defaultCognito().openOrCreateDataset("user_settings"))
     }
     
-    func synchronize(didSynchronize didSynchronize: (Self) -> Void, didFail: ((NSError) -> Void)? = nil) {
+    func synchronize(didSynchronize didSynchronize: (AWSUserDefaults) -> Void, didFail: ((NSError) -> Void)? = nil) {
         
         awsUserDefaults.synchronize().continueWithBlock { (task) -> AnyObject? in
             
@@ -60,5 +47,12 @@ extension AWSCognitoDataset {
     func setBool(bool: Bool, forKey key: String) {
         let string = bool ? "1" : "0"
         setString(string, forKey: string)
+    }
+}
+
+extension AWSUserDefaults {
+    var isUserInfoSetted: Bool {
+        get { return awsUserDefaults.boolForKey("isUserInfoSetted") }
+        set { awsUserDefaults.setBool(newValue, forKey: "isUserInfoSetted") }
     }
 }
