@@ -10,9 +10,7 @@ import UIKit
 import AWSCore
 import AWSCognito
 
-struct UserSetting: AWSUserSettingType {
-    
-    static var standardUserSetting = UserSetting(awsUserDefaults: AWSCognito.defaultCognito().openOrCreateDataset("user_settings"))
+struct UserDefaults: AWSUserDefaultsType {
     
     var awsUserDefaults: AWSCognitoDataset
     
@@ -20,8 +18,23 @@ struct UserSetting: AWSUserSettingType {
         get { return awsUserDefaults.boolForKey("isUserInfoSetted") }
         set { awsUserDefaults.setBool(newValue, forKey: "isUserInfoSetted") }
     }
+}
+
+
+protocol AWSUserDefaultsType {
+    var awsUserDefaults: AWSCognitoDataset { get set }
+    init(awsUserDefaults: AWSCognitoDataset)
+}
+
+
+
+extension AWSUserDefaultsType {
     
-    func synchronize(didSynchronize didSynchronize: (UserSetting) -> Void, didFail: ((NSError) -> Void)? = nil) {
+    static func standardUserSetting() -> Self {
+        return self.init(awsUserDefaults: AWSCognito.defaultCognito().openOrCreateDataset("user_settings"))
+    }
+    
+    func synchronize(didSynchronize didSynchronize: (Self) -> Void, didFail: ((NSError) -> Void)? = nil) {
         
         awsUserDefaults.synchronize().continueWithBlock { (task) -> AnyObject? in
             
@@ -36,11 +49,6 @@ struct UserSetting: AWSUserSettingType {
             return nil
         }
     }
-}
-
-
-protocol AWSUserSettingType {
-    static var standardUserSetting: Self { get set }
 }
 
 extension AWSCognitoDataset {
