@@ -13,13 +13,13 @@ import RxCocoa
 class MenuDetailController: UIViewController {
     
     let rx_showMenu = Variable(false)
-
+    
     @IBOutlet weak private var showMenuConstraint: NSLayoutConstraint!
     @IBOutlet weak private var hideMenuConstraint: NSLayoutConstraint!
     @IBOutlet weak private var maskButton: UIButton!
     
     private let disposeBag = DisposeBag()
-
+    
     var rx_currentIndex: Variable<Int> {
         return childViewControllerWithType(DetailController)!.rx_currentIndex
     }
@@ -27,18 +27,25 @@ class MenuDetailController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        rx_showMenu
+        let rx_showMenuDriver = rx_showMenu
             .asDriver()
             .distinctUntilChanged()
             .doOnNext { print("rx_showMenu", $0) }
+        
+        rx_showMenuDriver
             .drive(rx_showMenuObserver)
+            .addDisposableTo(disposeBag)
+        
+        rx_showMenuDriver
+            .map { $0 ? UIStatusBarStyle.LightContent : .Default }
+            .drive(rx_preferredStatusBarStyle)
             .addDisposableTo(disposeBag)
         
         maskButton.rx_tap
             .asDriver()
             .drive(rx_toogleShowMenuObserver)
             .addDisposableTo(disposeBag)
-
+        
     }
     
     var rx_toogleShowMenuObserver: AnyObserver<Void> {
@@ -64,6 +71,20 @@ class MenuDetailController: UIViewController {
             
         }).asObserver()
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return _preferredStatusBarStyle
+    }
+    
+    private var _preferredStatusBarStyle = UIStatusBarStyle.Default {
+        didSet { setNeedsStatusBarAppearanceUpdate() }
+    }
+    
+    private var rx_preferredStatusBarStyle: AnyObserver<UIStatusBarStyle> {
+        return UIBindingObserver(UIElement: self, binding: { (selfvc, style) in
+            selfvc._preferredStatusBarStyle = style
+        }).asObserver()
+    }
 }
 
 class DetailController: UIViewController, HasMenuDetailController {
@@ -71,12 +92,12 @@ class DetailController: UIViewController, HasMenuDetailController {
     let rx_currentIndex = Variable(0)
     
     var viewControllers = [Int: UIViewController]()
-
+    
     @IBOutlet weak private var scrollView: UIScrollView!
     @IBOutlet weak private var toggleMenuBarButtonItem: UIBarButtonItem!
     
     private let disposeBag = DisposeBag()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -97,7 +118,7 @@ class DetailController: UIViewController, HasMenuDetailController {
             .drive(menuDetailController!.rx_toogleShowMenuObserver)
             .addDisposableTo(disposeBag)
     }
-
+    
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         return false
