@@ -59,7 +59,7 @@ extension S3DataConvertible {
             let manager = AWSUserFileManager.defaultUserFileManager()
             let content = manager.contentWithKey(key)
             
-            content.downloadWithDownloadType(.IfNotCached, pinOnCompletion: true, progressBlock: { _, _ in print("progressBlock") }) { _, data, error in
+            content.downloadWithDownloadType(.IfNotCached, pinOnCompletion: true, progressBlock: { _, progress in print("progressBlock", progress.percent) }) { _, data, error in
                 switch (error, data) {
                 case let (error?, _):
                     observer.onError(error)
@@ -91,8 +91,8 @@ extension S3DataConvertible {
             let filename = NSDate().timeIntervalSince1970.description + self.extensionName, key = "public/\(filename)"
             
             let content = manager.localContentWithData(data, key: key)
-            
-            content.uploadWithPinOnCompletion(true, progressBlock: { _, _ in print("progressBlock") }) { (_, error) in
+
+            content.uploadWithPinOnCompletion(true, progressBlock: { _, progress in print("progressBlock", progress.percent) }) { (_, error) in
                 switch error {
                 case let error?:
                     observer.onError(error)
@@ -120,3 +120,28 @@ extension UIImage: S3DataConvertible {
         return ".png"
     }
 }
+
+extension String {
+    
+    func toS3URL(s3bucket s3bucket: String = InfoPlist.s3Bucket!) -> NSURL? {
+        let path = "https://s3.amazonaws.com/\(s3bucket)/\(self)"
+        return NSURL(string: path)
+    }
+}
+
+extension InfoPlist {
+    
+    static var s3Bucket: String? {
+        return valueForKeyPath("AWS.UserFileManager.Default.S3Bucket") as? String
+    }
+}
+
+extension NSProgress {
+    
+    var percent: String {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .PercentStyle
+        return formatter.stringFromNumber(NSNumber(double: fractionCompleted))!
+    }
+}
+

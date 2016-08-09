@@ -38,11 +38,11 @@ extension ImageCollectionViewCellModeled {
 extension Photo: ImageCollectionViewCellModeled {
     
     var subtitle: String? {
-        return creationDate?.toDateString
+        return creationTime?.toDateString
     }
     
     var s3ImageKey: String? {
-        return imageS3Key
+        return thumbnailImageS3Key
     }
 }
 

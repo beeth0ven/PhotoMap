@@ -23,9 +23,13 @@ class MenuTableViewController: UITableViewController {
         }
         
         NSNotificationCenter.defaultCenter().rx_notification(AWSIdentityManagerDidSignInNotification)
-            .doOnNext { _ in print("接到登录成功通知！") }
+            .doOnNext { _ in print("接到登录成功通知！");
+//                AWSUserDefaults.sharedInstance.isUserInfoSetted = false
+            }
             .flatMapLatest { _ in AWSUserDefaults.sharedInstance.rx_synchronize() }
-            .subscribeNext { userDefaults in print("isUserInfoSetted:", userDefaults.isUserInfoSetted) }
+            .subscribeNext { userDefaults in
+//                self.title = userDefaults.isUserInfoSetted.description
+                print("isUserInfoSetted:", userDefaults.isUserInfoSetted) }
             .addDisposableTo(disposeBag)
         
         NSNotificationCenter.defaultCenter().rx_notification(AWSIdentityManagerDidSignOutNotification)
