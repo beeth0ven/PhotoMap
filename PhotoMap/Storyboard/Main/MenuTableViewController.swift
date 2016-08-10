@@ -12,9 +12,7 @@ import RxCocoa
 import AWSMobileHubHelper
 
 class MenuTableViewController: UITableViewController {
-    
-    let disposeBag = DisposeBag()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         

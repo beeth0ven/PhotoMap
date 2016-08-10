@@ -29,8 +29,6 @@ class ConfirmCodeViewController: UIViewController {
         setupRx()
     }
     
-    let disposeBag = DisposeBag()
-    
     func setupRx() {
         
         codeTextField

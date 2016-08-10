@@ -8,10 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		4530E58A1D59D31300A09AF0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4530E5891D59D31300A09AF0 /* MenuViewController.swift */; };
+		453D7EEB1D5AB36C009C1B0D /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB901D5A1B310003368D /* AWSMobileHubHelper.framework */; };
+		453D7EED1D5AC4B3009C1B0D /* NSObject+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EEC1D5AC4B3009C1B0D /* NSObject+Rx.swift */; };
+		453D7EEF1D5ACEF0009C1B0D /* NSObject+objc_Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EEE1D5ACEF0009C1B0D /* NSObject+objc_Value.swift */; };
+		453D7EF31D5AF682009C1B0D /* UIView+IBInspectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EF21D5AF682009C1B0D /* UIView+IBInspectable.swift */; };
+		453D7EF61D5B2668009C1B0D /* CoreGraphics+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EF51D5B2668009C1B0D /* CoreGraphics+.swift */; };
 		4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */; };
 		4553EB861D58CCC20003368D /* AWSTask+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB851D58CCC20003368D /* AWSTask+Rx.swift */; };
 		4553EB8D1D58E5240003368D /* Photo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4553EB8C1D58E5240003368D /* Photo.storyboard */; };
-		4553EB931D5A1B4F0003368D /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB901D5A1B310003368D /* AWSMobileHubHelper.framework */; };
 		45FBD3C71D52EB4100881DC9 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; };
 		45FBD3C81D52EB4100881DC9 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		45FBD3C91D52EB4100881DC9 /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C31D52EB4100881DC9 /* AWSDynamoDB.framework */; };
@@ -112,6 +116,10 @@
 		29C00F262075FB7CE001A831 /* Pods-PhotoMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoMap.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoMap/Pods-PhotoMap.release.xcconfig"; sourceTree = "<group>"; };
 		360F7D06CCF31E01A2EEBC65 /* Pods-PhotoMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoMap.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoMap/Pods-PhotoMap.debug.xcconfig"; sourceTree = "<group>"; };
 		4530E5891D59D31300A09AF0 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		453D7EEC1D5AC4B3009C1B0D /* NSObject+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Rx.swift"; sourceTree = "<group>"; };
+		453D7EEE1D5ACEF0009C1B0D /* NSObject+objc_Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+objc_Value.swift"; sourceTree = "<group>"; };
+		453D7EF21D5AF682009C1B0D /* UIView+IBInspectable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+IBInspectable.swift"; sourceTree = "<group>"; };
+		453D7EF51D5B2668009C1B0D /* CoreGraphics+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreGraphics+.swift"; sourceTree = "<group>"; };
 		4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSDynamoDB+Rx.swift"; sourceTree = "<group>"; };
 		4553EB851D58CCC20003368D /* AWSTask+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSTask+Rx.swift"; sourceTree = "<group>"; };
 		4553EB8C1D58E5240003368D /* Photo.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Photo.storyboard; sourceTree = "<group>"; };
@@ -162,7 +170,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4553EB931D5A1B4F0003368D /* AWSMobileHubHelper.framework in Frameworks */,
+				453D7EEB1D5AB36C009C1B0D /* AWSMobileHubHelper.framework in Frameworks */,
 				45FBD3E11D52EBC700881DC9 /* GoogleAppUtilities.framework in Frameworks */,
 				45FBD3E21D52EBC700881DC9 /* GoogleAuthUtilities.framework in Frameworks */,
 				45FBD3E31D52EBC700881DC9 /* GoogleNetworkingUtilities.framework in Frameworks */,
@@ -204,13 +212,21 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		453D7EF41D5B261F009C1B0D /* CoreGraphics+ */ = {
+			isa = PBXGroup;
+			children = (
+				453D7EF51D5B2668009C1B0D /* CoreGraphics+.swift */,
+			);
+			path = "CoreGraphics+";
+			sourceTree = "<group>";
+		};
 		4553EB891D58E43B0003368D /* Photo */ = {
 			isa = PBXGroup;
 			children = (
+				45FBD3F51D52F2F200881DC9 /* Phpto.swift */,
 				4553EB8C1D58E5240003368D /* Photo.storyboard */,
 				45FBD3F11D52F2F200881DC9 /* ImageCollectionViewCell.swift */,
 				45FBD3F41D52F2F200881DC9 /* PhotosCollectionViewController.swift */,
-				45FBD3F51D52F2F200881DC9 /* Phpto.swift */,
 				45FBD3F61D52F2F200881DC9 /* UploadPhotoTableViewController.swift */,
 			);
 			path = Photo;
@@ -275,6 +291,7 @@
 		45FBD4071D52F30100881DC9 /* Framework+ */ = {
 			isa = PBXGroup;
 			children = (
+				453D7EF41D5B261F009C1B0D /* CoreGraphics+ */,
 				45FBD4221D596CCB00881DC9 /* Rx+ */,
 				45FBD40B1D52F30100881DC9 /* AWS */,
 				45FBD40D1D52F30100881DC9 /* Fundation+ */,
@@ -307,6 +324,7 @@
 			children = (
 				45FBD40E1D52F30100881DC9 /* Queue.swift */,
 				45FBD4201D5969A800881DC9 /* InfoPlist.swift */,
+				453D7EEE1D5ACEF0009C1B0D /* NSObject+objc_Value.swift */,
 			);
 			path = "Fundation+";
 			sourceTree = "<group>";
@@ -315,6 +333,7 @@
 			isa = PBXGroup;
 			children = (
 				45FBD4231D596CF600881DC9 /* UIImageView+Rx.swift */,
+				453D7EEC1D5AC4B3009C1B0D /* NSObject+Rx.swift */,
 			);
 			path = "Rx+";
 			sourceTree = "<group>";
@@ -323,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				45FBD4271D59A6DC00881DC9 /* UIKit+.swift */,
+				453D7EF21D5AF682009C1B0D /* UIView+IBInspectable.swift */,
 			);
 			path = "UIKit+";
 			sourceTree = "<group>";
@@ -581,10 +601,14 @@
 				45FBD3FA1D52F2F200881DC9 /* ConfirmCodeViewController.swift in Sources */,
 				45FBD4281D59A6DC00881DC9 /* UIKit+.swift in Sources */,
 				4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */,
+				453D7EF31D5AF682009C1B0D /* UIView+IBInspectable.swift in Sources */,
 				45FBD3FC1D52F2F200881DC9 /* LoginProvider.swift in Sources */,
 				E7A30F04F215D26B00000000 /* AppDelegate.swift in Sources */,
+				453D7EED1D5AC4B3009C1B0D /* NSObject+Rx.swift in Sources */,
 				45FBD42A1D59ADE000881DC9 /* MenuDetailController.swift in Sources */,
+				453D7EEF1D5ACEF0009C1B0D /* NSObject+objc_Value.swift in Sources */,
 				45FBD4031D52F2F200881DC9 /* Phpto.swift in Sources */,
+				453D7EF61D5B2668009C1B0D /* CoreGraphics+.swift in Sources */,
 				45FBD3FE1D52F2F200881DC9 /* SignUpViewController.swift in Sources */,
 				45FBD4241D596CF600881DC9 /* UIImageView+Rx.swift in Sources */,
 				45FBD4021D52F2F200881DC9 /* PhotosCollectionViewController.swift in Sources */,

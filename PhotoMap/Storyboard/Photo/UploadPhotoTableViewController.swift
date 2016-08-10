@@ -20,9 +20,7 @@ class UploadPhotoTableViewController: UITableViewController {
         ipc.delegate = self
         presentViewController(ipc, animated: true, completion: nil)
     }
-    
-    let disposeBag = DisposeBag()
-    
+        
     private func uploadImage(image: UIImage) {
         guard let photoTitle = photoTitleTextField.text
             where photoTitle.characters.count > 0 else {

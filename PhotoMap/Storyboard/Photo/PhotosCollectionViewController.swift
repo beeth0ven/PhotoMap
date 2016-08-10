@@ -18,9 +18,7 @@ class PhotosCollectionViewController: UICollectionViewController, UICollectionVi
         super.viewDidLoad()
         setupRx()
     }
-    
-    let disposeBag = DisposeBag()
-    
+        
     private func setupRx() {
         title = "加载中..."
         

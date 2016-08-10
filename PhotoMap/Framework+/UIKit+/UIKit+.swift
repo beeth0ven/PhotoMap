@@ -22,30 +22,3 @@ extension UIImage {
     }
 }
 
-extension CGSize {
-    
-    static var thumbnaiImagelSize: CGSize {
-        
-        return CGSize(width: 256, height: 256)
-    }
-}
-
-extension CGRect {
-    
-    init(center: CGPoint, size: CGSize) {
-        self.init(origin: CGPoint.zero, size: size)
-        self.center = center
-    }
-    
-    var center: CGPoint {
-        get { return CGPoint(x: CGRectGetMidX(self), y: CGRectGetMidY(self)) }
-        set {
-            origin.x = newValue.x - size.width/2
-            origin.y = newValue.y - size.height/2
-        }
-    }
-}
-
-func *(size: CGSize, scale: CGFloat) -> CGSize {
-    return CGSize(width: size.width * scale, height: size.height * scale)
-}

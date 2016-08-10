@@ -18,8 +18,6 @@ class MenuDetailController: UIViewController {
     @IBOutlet weak private var hideMenuConstraint: NSLayoutConstraint!
     @IBOutlet weak private var maskButton: UIButton!
     
-    private let disposeBag = DisposeBag()
-    
     var rx_currentIndex: Variable<Int> {
         return childViewControllerWithType(DetailController)!.rx_currentIndex
     }
@@ -64,10 +62,22 @@ class MenuDetailController: UIViewController {
             selfvc.showMenuConstraint.active = show
             selfvc.hideMenuConstraint.active = !show
             
-            UIView.animateWithDuration(0.3, animations: {
-                selfvc.maskButton.alpha = show ? 1 : 0
-                selfvc.view.layoutIfNeeded()
-            })
+            UIView.animateWithDuration(
+                0.3,
+                delay: 0,
+                usingSpringWithDamping: 0.7,
+                initialSpringVelocity: 1,
+                options: [],
+                animations: {
+                    selfvc.maskButton.alpha = show ? 1 : 0
+                    selfvc.view.layoutIfNeeded()
+                },
+                completion: nil
+            )
+//            UIView.animateWithDuration(0.3, animations: {
+//                selfvc.maskButton.alpha = show ? 1 : 0
+//                selfvc.view.layoutIfNeeded()
+//            })
             
         }).asObserver()
     }
@@ -95,9 +105,7 @@ class DetailController: UIViewController, HasMenuDetailController {
     
     @IBOutlet weak private var scrollView: UIScrollView!
     @IBOutlet weak private var toggleMenuBarButtonItem: UIBarButtonItem!
-    
-    private let disposeBag = DisposeBag()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -118,7 +126,6 @@ class DetailController: UIViewController, HasMenuDetailController {
             .drive(menuDetailController!.rx_toogleShowMenuObserver)
             .addDisposableTo(disposeBag)
     }
-    
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         return false

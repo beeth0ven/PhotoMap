@@ -23,9 +23,7 @@ class SignUpViewController: UIViewController {
         super.viewDidLoad()
         setupRx()
     }
-    
-    let disposeBag = DisposeBag()
-    
+        
     func setupRx() {
         
         let usernameValid = usernameTextField

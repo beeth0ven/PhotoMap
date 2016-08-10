@@ -33,9 +33,7 @@ class LoginViewController: UIViewController {
         usernameTextField.text = pool.getUser().username
         
     }
-    
-    let disposeBag = DisposeBag()
-    
+        
     func setupRx() {
         let usernameValid = usernameTextField
             .rx_text
