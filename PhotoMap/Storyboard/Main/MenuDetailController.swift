@@ -24,11 +24,11 @@ class MenuDetailController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let rx_showMenuDriver = rx_showMenu
             .asDriver()
             .distinctUntilChanged()
-            .doOnNext { print("rx_showMenu", $0) }
+//            .doOnNext { print("rx_showMenu", $0) }
         
         rx_showMenuDriver
             .drive(rx_showMenuObserver)
@@ -62,22 +62,23 @@ class MenuDetailController: UIViewController {
             selfvc.showMenuConstraint.active = show
             selfvc.hideMenuConstraint.active = !show
             
-            UIView.animateWithDuration(
-                0.3,
-                delay: 0,
-                usingSpringWithDamping: 0.7,
-                initialSpringVelocity: 1,
-                options: [],
-                animations: {
-                    selfvc.maskButton.alpha = show ? 1 : 0
-                    selfvc.view.layoutIfNeeded()
-                },
-                completion: nil
-            )
-//            UIView.animateWithDuration(0.3, animations: {
-//                selfvc.maskButton.alpha = show ? 1 : 0
-//                selfvc.view.layoutIfNeeded()
-//            })
+//            UIView.animateWithDuration(
+//                0.3,
+//                delay: 0,
+//                usingSpringWithDamping: 0.7,
+//                initialSpringVelocity: 1,
+//                options: [],
+//                animations: {
+//                    selfvc.maskButton.alpha = show ? 1 : 0
+//                    selfvc.view.layoutIfNeeded()
+//                },
+//                completion: nil
+//            )
+            
+            UIView.animateWithDuration(0.3, animations: {
+                selfvc.maskButton.alpha = show ? 1 : 0
+                selfvc.view.layoutIfNeeded()
+            })
             
         }).asObserver()
     }
@@ -112,7 +113,7 @@ class DetailController: UIViewController, HasMenuDetailController {
         rx_currentIndex
             .asDriver()
             .distinctUntilChanged()
-            .doOnNext { print("rx_currentIndex", $0) }
+//            .doOnNext { print("rx_currentIndex", $0) }
             .doOnNext { [unowned self] in
                 let offset = CGPoint(x: CGFloat($0) * self.scrollView.bounds.width, y:0)
                 self.scrollView.setContentOffset(offset, animated: false)
@@ -132,7 +133,7 @@ class DetailController: UIViewController, HasMenuDetailController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        print(String(self.dynamicType), #function, segue.identifier)
+//        print(String(self.dynamicType), #function, segue.identifier)
         let index = sender as! Int
         viewControllers[index] = segue.destinationViewController
     }

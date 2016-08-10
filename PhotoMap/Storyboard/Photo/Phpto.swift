@@ -18,6 +18,7 @@ class Photo: AWSDynamoDBObjectModel {
     var imageS3Key: String?
     var thumbnailImageS3Key: String?
     var title: String?
+    
 }
 
 
@@ -46,7 +47,6 @@ extension Photo {
             .map { keys in Photo(title: title, imageS3Key: keys.imageS3Key, thumbnailImageS3Key: keys.thumbnailImageS3Key) }
             .flatMap { $0.rx_save() }
     }
-
 }
 
 extension Photo {

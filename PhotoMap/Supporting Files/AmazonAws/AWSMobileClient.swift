@@ -27,6 +27,7 @@ class AWSMobileClient: NSObject {
     private override init() {
         isInitialized = false
         super.init()
+        handleLogin()
     }
     
     deinit {
@@ -115,3 +116,4 @@ class AWSMobileClient: NSObject {
         return didFinishLaunching
     }
 }
+

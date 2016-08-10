@@ -10,6 +10,20 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+
+extension NSObject {
+    
+    func observe(for name: String) -> Observable<NSNotification> {
+        return NSNotificationCenter.defaultCenter().rx_notification(name)
+    }
+    
+    func postNotification(for name: String, object: AnyObject? = nil, userInfo: [NSObject : AnyObject]? = nil) {
+        let object = object ?? self
+        NSNotificationCenter.defaultCenter().postNotificationName(name, object: object, userInfo: userInfo)
+    }
+}
+
+
 extension NSObject {
     
     var disposeBag: DisposeBag {
@@ -28,4 +42,3 @@ extension NSObject {
         static var disposeBag = "disposeBag"
     }
 }
-
