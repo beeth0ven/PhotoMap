@@ -17,9 +17,11 @@ class UserInfo: AWSDynamoDBObjectModel {
     var followersNumber: NSNumber?
     var displayName: String?
     var imagePath: String?
+}
+
+extension UserInfo {
     
     var imageURL: NSURL? { return imagePath.flatMap(NSURL.init) }
-
 }
 
 extension UserInfo: AWSDynamoDBModeling {
@@ -54,11 +56,46 @@ extension UserInfo {
     }
 }
 
+extension UserInfo {
+    
+    @nonobjc static let cache = NSCache()
+    
+    static func rx_get(userId userId: String) -> Observable<UserInfo?> {
+        
+        switch cache.objectForKey(userId) {
+        case let result as Observable<UserInfo?>:
+            print("new UserInfo from cache")
+            return result
+            
+        default:
+            print("new UserInfo from AWS")
+            let predicate = AWSDynamoDBQueryExpression()
+                .when(key: "userId", isEqualTo: userId)
+            let result = rx_get(predicate: predicate).map { $0.first }.shareReplay(1)
+            cache.setObject(result, forKey: userId)
+            return result
+        }
+    }
+    
+    static func rx_get(userIds userIds: [String]) -> Observable<[UserInfo]> {
+        
+        let rx_userInfos = userIds.map { rx_get(userId: $0) }
+        
+        return rx_userInfos.combineLatest { userInfos in
+            
+            userInfos.flatMap { userInfo in userInfo }
+            
+            }.observeOn(MainScheduler.instance)
+    }
+}
+
 extension AWSIdentityManager {
     
     func rx_saveUserInfo() -> Observable<UserInfo> {
-        let manager = AWSIdentityManager.defaultIdentityManager()
-        return UserInfo(displayName: manager.userName, imagePath: manager.imageURL?.absoluteString)
-        .rx_save()
+        return UserInfo(displayName: userName, imagePath: imageURL?.absoluteString)
+            .rx_save()
     }
 }
+
+
+

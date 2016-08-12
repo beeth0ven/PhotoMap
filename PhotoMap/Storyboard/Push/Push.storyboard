@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E39d" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E39d" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="baG-Td-pcv">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
@@ -14,7 +14,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="AsJ-EG-YB9">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AsJ-EG-YB9" id="7Gj-C4-tDs">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -27,8 +27,32 @@
                             <outlet property="delegate" destination="rvw-Ks-Um1" id="UNQ-LL-04J"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="Avd-Z8-Wns">
+                        <barButtonItem key="leftBarButtonItem" title="三" id="mUc-2V-S7N"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="toggleMenuBarButtonItem" destination="mUc-2V-S7N" id="O6R-wf-xr8"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6a-tK-wGt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1931" y="275"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="tdh-bg-LPj">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="baG-Td-pcv" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="U1Z-hf-yzL">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="rvw-Ks-Um1" kind="relationship" relationship="rootViewController" id="amT-Ze-drc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fYF-1N-hfv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1119" y="275"/>
         </scene>

@@ -66,6 +66,10 @@ class AWSMobileClient: NSObject {
         print("applicationDidBecomeActive:")
     }
     
+    func applicationDidEnterBackground(application: UIApplication) {
+        print(String(self.dynamicType), #function)
+    }
+    
     /**
     * Handles callback from iOS platform indicating push notification registration was a success.
     * - parameter application: application

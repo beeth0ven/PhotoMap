@@ -12,11 +12,16 @@
 		453D7EEF1D5ACEF0009C1B0D /* NSObject+objc_Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EEE1D5ACEF0009C1B0D /* NSObject+objc_Value.swift */; };
 		453D7EF31D5AF682009C1B0D /* UIView+IBInspectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EF21D5AF682009C1B0D /* UIView+IBInspectable.swift */; };
 		453D7EF61D5B2668009C1B0D /* CoreGraphics+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EF51D5B2668009C1B0D /* CoreGraphics+.swift */; };
+		453D7EF71D5C0500009C1B0D /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */; };
+		453D7EFE1D5D601B009C1B0D /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EFD1D5D601B009C1B0D /* DetailController.swift */; };
+		453D7F001D5D6040009C1B0D /* HasMenuDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EFF1D5D6040009C1B0D /* HasMenuDetailController.swift */; };
+		453D7F021D5D71B4009C1B0D /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7F011D5D71B4009C1B0D /* UsersTableViewController.swift */; };
+		453D7F041D5D957D009C1B0D /* UICollectionViewCell+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7F031D5D957D009C1B0D /* UICollectionViewCell+Rx.swift */; };
+		453D7F0A1D5DC680009C1B0D /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7F091D5DC680009C1B0D /* Link.swift */; };
 		4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */; };
 		4553EB861D58CCC20003368D /* AWSTask+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB851D58CCC20003368D /* AWSTask+Rx.swift */; };
 		4553EB8D1D58E5240003368D /* Photo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4553EB8C1D58E5240003368D /* Photo.storyboard */; };
 		4553EB971D5B5DE00003368D /* AWSMobileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB951D5B5DE00003368D /* AWSMobileClient.swift */; };
-		4553EB9B1D5B5E6A0003368D /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */; };
 		4553EB9D1D5B61C70003368D /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB9C1D5B61C70003368D /* UserInfo.swift */; };
 		4553EB9F1D5B69B90003368D /* AWSMobileClient+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB9E1D5B69B90003368D /* AWSMobileClient+.swift */; };
 		4553EBA11D5B787B0003368D /* AWSIdentityManager+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EBA01D5B787B0003368D /* AWSIdentityManager+Rx.swift */; };
@@ -122,6 +127,11 @@
 		453D7EEE1D5ACEF0009C1B0D /* NSObject+objc_Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+objc_Value.swift"; sourceTree = "<group>"; };
 		453D7EF21D5AF682009C1B0D /* UIView+IBInspectable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+IBInspectable.swift"; sourceTree = "<group>"; };
 		453D7EF51D5B2668009C1B0D /* CoreGraphics+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreGraphics+.swift"; sourceTree = "<group>"; };
+		453D7EFD1D5D601B009C1B0D /* DetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
+		453D7EFF1D5D6040009C1B0D /* HasMenuDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HasMenuDetailController.swift; sourceTree = "<group>"; };
+		453D7F011D5D71B4009C1B0D /* UsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
+		453D7F031D5D957D009C1B0D /* UICollectionViewCell+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Rx.swift"; sourceTree = "<group>"; };
+		453D7F091D5DC680009C1B0D /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
 		4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSDynamoDB+Rx.swift"; sourceTree = "<group>"; };
 		4553EB851D58CCC20003368D /* AWSTask+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSTask+Rx.swift"; sourceTree = "<group>"; };
 		4553EB8C1D58E5240003368D /* Photo.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Photo.storyboard; sourceTree = "<group>"; };
@@ -174,7 +184,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4553EB9B1D5B5E6A0003368D /* AWSMobileHubHelper.framework in Frameworks */,
+				453D7EF71D5C0500009C1B0D /* AWSMobileHubHelper.framework in Frameworks */,
 				45FBD3E11D52EBC700881DC9 /* GoogleAppUtilities.framework in Frameworks */,
 				45FBD3E21D52EBC700881DC9 /* GoogleAuthUtilities.framework in Frameworks */,
 				45FBD3E31D52EBC700881DC9 /* GoogleNetworkingUtilities.framework in Frameworks */,
@@ -284,9 +294,12 @@
 			isa = PBXGroup;
 			children = (
 				4553EB9C1D5B61C70003368D /* UserInfo.swift */,
+				453D7F011D5D71B4009C1B0D /* UsersTableViewController.swift */,
 				45FBD3F21D52F2F200881DC9 /* Main.storyboard */,
 				4530E5891D59D31300A09AF0 /* MenuViewController.swift */,
 				45FBD4291D59ADE000881DC9 /* MenuDetailController.swift */,
+				453D7EFD1D5D601B009C1B0D /* DetailController.swift */,
+				453D7EFF1D5D6040009C1B0D /* HasMenuDetailController.swift */,
 				45FBD42B1D59B3B700881DC9 /* UIViewController+.swift */,
 			);
 			path = Main;
@@ -295,6 +308,7 @@
 		45FBD3F71D52F2F200881DC9 /* Push */ = {
 			isa = PBXGroup;
 			children = (
+				453D7F091D5DC680009C1B0D /* Link.swift */,
 				45FBD3F81D52F2F200881DC9 /* Push.storyboard */,
 				45FBD3F91D52F2F200881DC9 /* PushNotificationTableViewController.swift */,
 			);
@@ -340,6 +354,7 @@
 			children = (
 				45FBD4231D596CF600881DC9 /* UIImageView+Rx.swift */,
 				453D7EEC1D5AC4B3009C1B0D /* NSObject+Rx.swift */,
+				453D7F031D5D957D009C1B0D /* UICollectionViewCell+Rx.swift */,
 			);
 			path = "Rx+";
 			sourceTree = "<group>";
@@ -599,6 +614,7 @@
 				45FBD4041D52F2F200881DC9 /* UploadPhotoTableViewController.swift in Sources */,
 				45FBD4211D5969A800881DC9 /* InfoPlist.swift in Sources */,
 				45FBD4061D52F2F200881DC9 /* PushNotificationTableViewController.swift in Sources */,
+				453D7F041D5D957D009C1B0D /* UICollectionViewCell+Rx.swift in Sources */,
 				4553EB971D5B5DE00003368D /* AWSMobileClient.swift in Sources */,
 				45FBD4111D52F30100881DC9 /* AWSS3+.swift in Sources */,
 				45FBD4181D587B1E00881DC9 /* AWSUserDefaults+.swift in Sources */,
@@ -608,8 +624,10 @@
 				4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */,
 				453D7EF31D5AF682009C1B0D /* UIView+IBInspectable.swift in Sources */,
 				45FBD3FC1D52F2F200881DC9 /* LoginProvider.swift in Sources */,
+				453D7F0A1D5DC680009C1B0D /* Link.swift in Sources */,
 				E7A30F04F215D26B00000000 /* AppDelegate.swift in Sources */,
 				453D7EED1D5AC4B3009C1B0D /* NSObject+Rx.swift in Sources */,
+				453D7F021D5D71B4009C1B0D /* UsersTableViewController.swift in Sources */,
 				45FBD42A1D59ADE000881DC9 /* MenuDetailController.swift in Sources */,
 				453D7EEF1D5ACEF0009C1B0D /* NSObject+objc_Value.swift in Sources */,
 				45FBD4031D52F2F200881DC9 /* Phpto.swift in Sources */,
@@ -620,6 +638,8 @@
 				45FBD4021D52F2F200881DC9 /* PhotosCollectionViewController.swift in Sources */,
 				4553EB9D1D5B61C70003368D /* UserInfo.swift in Sources */,
 				4553EB9F1D5B69B90003368D /* AWSMobileClient+.swift in Sources */,
+				453D7EFE1D5D601B009C1B0D /* DetailController.swift in Sources */,
+				453D7F001D5D6040009C1B0D /* HasMenuDetailController.swift in Sources */,
 				4530E58A1D59D31300A09AF0 /* MenuViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

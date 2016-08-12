@@ -27,15 +27,17 @@ extension UIImageView {
     
     private var s3_setImageDisposeBag: DisposeBag {
         get {
-            if let disposeBag = objc_getAssociatedObject(self, &AssociatedKeys.s3_setImageDisposeBag) as? DisposeBag {
-                return disposeBag
+            switch objc_getValue(key: &AssociatedKeys.s3_setImageDisposeBag) {
+            case let result as DisposeBag:
+                return result
+            default:
+                let result = DisposeBag()
+                objc_set(value: result, key: &AssociatedKeys.s3_setImageDisposeBag)
+                return result
             }
-            let disposeBag = DisposeBag()
-            objc_setAssociatedObject(self, &AssociatedKeys.s3_setImageDisposeBag, disposeBag, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            return disposeBag
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedKeys.s3_setImageDisposeBag, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_set(value: disposeBag, key: &AssociatedKeys.s3_setImageDisposeBag)
         }
     }
     

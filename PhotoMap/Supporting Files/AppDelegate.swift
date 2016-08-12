@@ -33,6 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
     }
     
+    func applicationDidEnterBackground(application: UIApplication) {
+        AWSMobileClient.sharedInstance.applicationDidEnterBackground(application)
+    }
+    
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         AWSMobileClient.sharedInstance.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
     }

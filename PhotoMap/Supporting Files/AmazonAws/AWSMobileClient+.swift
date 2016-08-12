@@ -18,6 +18,7 @@ extension AWSMobileClient {
     func handleLogin() {
 //        print(String(self.dynamicType), #function)
         observe(for: AWSIdentityManagerDidSignInNotification)
+            .throttle(0.5, scheduler: MainScheduler.instance)
             .doOnNext { _ in print("接到登录成功通知！") }
             .flatMapLatest { _ in AWSUserDefaults.sharedInstance.rx_synchronize() }
             .filter { !$0.isUserInfoSetted }

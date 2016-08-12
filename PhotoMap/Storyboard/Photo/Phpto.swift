@@ -21,6 +21,13 @@ class Photo: AWSDynamoDBObjectModel {
     
 }
 
+extension Photo{
+    
+    var rx_user: Observable<UserInfo?> {
+        return userId.flatMap { UserInfo.rx_get(userId: $0) } ?? Observable.just(nil)
+    }
+}
+
 
 extension Photo: AWSDynamoDBModeling {
     
@@ -35,15 +42,19 @@ extension Photo: AWSDynamoDBModeling {
     static func rangeKeyAttribute() -> String {
         return "creationTime"
     }
-    
 }
 
+extension Photo {
+    
+    @nonobjc static let cache = NSCache()
+    
+    
+}
 
 extension Photo {
     
     static func rx_insert(title title: String, image: UIImage) -> Observable<Photo> {
-        let thumbnailImage = image.thumbnailImage()
-        return Observable.combineLatest(image.rx_saveToS3(), thumbnailImage.rx_saveToS3()) { (imageS3Key: $0, thumbnailImageS3Key: $1) }
+        return Observable.combineLatest(image.rx_saveToS3(), image.thumbnailImage().rx_saveToS3()) { (imageS3Key: $0, thumbnailImageS3Key: $1) }
             .map { keys in Photo(title: title, imageS3Key: keys.imageS3Key, thumbnailImageS3Key: keys.thumbnailImageS3Key) }
             .flatMap { $0.rx_save() }
     }

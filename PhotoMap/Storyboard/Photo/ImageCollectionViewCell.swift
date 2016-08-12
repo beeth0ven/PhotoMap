@@ -10,48 +10,20 @@ import UIKit
 import AWSS3
 import AWSMobileHubHelper
 
-class ImageCollectionViewCell: UICollectionViewCell {
+class ImageCollectionViewCell: RxCollectionViewCell {
+    
     @IBOutlet weak private var imageView: UIImageView!
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var subtitleLabel: UILabel!
     
-    func update(with model: ImageCollectionViewCellModeled) {
+    func update(with model: Photo) {
+        
+        imageView.s3_setImage(key: model.thumbnailImageS3Key)
         titleLabel.text = model.title
-        subtitleLabel.text = model.subtitle
-        imageView.s3_setImage(key: model.s3ImageKey)
-    }
-}
-
-
-protocol ImageCollectionViewCellModeled {
-    var title: String? { get }
-    var subtitle: String? { get }
-    var s3ImageKey: String? { get }
-}
-
-extension ImageCollectionViewCellModeled {
-    var subtitle: String? {
-        return nil
-    }
-}
-
-extension Photo: ImageCollectionViewCellModeled {
-    
-    var subtitle: String? {
-        return creationTime?.toDateString
-    }
-    
-    var s3ImageKey: String? {
-        return thumbnailImageS3Key
-    }
-}
-
-extension NSNumber {
-    var toDateString: String? {
-        let date = NSDate(timeIntervalSince1970: doubleValue)
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .ShortStyle
-        dateFormatter.timeStyle = .ShortStyle
-        return dateFormatter.stringFromDate(date)
+        model.rx_user
+            .subscribeNext { [unowned self] userInfo in
+                self.subtitleLabel.text = userInfo?.displayName
+            }
+            .addDisposableTo(prepareForReuseDisposeBag)
     }
 }

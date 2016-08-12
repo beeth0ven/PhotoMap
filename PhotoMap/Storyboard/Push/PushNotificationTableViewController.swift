@@ -11,8 +11,10 @@ import RxSwift
 import RxCocoa
 import AWSMobileHubHelper
 
-class PushNotificationTableViewController: UITableViewController {
+class PushNotificationTableViewController: UITableViewController, HasMenuDetailController, DetailChildViewControllerType {
     
+    @IBOutlet weak var toggleMenuBarButtonItem: UIBarButtonItem!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,6 +25,9 @@ class PushNotificationTableViewController: UITableViewController {
         if let topicARNs = pushManager.topicARNs {
             pushManager.registerTopicARNs(topicARNs)
         }
+        
+        rx_bindToggleShowMenu()
+
     }
 }
 

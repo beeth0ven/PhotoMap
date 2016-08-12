@@ -20,17 +20,17 @@ extension AWSIdentityManager {
             print("rx_logout error:", error)
         }
         
-//        return Observable.create({ (obsever) -> Disposable in
+//        return Observable.create({ (observer) -> Disposable in
 //
 //            AWSIdentityManager.defaultIdentityManager().logoutWithCompletionHandler { (result, error) in
 //                print("rx_logout result:", result)
 //                print("rx_logout error:", error)
 //                switch error {
 //                case let error?:
-//                    obsever.onError(error)
+//                    observer.onError(error)
 //                default:
-//                    obsever.onNext()
-//                    obsever.onCompleted()
+//                    observer.onNext()
+//                    observer.onCompleted()
 //                }
 //            }
 //            
