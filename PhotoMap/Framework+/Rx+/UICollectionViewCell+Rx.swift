@@ -14,7 +14,6 @@ class RxCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        print(String(self.dynamicType), #function)
         prepareForReuseDisposeBag = DisposeBag()
     }
     
@@ -25,7 +24,6 @@ class RxTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        print(String(self.dynamicType), #function)
         prepareForReuseDisposeBag = DisposeBag()
     }
     

@@ -14,21 +14,25 @@ import RxSwift
 class Link: AWSDynamoDBObjectModel {
     
     var fromUserId: String?
-    var toItemId: String?
-    var content: String?
     var creationTime: NSNumber?
-    var kindRawValue: NSNumber?
     var toUserId: String?
+    var toItemId: NSNumber?
+    var kindRawValue: NSNumber?
+    var content: String?
 }
 
 extension Link {
     
     var rx_fromUser: Observable<UserInfo?> {
-        return fromUserId.flatMap { UserInfo.rx_get(userId: $0) } ?? Observable.just(nil)
+        return fromUserId.flatMap { UserInfo.rx_get(hashValue: $0) } ?? Observable.just(nil)
     }
     
     var rx_toUser: Observable<UserInfo?> {
-        return toUserId.flatMap { UserInfo.rx_get(userId: $0) } ?? Observable.just(nil)
+        return toUserId.flatMap { UserInfo.rx_get(hashValue: $0) } ?? Observable.just(nil)
+    }
+    
+    var rx_photo: Observable<Photo?> {
+        return toItemId.flatMap { Photo.rx_get(hashValue: $0) } ?? Observable.just(nil)
     }
     
     var kind: Kind! {
@@ -54,7 +58,7 @@ extension Link: AWSDynamoDBModeling {
     }
     
     static func rangeKeyAttribute() -> String {
-        return "toItemId"
+        return "creationTime"
     }
     
 }

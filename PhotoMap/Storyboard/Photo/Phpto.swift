@@ -13,21 +13,21 @@ import RxSwift
 
 class Photo: AWSDynamoDBObjectModel {
     
-    var userId: String?
+    var userReference: String?
     var creationTime: NSNumber?
+    var commentsNumber: NSNumber?
     var imageS3Key: String?
+    var likesNumber: NSNumber?
     var thumbnailImageS3Key: String?
     var title: String?
-    
 }
 
-extension Photo{
-    
+extension Photo {
+
     var rx_user: Observable<UserInfo?> {
-        return userId.flatMap { UserInfo.rx_get(userId: $0) } ?? Observable.just(nil)
+        return userReference.flatMap { UserInfo.rx_get(reference: $0) } ?? Observable.just(nil, scheduler: MainScheduler.instance)
     }
 }
-
 
 extension Photo: AWSDynamoDBModeling {
     
@@ -36,7 +36,7 @@ extension Photo: AWSDynamoDBModeling {
     }
     
     static func hashKeyAttribute() -> String {
-        return "userId"
+        return "userReference"
     }
     
     static func rangeKeyAttribute() -> String {
@@ -46,28 +46,27 @@ extension Photo: AWSDynamoDBModeling {
 
 extension Photo {
     
-    @nonobjc static let cache = NSCache()
-    
-    
-}
-
-extension Photo {
-    
     static func rx_insert(title title: String, image: UIImage) -> Observable<Photo> {
         return Observable.combineLatest(image.rx_saveToS3(), image.thumbnailImage().rx_saveToS3()) { (imageS3Key: $0, thumbnailImageS3Key: $1) }
-            .map { keys in Photo(title: title, imageS3Key: keys.imageS3Key, thumbnailImageS3Key: keys.thumbnailImageS3Key) }
+            .flatMap { keys in Photo.rx_init(title: title, imageS3Key: keys.imageS3Key, thumbnailImageS3Key: keys.thumbnailImageS3Key) }
             .flatMap { $0.rx_save() }
     }
 }
 
 extension Photo {
     
-    convenience init(title: String, imageS3Key: String, thumbnailImageS3Key: String) {
-        self.init()
-        self.userId = AWSIdentityManager.defaultIdentityManager().identityId!
-        self.title = title
-        self.imageS3Key = imageS3Key
-        self.thumbnailImageS3Key = thumbnailImageS3Key
-        self.creationTime = NSNumber(double: NSDate().timeIntervalSince1970)
+    static func rx_init(title title: String, imageS3Key: String, thumbnailImageS3Key: String) -> Observable<Photo> {
+        
+        return UserInfo.currentUserInfo.map {
+            let photo = Photo()
+            photo.userReference = $0!.reference!
+            photo.creationTime = NSNumber.currentTimeNumber
+            photo.commentsNumber = 0
+            photo.imageS3Key = imageS3Key
+            photo.thumbnailImageS3Key = thumbnailImageS3Key
+            photo.likesNumber = 0
+            photo.title = title
+            return photo
+        }
     }
 }

@@ -12,7 +12,6 @@
 		453D7EEF1D5ACEF0009C1B0D /* NSObject+objc_Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EEE1D5ACEF0009C1B0D /* NSObject+objc_Value.swift */; };
 		453D7EF31D5AF682009C1B0D /* UIView+IBInspectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EF21D5AF682009C1B0D /* UIView+IBInspectable.swift */; };
 		453D7EF61D5B2668009C1B0D /* CoreGraphics+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EF51D5B2668009C1B0D /* CoreGraphics+.swift */; };
-		453D7EF71D5C0500009C1B0D /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */; };
 		453D7EFE1D5D601B009C1B0D /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EFD1D5D601B009C1B0D /* DetailController.swift */; };
 		453D7F001D5D6040009C1B0D /* HasMenuDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EFF1D5D6040009C1B0D /* HasMenuDetailController.swift */; };
 		453D7F021D5D71B4009C1B0D /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7F011D5D71B4009C1B0D /* UsersTableViewController.swift */; };
@@ -25,6 +24,11 @@
 		4553EB9D1D5B61C70003368D /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB9C1D5B61C70003368D /* UserInfo.swift */; };
 		4553EB9F1D5B69B90003368D /* AWSMobileClient+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB9E1D5B69B90003368D /* AWSMobileClient+.swift */; };
 		4553EBA11D5B787B0003368D /* AWSIdentityManager+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EBA01D5B787B0003368D /* AWSIdentityManager+Rx.swift */; };
+		456447551D5E1A0A000BC22A /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */; };
+		456447571D5E1B69000BC22A /* Fundation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456447561D5E1B69000BC22A /* Fundation+.swift */; };
+		456447591D5E1BDB000BC22A /* NSURL+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456447581D5E1BDB000BC22A /* NSURL+.swift */; };
+		4564475B1D60173C000BC22A /* NSJSONSerialization+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4564475A1D60173C000BC22A /* NSJSONSerialization+.swift */; };
+		4564475D1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4564475C1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift */; };
 		45FBD3C71D52EB4100881DC9 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; };
 		45FBD3C81D52EB4100881DC9 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		45FBD3C91D52EB4100881DC9 /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C31D52EB4100881DC9 /* AWSDynamoDB.framework */; };
@@ -129,17 +133,21 @@
 		453D7EF51D5B2668009C1B0D /* CoreGraphics+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreGraphics+.swift"; sourceTree = "<group>"; };
 		453D7EFD1D5D601B009C1B0D /* DetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
 		453D7EFF1D5D6040009C1B0D /* HasMenuDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HasMenuDetailController.swift; sourceTree = "<group>"; };
-		453D7F011D5D71B4009C1B0D /* UsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
+		453D7F011D5D71B4009C1B0D /* UsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UsersTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		453D7F031D5D957D009C1B0D /* UICollectionViewCell+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Rx.swift"; sourceTree = "<group>"; };
-		453D7F091D5DC680009C1B0D /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
-		4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSDynamoDB+Rx.swift"; sourceTree = "<group>"; };
+		453D7F091D5DC680009C1B0D /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Link.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "AWSDynamoDB+Rx.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4553EB851D58CCC20003368D /* AWSTask+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSTask+Rx.swift"; sourceTree = "<group>"; };
 		4553EB8C1D58E5240003368D /* Photo.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Photo.storyboard; sourceTree = "<group>"; };
 		4553EB951D5B5DE00003368D /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
 		4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileHubHelper.framework; path = "PhotoMap/Supporting Files/AmazonAws/AWSMobileHubHelper.framework"; sourceTree = "<group>"; };
-		4553EB9C1D5B61C70003368D /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		4553EB9C1D5B61C70003368D /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UserInfo.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4553EB9E1D5B69B90003368D /* AWSMobileClient+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSMobileClient+.swift"; sourceTree = "<group>"; };
 		4553EBA01D5B787B0003368D /* AWSIdentityManager+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSIdentityManager+Rx.swift"; sourceTree = "<group>"; };
+		456447561D5E1B69000BC22A /* Fundation+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Fundation+.swift"; sourceTree = "<group>"; };
+		456447581D5E1BDB000BC22A /* NSURL+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL+.swift"; sourceTree = "<group>"; };
+		4564475A1D60173C000BC22A /* NSJSONSerialization+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSJSONSerialization+.swift"; sourceTree = "<group>"; };
+		4564475C1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AWSDynamoDBObjectModelType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		45FBD3C21D52EB4100881DC9 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = PhotoMap/Sdk/Aws/AWSCore.framework; sourceTree = "<group>"; };
 		45FBD3C31D52EB4100881DC9 /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = PhotoMap/Sdk/Aws/AWSDynamoDB.framework; sourceTree = "<group>"; };
 		45FBD3C41D52EB4100881DC9 /* AWSLambda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSLambda.framework; path = PhotoMap/Sdk/Aws/AWSLambda.framework; sourceTree = "<group>"; };
@@ -163,7 +171,7 @@
 		45FBD3F11D52F2F200881DC9 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		45FBD3F21D52F2F200881DC9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		45FBD3F41D52F2F200881DC9 /* PhotosCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewController.swift; sourceTree = "<group>"; };
-		45FBD3F51D52F2F200881DC9 /* Phpto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Phpto.swift; sourceTree = "<group>"; };
+		45FBD3F51D52F2F200881DC9 /* Phpto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Phpto.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		45FBD3F61D52F2F200881DC9 /* UploadPhotoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadPhotoTableViewController.swift; sourceTree = "<group>"; };
 		45FBD3F81D52F2F200881DC9 /* Push.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Push.storyboard; sourceTree = "<group>"; };
 		45FBD3F91D52F2F200881DC9 /* PushNotificationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationTableViewController.swift; sourceTree = "<group>"; };
@@ -184,7 +192,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				453D7EF71D5C0500009C1B0D /* AWSMobileHubHelper.framework in Frameworks */,
+				456447551D5E1A0A000BC22A /* AWSMobileHubHelper.framework in Frameworks */,
 				45FBD3E11D52EBC700881DC9 /* GoogleAppUtilities.framework in Frameworks */,
 				45FBD3E21D52EBC700881DC9 /* GoogleAuthUtilities.framework in Frameworks */,
 				45FBD3E31D52EBC700881DC9 /* GoogleNetworkingUtilities.framework in Frameworks */,
@@ -332,6 +340,7 @@
 			children = (
 				45FBD40C1D52F30100881DC9 /* AWSS3+.swift */,
 				4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */,
+				4564475C1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift */,
 				4553EBA01D5B787B0003368D /* AWSIdentityManager+Rx.swift */,
 				4553EB851D58CCC20003368D /* AWSTask+Rx.swift */,
 				45FBD4171D587B1E00881DC9 /* AWSUserDefaults+.swift */,
@@ -342,9 +351,12 @@
 		45FBD40D1D52F30100881DC9 /* Fundation+ */ = {
 			isa = PBXGroup;
 			children = (
+				456447561D5E1B69000BC22A /* Fundation+.swift */,
+				4564475A1D60173C000BC22A /* NSJSONSerialization+.swift */,
 				45FBD40E1D52F30100881DC9 /* Queue.swift */,
 				45FBD4201D5969A800881DC9 /* InfoPlist.swift */,
 				453D7EEE1D5ACEF0009C1B0D /* NSObject+objc_Value.swift */,
+				456447581D5E1BDB000BC22A /* NSURL+.swift */,
 			);
 			path = "Fundation+";
 			sourceTree = "<group>";
@@ -609,6 +621,7 @@
 			files = (
 				45FBD3FF1D52F2F200881DC9 /* ImageCollectionViewCell.swift in Sources */,
 				45FBD4121D52F30100881DC9 /* Queue.swift in Sources */,
+				456447571D5E1B69000BC22A /* Fundation+.swift in Sources */,
 				45FBD42C1D59B3B700881DC9 /* UIViewController+.swift in Sources */,
 				4553EB861D58CCC20003368D /* AWSTask+Rx.swift in Sources */,
 				45FBD4041D52F2F200881DC9 /* UploadPhotoTableViewController.swift in Sources */,
@@ -623,6 +636,7 @@
 				45FBD4281D59A6DC00881DC9 /* UIKit+.swift in Sources */,
 				4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */,
 				453D7EF31D5AF682009C1B0D /* UIView+IBInspectable.swift in Sources */,
+				4564475B1D60173C000BC22A /* NSJSONSerialization+.swift in Sources */,
 				45FBD3FC1D52F2F200881DC9 /* LoginProvider.swift in Sources */,
 				453D7F0A1D5DC680009C1B0D /* Link.swift in Sources */,
 				E7A30F04F215D26B00000000 /* AppDelegate.swift in Sources */,
@@ -637,9 +651,11 @@
 				45FBD4241D596CF600881DC9 /* UIImageView+Rx.swift in Sources */,
 				45FBD4021D52F2F200881DC9 /* PhotosCollectionViewController.swift in Sources */,
 				4553EB9D1D5B61C70003368D /* UserInfo.swift in Sources */,
+				4564475D1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift in Sources */,
 				4553EB9F1D5B69B90003368D /* AWSMobileClient+.swift in Sources */,
 				453D7EFE1D5D601B009C1B0D /* DetailController.swift in Sources */,
 				453D7F001D5D6040009C1B0D /* HasMenuDetailController.swift in Sources */,
+				456447591D5E1BDB000BC22A /* NSURL+.swift in Sources */,
 				4530E58A1D59D31300A09AF0 /* MenuViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

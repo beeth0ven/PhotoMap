@@ -14,8 +14,9 @@ import RxSwift
 class UserInfo: AWSDynamoDBObjectModel {
     
     var userId: String?
-    var followersNumber: NSNumber?
+    var creationTime: NSNumber?
     var displayName: String?
+    var followersNumber: NSNumber?
     var imagePath: String?
 }
 
@@ -35,9 +36,8 @@ extension UserInfo: AWSDynamoDBModeling {
     }
     
     static func rangeKeyAttribute() -> String {
-        return "followersNumber"
+        return "creationTime"
     }
-    
 }
 
 extension UserInfo {
@@ -45,49 +45,44 @@ extension UserInfo {
     convenience init(displayName: String?, imagePath: String?) {
         self.init()
         self.userId = AWSIdentityManager.defaultIdentityManager().identityId!
-        self.followersNumber = 0
+        self.creationTime = NSNumber.currentTimeNumber
         self.displayName = displayName
+        self.followersNumber = 0
         self.imagePath = imagePath
-        
-        print("userId:", userId)
-        print("followersNumber:", followersNumber)
-        print("displayName:", displayName)
-        print("imagePath:", imagePath)
     }
 }
 
 extension UserInfo {
     
-    @nonobjc static let cache = NSCache()
-    
-    static func rx_get(userId userId: String) -> Observable<UserInfo?> {
+    static var currentUserInfo: Observable<UserInfo?> {
+        let manager = AWSIdentityManager.defaultIdentityManager()
+        guard let userId = manager.identityId where manager.loggedIn == true else {
+            return Observable.just(nil, scheduler: MainScheduler.instance)
+        }
         
         switch cache.objectForKey(userId) {
-        case let result as Observable<UserInfo?>:
-            print("new UserInfo from cache")
+        case let result  as Observable<UserInfo?>:
             return result
             
         default:
-            print("new UserInfo from AWS")
             let predicate = AWSDynamoDBQueryExpression()
                 .when(key: "userId", isEqualTo: userId)
-            let result = rx_get(predicate: predicate).map { $0.first }.shareReplay(1)
+            
+            let result = rx_get(predicate: predicate)
+                .map { $0.first }
+                .shareReplay(1)
+            
             cache.setObject(result, forKey: userId)
+            
             return result
         }
+
     }
     
-    static func rx_get(userIds userIds: [String]) -> Observable<[UserInfo]> {
-        
-        let rx_userInfos = userIds.map { rx_get(userId: $0) }
-        
-        return rx_userInfos.combineLatest { userInfos in
-            
-            userInfos.flatMap { userInfo in userInfo }
-            
-            }.observeOn(MainScheduler.instance)
-    }
+    private static let cache = NSCache()
+    
 }
+
 
 extension AWSIdentityManager {
     
