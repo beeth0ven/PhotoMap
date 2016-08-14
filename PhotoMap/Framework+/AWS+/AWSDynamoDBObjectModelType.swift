@@ -125,10 +125,10 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
 //    }
     
     static func rx_get(reference reference: String) -> Observable<Self?> {
-        guard let parameters = NSJSONSerialization.parameters(from: reference), hashValue = parameters["hashKey"] else {
+        guard let parameters = NSJSONSerialization.parameters(from: reference), hashValue = parameters.element(at: 0) else {
             return Observable.just(nil, scheduler: MainScheduler.instance)
         }
-        return rx_get(hashValue: hashValue, rangeValue: parameters["rangeKey"])
+        return rx_get(hashValue: hashValue, rangeValue: parameters.element(at: 1))
     }
     
     static func rx_get(references references: [String]) -> Observable<[Self]> {
@@ -148,10 +148,10 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
         
         switch (valueForKey(hashKey), rangeKey) {
         case let (hashValue?, nil):
-            return NSJSONSerialization.string(from: ["hashKey": hashValue])
+            return NSJSONSerialization.string(from: [hashValue])
         case let (hashValue?, rangeKey?):
             let rangeValue = valueForKey(rangeKey)
-            return rangeValue.flatMap { NSJSONSerialization.string(from: ["hashKey": hashValue, "rangeKey": $0]) }
+            return rangeValue.flatMap { NSJSONSerialization.string(from: [hashValue, $0]) }
         default:
             return nil
         }

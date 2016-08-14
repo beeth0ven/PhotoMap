@@ -32,8 +32,8 @@ class UsersTableViewController: UITableViewController, HasMenuDetailController, 
         
 //        UserInfo.rx_getAll()
         UserInfo.rx_get(references: [
-            "{\"rangeKey\":1471156438.289722,\"hashKey\":\"us-east-1:c78ba7fb-c24b-4757-9c8d-68e22a1e2159\"}",
-            "{\"rangeKey\":1471156478.923095,\"hashKey\":\"us-east-1:dbf2ecae-5735-41d1-862a-a822d0ded00f\"}"])
+            "[\"us-east-1:c78ba7fb-c24b-4757-9c8d-68e22a1e2159\",1471156438.289722]",
+            "[\"us-east-1:dbf2ecae-5735-41d1-862a-a822d0ded00f\",1471156478.923095]"])
             .doOnError { [unowned self] error in self.title = "用户信息获取失败"; print(error) }
             .doOnCompleted { [unowned self] in self.title = "用户信息获取成功" }
             .bindTo(tableView!.rx_itemsWithCellIdentifier("UITableViewCell")) { index, userInfo, cell in

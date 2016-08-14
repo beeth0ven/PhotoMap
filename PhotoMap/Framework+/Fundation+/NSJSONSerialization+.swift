@@ -10,16 +10,16 @@ import Foundation
 
 extension NSJSONSerialization {
     
-    static func parameters(from string: String) -> [String: AnyObject]? {
+    static func parameters(from string: String) -> [AnyObject]? {
         if let
             data = string.dataUsingEncoding(NSUTF8StringEncoding),
-            parameters = try? JSONObjectWithData(data, options: []) as? [String: AnyObject] {
+            parameters = (try? JSONObjectWithData(data, options: [])) as? [AnyObject] {
             return parameters
         }
         return nil
     }
     
-    static func string(from parameters: [String: AnyObject]) -> String? {
+    static func string(from parameters: [AnyObject]) -> String? {
         if let
             data = try? dataWithJSONObject(parameters, options: []) {
             return String(data: data, encoding: NSUTF8StringEncoding)
