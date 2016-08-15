@@ -17,6 +17,7 @@
 		453D7F021D5D71B4009C1B0D /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7F011D5D71B4009C1B0D /* UsersTableViewController.swift */; };
 		453D7F041D5D957D009C1B0D /* UICollectionViewCell+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7F031D5D957D009C1B0D /* UICollectionViewCell+Rx.swift */; };
 		453D7F0A1D5DC680009C1B0D /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7F091D5DC680009C1B0D /* Link.swift */; };
+		453D7F0B1D6151E6009C1B0D /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */; };
 		4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */; };
 		4553EB861D58CCC20003368D /* AWSTask+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB851D58CCC20003368D /* AWSTask+Rx.swift */; };
 		4553EB8D1D58E5240003368D /* Photo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4553EB8C1D58E5240003368D /* Photo.storyboard */; };
@@ -24,7 +25,6 @@
 		4553EB9D1D5B61C70003368D /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB9C1D5B61C70003368D /* UserInfo.swift */; };
 		4553EB9F1D5B69B90003368D /* AWSMobileClient+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EB9E1D5B69B90003368D /* AWSMobileClient+.swift */; };
 		4553EBA11D5B787B0003368D /* AWSIdentityManager+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4553EBA01D5B787B0003368D /* AWSIdentityManager+Rx.swift */; };
-		456447551D5E1A0A000BC22A /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */; };
 		456447571D5E1B69000BC22A /* Fundation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456447561D5E1B69000BC22A /* Fundation+.swift */; };
 		456447591D5E1BDB000BC22A /* NSURL+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456447581D5E1BDB000BC22A /* NSURL+.swift */; };
 		4564475B1D60173C000BC22A /* NSJSONSerialization+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4564475A1D60173C000BC22A /* NSJSONSerialization+.swift */; };
@@ -192,7 +192,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				456447551D5E1A0A000BC22A /* AWSMobileHubHelper.framework in Frameworks */,
+				453D7F0B1D6151E6009C1B0D /* AWSMobileHubHelper.framework in Frameworks */,
 				45FBD3E11D52EBC700881DC9 /* GoogleAppUtilities.framework in Frameworks */,
 				45FBD3E21D52EBC700881DC9 /* GoogleAuthUtilities.framework in Frameworks */,
 				45FBD3E31D52EBC700881DC9 /* GoogleNetworkingUtilities.framework in Frameworks */,

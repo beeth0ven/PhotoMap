@@ -53,7 +53,7 @@ extension LoginProvider: AWSCognitoIdentityInteractiveAuthenticationDelegate {
 extension LoginProvider: AWSIdentityProvider {
     
     var identityProviderName: String {
-        print(String(self.dynamicType), #function, "cognito-idp.us-east-1.amazonaws.com/\(pool.userPoolConfiguration.poolId)")
+//        print(String(self.dynamicType), #function, "cognito-idp.us-east-1.amazonaws.com/\(pool.userPoolConfiguration.poolId)")
         return "cognito-idp.us-east-1.amazonaws.com/\(pool.userPoolConfiguration.poolId)"
     }
     
@@ -67,7 +67,7 @@ extension LoginProvider: AWSSignInProvider {
     
     var loggedIn: Bool {
         @objc(isLoggedIn) get {
-            print(String(self.dynamicType), #function, currentUser?.signedIn)
+//            print(String(self.dynamicType), #function, currentUser?.signedIn)
             return currentUser?.signedIn ?? false
         }
     }
@@ -93,7 +93,10 @@ extension LoginProvider: AWSSignInProvider {
     
     func reloadSession() {
         print(String(self.dynamicType), #function)
-        currentUser?.getSession()
+        currentUser?.getSession().rx_result
+            .doOnError { print($0) }
+            .subscribeNext { _ in  AWSIdentityManager.defaultIdentityManager().didLogin() }
+            .addDisposableTo(disposeBag)
     }
     
     func interceptApplication(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
@@ -109,3 +112,5 @@ extension LoginProvider: AWSSignInProvider {
     }
     
 }
+
+

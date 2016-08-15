@@ -67,12 +67,19 @@ class LoginViewController: UIViewController {
         title = "正在登录 ..."
         
         AWSIdentityManager.defaultIdentityManager().loginWithSignInProvider(signInProvider) { (result, error) in
-            print("loginWithSignInProvider")
-            print("task.result:", result)
-            print("task.error:", error)
-            print("loggedIn:", LoginProvider.sharedInstance().loggedIn)
+            print("defaultIdentityManager().loginWithSignInProvider")
+//            print("task.result:", result)
+//            print("task.error:", error)
+            print("currentUser:", LoginProvider.sharedInstance().pool.currentUser())
+            print("currentUser.username:", LoginProvider.sharedInstance().pool.currentUser()?.username)
+            print("LoginProvider.loggedIn:", LoginProvider.sharedInstance().loggedIn)
+            print("AWSIdentityManager.loggedIn:", AWSIdentityManager.defaultIdentityManager().loggedIn)
             print("identityId:", AWSIdentityManager.defaultIdentityManager().identityId)
+            print("userName:", AWSIdentityManager.defaultIdentityManager().userName)
+            print("imageURL:", AWSIdentityManager.defaultIdentityManager().imageURL)
 
+
+            
             switch error {
             case let error? where error.domain != "success":
                 print("Login failed.")
@@ -127,13 +134,16 @@ extension LoginViewController: AWSCognitoIdentityPasswordAuthentication {
                 
             }
             
+            
             switch (task.result, task.error) {
             case let (_, error?):
                 self.completionHandler?("", error)
                 self.completionHandler = nil
             case let (result?, _):
-                let token = (result as! AWSCognitoIdentityUserSession).accessToken!.tokenString
-                self.completionHandler?([LoginProvider.sharedInstance().identityProviderName: token], NSError(domain: "success", code: -1, userInfo: nil))
+//                let token = (result as! AWSCognitoIdentityUserSession).accessToken!.tokenString
+                AWSIdentityManager.defaultIdentityManager().didLogin()
+
+                self.completionHandler?(result, NSError(domain: "success", code: -1, userInfo: nil))
                 self.completionHandler = nil
             default: break
             }
@@ -192,3 +202,8 @@ extension LoginViewController {
     }
 }
 
+extension AWSIdentityManager {
+    func didLogin() {
+        performSelector("completeLogin")
+    }
+}

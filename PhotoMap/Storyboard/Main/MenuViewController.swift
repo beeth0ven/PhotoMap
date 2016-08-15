@@ -21,6 +21,15 @@ class MenuViewController: UIViewController, HasMenuDetailController {
         
         updateUserInfoViews()
         
+        print(String(self.dynamicType), #function)
+        print("currentUser:", LoginProvider.sharedInstance().pool.currentUser())
+        print("currentUser.username:", LoginProvider.sharedInstance().pool.currentUser()?.username)
+        print("LoginProvider.loggedIn:", LoginProvider.sharedInstance().loggedIn)
+        print("AWSIdentityManager.loggedIn:", AWSIdentityManager.defaultIdentityManager().loggedIn)
+        print("identityId:", AWSIdentityManager.defaultIdentityManager().identityId)
+        print("userName:", AWSIdentityManager.defaultIdentityManager().userName)
+        print("imageURL:", AWSIdentityManager.defaultIdentityManager().imageURL)
+
         if !identityManager.loggedIn {
             Queue.Main.execute { self.presentViewController(LoginViewController.navigationController, animated: true, completion: nil) }
         }
@@ -48,7 +57,16 @@ class MenuViewController: UIViewController, HasMenuDetailController {
     }
     
     @IBAction func logout(sender: UIButton) {
+        
         if identityManager.loggedIn  {
+            print(String(self.dynamicType), #function)
+            print("currentUser:", LoginProvider.sharedInstance().pool.currentUser())
+            print("currentUser.username:", LoginProvider.sharedInstance().pool.currentUser()?.username)
+            print("LoginProvider.loggedIn:", LoginProvider.sharedInstance().loggedIn)
+            print("AWSIdentityManager.loggedIn:", AWSIdentityManager.defaultIdentityManager().loggedIn)
+            print("identityId:", AWSIdentityManager.defaultIdentityManager().identityId)
+            print("userName:", AWSIdentityManager.defaultIdentityManager().userName)
+            print("imageURL:", AWSIdentityManager.defaultIdentityManager().imageURL)
             identityManager.rx_logout()
         }
     }
