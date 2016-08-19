@@ -4,6 +4,21 @@
 <dict>
 	<key>AWS</key>
 	<dict>
+		<key>PushManager</key>
+		<dict>
+			<key>Default</key>
+			<dict>
+				<key>SNSConfiguredTopics</key>
+				<array>
+					<string>arn:aws:sns:us-east-1:649756765455:photomap_alldevices_MOBILEHUB_567053031</string>
+					<string></string>
+				</array>
+				<key>Region</key>
+				<string>us-east-1</string>
+				<key>SNSPlatformApplicationARN</key>
+				<string>arn:aws:sns:us-east-1:649756765455:app/APNS/photomap_MOBILEHUB_567053031</string>
+			</dict>
+		</dict>
 		<key>CloudLogic</key>
 		<dict>
 			<key>Default</key>
@@ -56,21 +71,6 @@
 		<dict>
 			<key>ProjectClientId</key>
 			<string>MobileHub 927b8931-e9ff-47a7-b549-c2aaee902ce7 aws-my-sample-app-ios-swift-v0.2</string>
-		</dict>
-		<key>PushManager</key>
-		<dict>
-			<key>Default</key>
-			<dict>
-				<key>Region</key>
-				<string>us-east-1</string>
-				<key>SNSConfiguredTopics</key>
-				<array>
-					<string>arn:aws:sns:us-east-1:649756765455:photomap_alldevices_MOBILEHUB_567053031</string>
-					<string></string>
-				</array>
-				<key>SNSPlatformApplicationARN</key>
-				<string>arn:aws:sns:us-east-1:649756765455:app/APNS/photomap_MOBILEHUB_567053031</string>
-			</dict>
 		</dict>
 		<key>UserFileManager</key>
 		<dict>

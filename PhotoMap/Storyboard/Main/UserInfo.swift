@@ -18,6 +18,7 @@ class UserInfo: AWSDynamoDBObjectModel {
     var displayName: String?
     var followersNumber: NSNumber?
     var imagePath: String?
+    var snsTopicArn: String?
 }
 
 extension UserInfo {

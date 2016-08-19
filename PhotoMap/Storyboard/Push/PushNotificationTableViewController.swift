@@ -67,7 +67,11 @@ extension PushNotificationTableViewController: AWSPushManagerDelegate {
 extension PushNotificationTableViewController: AWSPushTopicDelegate {
     
     func topicDidSubscribe(topic: AWSPushTopic) {
-        print(String(self.dynamicType), #function)
+        print(String(self.dynamicType), #function, topic)
+        print("topicName:", topic.topicName)
+        print("topicARN:", topic.topicARN)
+        print("subscriptionARN:", topic.subscriptionARN)
+        print("endpointARN:", AWSPushManager.defaultPushManager().endpointARN)
         Queue.Main.execute { self.title = "主题订阅成功" }
     }
     
