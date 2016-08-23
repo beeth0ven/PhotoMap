@@ -19,21 +19,13 @@ class Link: AWSDynamoDBObjectModel {
     var itemReference: String?
     var kindRawValue: NSNumber?
     var content: String?
+    
+    lazy var rx_fromUser: Observable<UserInfo?> = UserInfo.rx_get(reference: self.fromUserReference)
+    lazy var rx_toUser: Observable<UserInfo?> = UserInfo.rx_get(reference: self.toUserReference)
+    lazy var rx_photo: Observable<Photo?> = Photo.rx_get(reference: self.itemReference)
 }
 
 extension Link: AWSModelHasCreationDate {
-    
-    var rx_fromUser: Observable<UserInfo?> {
-        return fromUserReference.flatMap { UserInfo.rx_get(reference: $0) } ?? Observable.just(nil)
-    }
-    
-    var rx_toUser: Observable<UserInfo?> {
-        return toUserReference.flatMap { UserInfo.rx_get(reference: $0) } ?? Observable.just(nil)
-    }
-    
-    var rx_photo: Observable<Photo?> {
-        return itemReference.flatMap { Photo.rx_get(reference: $0) } ?? Observable.just(nil)
-    }
     
     var kind: Kind! {
         get { return Kind(rawValue: kindRawValue!.integerValue) }

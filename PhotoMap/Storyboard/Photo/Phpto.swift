@@ -20,6 +20,9 @@ class Photo: AWSDynamoDBObjectModel {
     var likesNumber: NSNumber?
     var thumbnailImageS3Key: String?
     var title: String?
+    
+    lazy var rx_user: Observable<UserInfo?> = UserInfo.rx_get(reference: self.userReference)
+    lazy var recentComments: Observable<[Link]> = Link.rx_getComments(from: self, limit: 5)
 }
 
 extension Photo: AWSModelHasCreationDate {
@@ -32,14 +35,6 @@ extension Photo: AWSModelHasCreationDate {
     var commentsCount: Int {
         get { return commentsNumber?.integerValue ?? 0 }
         set { commentsNumber = NSNumber(integer: newValue) }
-    }
-
-    var rx_user: Observable<UserInfo?> {
-        return userReference.flatMap { UserInfo.rx_get(reference: $0) } ?? Observable.just(nil, scheduler: MainScheduler.instance)
-    }
-    
-    var recentComments: Observable<[Link]> {
-        return Link.rx_getComments(from: self, limit: 5)
     }
 }
 

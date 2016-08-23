@@ -124,8 +124,8 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
 //            }.observeOn(MainScheduler.instance)
 //    }
     
-    static func rx_get(reference reference: String) -> Observable<Self?> {
-        guard let parameters = NSJSONSerialization.parameters(from: reference), hashValue = parameters.element(at: 0) else {
+    static func rx_get(reference reference: String?) -> Observable<Self?> {
+        guard let reference = reference, parameters = NSJSONSerialization.parameters(from: reference), hashValue = parameters.element(at: 0) else {
             return Observable.just(nil, scheduler: MainScheduler.instance)
         }
         return rx_get(hashValue: hashValue, rangeValue: parameters.element(at: 1))
