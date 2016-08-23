@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4530E58A1D59D31300A09AF0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4530E5891D59D31300A09AF0 /* MenuViewController.swift */; };
-		453733DC1D66A1260087D43D /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */; };
 		453D7EED1D5AC4B3009C1B0D /* NSObject+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EEC1D5AC4B3009C1B0D /* NSObject+Rx.swift */; };
 		453D7EEF1D5ACEF0009C1B0D /* NSObject+objc_Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EEE1D5ACEF0009C1B0D /* NSObject+objc_Value.swift */; };
 		453D7EF31D5AF682009C1B0D /* UIView+IBInspectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7EF21D5AF682009C1B0D /* UIView+IBInspectable.swift */; };
@@ -29,6 +28,10 @@
 		456447591D5E1BDB000BC22A /* NSURL+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456447581D5E1BDB000BC22A /* NSURL+.swift */; };
 		4564475B1D60173C000BC22A /* NSJSONSerialization+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4564475A1D60173C000BC22A /* NSJSONSerialization+.swift */; };
 		4564475D1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4564475C1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift */; };
+		459EFEC01D6BEEC0005557F7 /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */; };
+		45F99D6F1D6BF59D0029EC08 /* AWSModelHasCreationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F99D6E1D6BF59D0029EC08 /* AWSModelHasCreationDate.swift */; };
+		45F99D711D6C2D230029EC08 /* PhotoDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F99D701D6C2D230029EC08 /* PhotoDetailTableViewController.swift */; };
+		45F99D731D6C312E0029EC08 /* AddCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F99D721D6C312E0029EC08 /* AddCommentViewController.swift */; };
 		45FBD3C71D52EB4100881DC9 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; };
 		45FBD3C81D52EB4100881DC9 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		45FBD3C91D52EB4100881DC9 /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C31D52EB4100881DC9 /* AWSDynamoDB.framework */; };
@@ -140,7 +143,7 @@
 		4553EB851D58CCC20003368D /* AWSTask+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSTask+Rx.swift"; sourceTree = "<group>"; };
 		4553EB8C1D58E5240003368D /* Photo.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Photo.storyboard; sourceTree = "<group>"; };
 		4553EB951D5B5DE00003368D /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
-		4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileHubHelper.framework; path = "PhotoMap/Supporting Files/AmazonAws/AWSMobileHubHelper.framework"; sourceTree = "<group>"; };
+		4553EB961D5B5DE00003368D /* AWSMobileHubHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileHubHelper.framework; path = PhotoMap/SupportingFiles/AmazonAws/AWSMobileHubHelper.framework; sourceTree = "<group>"; };
 		4553EB9C1D5B61C70003368D /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UserInfo.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4553EB9E1D5B69B90003368D /* AWSMobileClient+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSMobileClient+.swift"; sourceTree = "<group>"; };
 		4553EBA01D5B787B0003368D /* AWSIdentityManager+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AWSIdentityManager+Rx.swift"; sourceTree = "<group>"; };
@@ -148,6 +151,9 @@
 		456447581D5E1BDB000BC22A /* NSURL+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL+.swift"; sourceTree = "<group>"; };
 		4564475A1D60173C000BC22A /* NSJSONSerialization+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSJSONSerialization+.swift"; sourceTree = "<group>"; };
 		4564475C1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AWSDynamoDBObjectModelType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		45F99D6E1D6BF59D0029EC08 /* AWSModelHasCreationDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSModelHasCreationDate.swift; sourceTree = "<group>"; };
+		45F99D701D6C2D230029EC08 /* PhotoDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoDetailTableViewController.swift; sourceTree = "<group>"; };
+		45F99D721D6C312E0029EC08 /* AddCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCommentViewController.swift; sourceTree = "<group>"; };
 		45FBD3C21D52EB4100881DC9 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = PhotoMap/Sdk/Aws/AWSCore.framework; sourceTree = "<group>"; };
 		45FBD3C31D52EB4100881DC9 /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = PhotoMap/Sdk/Aws/AWSDynamoDB.framework; sourceTree = "<group>"; };
 		45FBD3C41D52EB4100881DC9 /* AWSLambda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSLambda.framework; path = PhotoMap/Sdk/Aws/AWSLambda.framework; sourceTree = "<group>"; };
@@ -192,7 +198,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				453733DC1D66A1260087D43D /* AWSMobileHubHelper.framework in Frameworks */,
+				459EFEC01D6BEEC0005557F7 /* AWSMobileHubHelper.framework in Frameworks */,
 				45FBD3E11D52EBC700881DC9 /* GoogleAppUtilities.framework in Frameworks */,
 				45FBD3E21D52EBC700881DC9 /* GoogleAuthUtilities.framework in Frameworks */,
 				45FBD3E31D52EBC700881DC9 /* GoogleNetworkingUtilities.framework in Frameworks */,
@@ -250,6 +256,8 @@
 				45FBD3F11D52F2F200881DC9 /* ImageCollectionViewCell.swift */,
 				45FBD3F41D52F2F200881DC9 /* PhotosCollectionViewController.swift */,
 				45FBD3F61D52F2F200881DC9 /* UploadPhotoTableViewController.swift */,
+				45F99D701D6C2D230029EC08 /* PhotoDetailTableViewController.swift */,
+				45F99D721D6C312E0029EC08 /* AddCommentViewController.swift */,
 			);
 			path = Photo;
 			sourceTree = "<group>";
@@ -263,7 +271,7 @@
 			path = AmazonAws;
 			sourceTree = "<group>";
 		};
-		45FBD3E81D52F19500881DC9 /* Supporting Files */ = {
+		45FBD3E81D52F19500881DC9 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
 				4553EB941D5B5DE00003368D /* AmazonAws */,
@@ -272,7 +280,7 @@
 				1DD70E29B4CF36DF00000000 /* Images.xcassets */,
 				1DD70E29386FC04F00000000 /* Launch Screen.storyboard */,
 			);
-			path = "Supporting Files";
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 		45FBD3E91D52F2F200881DC9 /* Storyboard */ = {
@@ -340,6 +348,7 @@
 			children = (
 				45FBD40C1D52F30100881DC9 /* AWSS3+.swift */,
 				4553EB831D576DA70003368D /* AWSDynamoDB+Rx.swift */,
+				45F99D6E1D6BF59D0029EC08 /* AWSModelHasCreationDate.swift */,
 				4564475C1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift */,
 				4553EBA01D5B787B0003368D /* AWSIdentityManager+Rx.swift */,
 				4553EB851D58CCC20003368D /* AWSTask+Rx.swift */,
@@ -439,7 +448,7 @@
 			children = (
 				45FBD3E91D52F2F200881DC9 /* Storyboard */,
 				45FBD4071D52F30100881DC9 /* Framework+ */,
-				45FBD3E81D52F19500881DC9 /* Supporting Files */,
+				45FBD3E81D52F19500881DC9 /* SupportingFiles */,
 			);
 			path = PhotoMap;
 			sourceTree = SOURCE_ROOT;
@@ -622,6 +631,7 @@
 				45FBD3FF1D52F2F200881DC9 /* ImageCollectionViewCell.swift in Sources */,
 				45FBD4121D52F30100881DC9 /* Queue.swift in Sources */,
 				456447571D5E1B69000BC22A /* Fundation+.swift in Sources */,
+				45F99D711D6C2D230029EC08 /* PhotoDetailTableViewController.swift in Sources */,
 				45FBD42C1D59B3B700881DC9 /* UIViewController+.swift in Sources */,
 				4553EB861D58CCC20003368D /* AWSTask+Rx.swift in Sources */,
 				45FBD4041D52F2F200881DC9 /* UploadPhotoTableViewController.swift in Sources */,
@@ -634,6 +644,7 @@
 				45FBD3FD1D52F2F200881DC9 /* LoginViewController.swift in Sources */,
 				45FBD3FA1D52F2F200881DC9 /* ConfirmCodeViewController.swift in Sources */,
 				45FBD4281D59A6DC00881DC9 /* UIKit+.swift in Sources */,
+				45F99D6F1D6BF59D0029EC08 /* AWSModelHasCreationDate.swift in Sources */,
 				4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */,
 				453D7EF31D5AF682009C1B0D /* UIView+IBInspectable.swift in Sources */,
 				4564475B1D60173C000BC22A /* NSJSONSerialization+.swift in Sources */,
@@ -647,6 +658,7 @@
 				45FBD4031D52F2F200881DC9 /* Phpto.swift in Sources */,
 				453D7EF61D5B2668009C1B0D /* CoreGraphics+.swift in Sources */,
 				45FBD3FE1D52F2F200881DC9 /* SignUpViewController.swift in Sources */,
+				45F99D731D6C312E0029EC08 /* AddCommentViewController.swift in Sources */,
 				4553EBA11D5B787B0003368D /* AWSIdentityManager+Rx.swift in Sources */,
 				45FBD4241D596CF600881DC9 /* UIImageView+Rx.swift in Sources */,
 				45FBD4021D52F2F200881DC9 /* PhotosCollectionViewController.swift in Sources */,
@@ -723,10 +735,9 @@
 					"$(PROJECT_DIR)/PhotoMap/Sdk/Aws/extras",
 					"$(PROJECT_DIR)/PhotoMap/Sdk/Facebook",
 					"$(PROJECT_DIR)/PhotoMap/Sdk/Google",
-					"$(PROJECT_DIR)/PhotoMap/Supporting",
-					Files/AmazonAws,
+					"$(PROJECT_DIR)/PhotoMap/SupportingFiles/AmazonAws",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/PhotoMap/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/PhotoMap/SupportingFiles/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -809,10 +820,10 @@
 					"$(PROJECT_DIR)/PhotoMap/Sdk/Aws/extras",
 					"$(PROJECT_DIR)/PhotoMap/Sdk/Facebook",
 					"$(PROJECT_DIR)/PhotoMap/Sdk/Google",
-					"$(PROJECT_DIR)/PhotoMap/Supporting",
-					Files/AmazonAws,
+					"$(PROJECT_DIR)/PhotoMap/SupportingFiles/AmazonAws",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/PhotoMap/Supporting Files/Info.plist";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INFOPLIST_FILE = "$(SRCROOT)/PhotoMap/SupportingFiles/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -824,6 +835,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.beeth0ven.PhotoMap;
 				PRODUCT_NAME = PhotoMap;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;

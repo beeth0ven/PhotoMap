@@ -22,10 +22,24 @@ class Photo: AWSDynamoDBObjectModel {
     var title: String?
 }
 
-extension Photo {
+extension Photo: AWSModelHasCreationDate {
+    
+    var likesCount: Int {
+        get { return likesNumber?.integerValue ?? 0 }
+        set { likesNumber = NSNumber(integer: newValue) }
+    }
+    
+    var commentsCount: Int {
+        get { return commentsNumber?.integerValue ?? 0 }
+        set { commentsNumber = NSNumber(integer: newValue) }
+    }
 
     var rx_user: Observable<UserInfo?> {
         return userReference.flatMap { UserInfo.rx_get(reference: $0) } ?? Observable.just(nil, scheduler: MainScheduler.instance)
+    }
+    
+    var recentComments: Observable<[Link]> {
+        return Link.rx_getComments(from: self, limit: 5)
     }
 }
 
@@ -60,7 +74,7 @@ extension Photo {
         return UserInfo.currentUserInfo.map {
             let photo = Photo()
             photo.userReference = $0!.reference!
-            photo.creationTime = NSNumber.currentTimeNumber
+            photo.creationDate = NSDate()
             photo.commentsNumber = 0
             photo.imageS3Key = imageS3Key
             photo.thumbnailImageS3Key = thumbnailImageS3Key

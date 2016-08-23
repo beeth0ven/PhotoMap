@@ -14,16 +14,27 @@ class ImageCollectionViewCell: RxCollectionViewCell {
     
     @IBOutlet weak private var imageView: UIImageView!
     @IBOutlet weak private var titleLabel: UILabel!
-    @IBOutlet weak private var subtitleLabel: UILabel!
+    @IBOutlet weak private var likesCountLabel: UILabel!
+    @IBOutlet weak private var commentsCountLabel: UILabel!
+
+    @IBOutlet weak private var userImageView: UIImageView!
+    @IBOutlet weak private var usernameLabel: UILabel!
     
-    func update(with model: Photo) {
+    var photo: Photo! {
         
-        imageView.s3_setImage(key: model.thumbnailImageS3Key)
-        titleLabel.text = model.title
-        model.rx_user
-            .subscribeNext { [unowned self] userInfo in
-                self.subtitleLabel.text = userInfo?.displayName
-            }
-            .addDisposableTo(prepareForReuseDisposeBag)
+        didSet {
+            
+            imageView.s3_setImage(key: photo.thumbnailImageS3Key)
+            titleLabel.text = photo.title
+            likesCountLabel.text = "likes: \(photo.likesCount)"
+            commentsCountLabel.text = "comments: \(photo.commentsCount)"
+            
+            photo.rx_user
+                .subscribeNext { [unowned self] userInfo in
+                    self.usernameLabel.text = userInfo?.displayName
+                    self.userImageView.rx_setImage(url: userInfo?.imageURL)
+                }
+                .addDisposableTo(prepareForReuseDisposeBag)
+        }
     }
 }

@@ -21,7 +21,12 @@ class UserInfo: AWSDynamoDBObjectModel {
     var snsTopicArn: String?
 }
 
-extension UserInfo {
+extension UserInfo: AWSModelHasCreationDate {
+    
+    var followersCount: Int {
+        get { return followersNumber?.integerValue ?? 0 }
+        set { followersNumber = NSNumber(integer: newValue) }
+    }
     
     var imageURL: NSURL? { return imagePath.flatMap(NSURL.init) }
 }

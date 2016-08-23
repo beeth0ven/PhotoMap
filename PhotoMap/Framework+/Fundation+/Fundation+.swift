@@ -35,3 +35,26 @@ extension Array {
         return self[index]
     }
 }
+
+extension NSDate {
+    
+    func toTimeIntervalNumber() -> NSNumber {
+        return NSNumber(double: timeIntervalSince1970)
+    }
+    
+    convenience init(timeIntervalNumber: NSNumber) {
+        self.init(timeIntervalSince1970: timeIntervalNumber.doubleValue)
+    }
+}
+
+
+extension NSDateFormatter {
+    
+    static func string(from date: NSDate) -> String {
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .ShortStyle
+        dateFormatter.timeStyle = .ShortStyle
+        return dateFormatter.stringFromDate(date)
+    }
+}

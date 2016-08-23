@@ -40,16 +40,51 @@ extension AWSDynamoDBQueryExpression {
         return self
     }
     
-//    func when(reference reference: String) -> AWSDynamoDBQueryExpression {
-//        
-//        let matches = NSURL.parameters(from: reference)
-//
-//        matches.forEach { key, value in
-//            when(key: key, isEqualTo: value)
-//        }
-//        
-//        return self
-//    }
+    func filter(key key: String, isEqualTo object: AnyObject) -> AWSDynamoDBQueryExpression {
+        
+        switch filterExpression {
+        case nil:
+            filterExpression = "#\(key) = :\(key)"
+        default:
+            filterExpression! += " AND #\(key) = :\(key)"
+        }
+        
+        switch expressionAttributeNames {
+        case nil:
+            expressionAttributeNames = ["#\(key)": "\(key)",]
+        default:
+            expressionAttributeNames!["#\(key)"] = "\(key)"
+            
+        }
+        
+        switch expressionAttributeValues {
+        case nil:
+            expressionAttributeValues = [":\(key)": object]
+        default:
+            expressionAttributeValues![":\(key)"] = object
+        }
+        
+        return self
+    }
+}
+
+
+protocol AWSHasTableIndex {
+    associatedtype IndexIdentifier: RawRepresentable
+}
+
+extension AWSHasTableIndex where
+    Self: AWSDynamoDBObjectModelType,
+    Self: AWSDynamoDBObjectModel,
+    Self: AWSDynamoDBModeling,
+    Self.IndexIdentifier.RawValue == String {
+    
+    static func rx_get(indexIdentifier indexIdentifier: IndexIdentifier, predicate: AWSDynamoDBQueryExpression) -> Observable<[Self]> {
+        predicate.indexName = indexIdentifier.rawValue
+        return rx_get(predicate: predicate)
+    }
     
 }
+
+
 

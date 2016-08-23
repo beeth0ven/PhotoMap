@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         AWSMobileClient.sharedInstance.applicationDidBecomeActive(application)
     }
+    
     func applicationWillEnterForeground(application: UIApplication) {
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
     }

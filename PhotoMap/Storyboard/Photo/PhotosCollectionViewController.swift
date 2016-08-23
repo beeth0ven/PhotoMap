@@ -37,15 +37,31 @@ class PhotosCollectionViewController: UICollectionViewController, UICollectionVi
             .doOnError { [unowned self] error in self.title = "图片获取失败"; print(error) }
             .doOnCompleted { [unowned self] in self.title = "图片获取成功" }
             .bindTo(collectionView!.rx_itemsWithCellIdentifier("ImageCollectionViewCell", cellType: ImageCollectionViewCell.self)) { index, photo, cell in
-                cell.update(with: photo)
+                cell.photo = photo
             }.addDisposableTo(disposeBag)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let bounds = UIScreen.mainScreen().bounds
-        let width = (bounds.width - 30)/2 , height = width * 1.5
+        let width = (bounds.width - 30)/2 , height = width * 1.6
         return CGSize(width: width, height: height)
     }
 }
+
+extension PhotosCollectionViewController {
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        switch segue.identifier {
+        case "ShowPhoto"?:
+            let vc = segue.destinationViewController as! PhotoDetailTableViewController,
+            cell = sender as! ImageCollectionViewCell
+            vc.photo = cell.photo
+            
+        default:
+            break
+        }
+    }
+}
+
 
 
