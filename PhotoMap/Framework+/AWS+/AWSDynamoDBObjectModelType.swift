@@ -161,8 +161,8 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
     static var mapper: AWSDynamoDBObjectMapper {
         return AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
     }
-    
-    
 }
 
 private let cache = NSCache()
+
+

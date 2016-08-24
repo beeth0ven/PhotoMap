@@ -22,14 +22,20 @@ class AddCommentViewController: UIViewController {
             .map { !$0.isEmpty }
             .bindTo(doneBarButtonItem.rx_enabled)
             .addDisposableTo(disposeBag)
+        
+        inputTextView.becomeFirstResponder()
     }
     
     @IBAction private func done(sender: UIBarButtonItem) {
         
         Link.rx_insertComment(to: photo, content: inputTextView.text)
             .doOnError { [unowned self] error in self.title = "评论发布失败"; print(error) }
-            .subscribeCompleted { [unowned self] in self.title = "评论发布成功" }
+            .subscribeCompleted { [unowned self] in self.title = "评论发布成功"
+                self.navigationController?.popViewControllerAnimated(true)
+            }
             .addDisposableTo(disposeBag)
         
     }
+    
+    
 }

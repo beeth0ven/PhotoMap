@@ -21,20 +21,23 @@ class ImageCollectionViewCell: RxCollectionViewCell {
     @IBOutlet weak private var usernameLabel: UILabel!
     
     var photo: Photo! {
-        
-        didSet {
-            
-            imageView.s3_setImage(key: photo.thumbnailImageS3Key)
-            titleLabel.text = photo.title
-            likesCountLabel.text = "likes: \(photo.likesCount)"
-            commentsCountLabel.text = "comments: \(photo.commentsCount)"
-            
-            photo.rx_user
-                .subscribeNext { [unowned self] userInfo in
-                    self.usernameLabel.text = userInfo?.displayName
-                    self.userImageView.rx_setImage(url: userInfo?.imageURL)
-                }
-                .addDisposableTo(prepareForReuseDisposeBag)
-        }
+        didSet { updateUI() }
     }
+    
+    func updateUI() {
+        
+        imageView.s3_setImage(key: photo.thumbnailImageS3Key)
+        titleLabel.text = photo.title
+        likesCountLabel.text = "likes: \(photo.likesCount)"
+        commentsCountLabel.text = "comments: \(photo.commentsCount)"
+        
+        photo.rx_user
+            .subscribeNext { [unowned self] userInfo in
+                self.usernameLabel.text = userInfo?.displayName
+                self.userImageView.rx_setImage(url: userInfo?.imageURL)
+            }
+            .addDisposableTo(prepareForReuseDisposeBag)
+        
+    }
+    
 }

@@ -92,10 +92,10 @@ extension Link {
     
     static func rx_init() -> Observable<Link> {
         return UserInfo.currentUserInfo.map {
-            let link = Link()
-            link.creationDate = NSDate()
-            link.fromUserReference = $0!.reference!
-            return link
+            let result = Link()
+            result.creationDate = NSDate()
+            result.fromUserReference = $0!.reference!
+            return result
         }
     }
     

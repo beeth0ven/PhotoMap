@@ -32,6 +32,8 @@
 		45F99D6F1D6BF59D0029EC08 /* AWSModelHasCreationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F99D6E1D6BF59D0029EC08 /* AWSModelHasCreationDate.swift */; };
 		45F99D711D6C2D230029EC08 /* PhotoDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F99D701D6C2D230029EC08 /* PhotoDetailTableViewController.swift */; };
 		45F99D731D6C312E0029EC08 /* AddCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F99D721D6C312E0029EC08 /* AddCommentViewController.swift */; };
+		45F99D751D6D6CC10029EC08 /* CellSelfSized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F99D741D6D6CC10029EC08 /* CellSelfSized.swift */; };
+		45F99D771D6D73280029EC08 /* PhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F99D761D6D73280029EC08 /* PhotoTableViewCell.swift */; };
 		45FBD3C71D52EB4100881DC9 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; };
 		45FBD3C81D52EB4100881DC9 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C21D52EB4100881DC9 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		45FBD3C91D52EB4100881DC9 /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45FBD3C31D52EB4100881DC9 /* AWSDynamoDB.framework */; };
@@ -154,6 +156,8 @@
 		45F99D6E1D6BF59D0029EC08 /* AWSModelHasCreationDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSModelHasCreationDate.swift; sourceTree = "<group>"; };
 		45F99D701D6C2D230029EC08 /* PhotoDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoDetailTableViewController.swift; sourceTree = "<group>"; };
 		45F99D721D6C312E0029EC08 /* AddCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCommentViewController.swift; sourceTree = "<group>"; };
+		45F99D741D6D6CC10029EC08 /* CellSelfSized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellSelfSized.swift; sourceTree = "<group>"; };
+		45F99D761D6D73280029EC08 /* PhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoTableViewCell.swift; sourceTree = "<group>"; };
 		45FBD3C21D52EB4100881DC9 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = PhotoMap/Sdk/Aws/AWSCore.framework; sourceTree = "<group>"; };
 		45FBD3C31D52EB4100881DC9 /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = PhotoMap/Sdk/Aws/AWSDynamoDB.framework; sourceTree = "<group>"; };
 		45FBD3C41D52EB4100881DC9 /* AWSLambda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSLambda.framework; path = PhotoMap/Sdk/Aws/AWSLambda.framework; sourceTree = "<group>"; };
@@ -257,6 +261,7 @@
 				45FBD3F41D52F2F200881DC9 /* PhotosCollectionViewController.swift */,
 				45FBD3F61D52F2F200881DC9 /* UploadPhotoTableViewController.swift */,
 				45F99D701D6C2D230029EC08 /* PhotoDetailTableViewController.swift */,
+				45F99D761D6D73280029EC08 /* PhotoTableViewCell.swift */,
 				45F99D721D6C312E0029EC08 /* AddCommentViewController.swift */,
 			);
 			path = Photo;
@@ -385,6 +390,7 @@
 			children = (
 				45FBD4271D59A6DC00881DC9 /* UIKit+.swift */,
 				453D7EF21D5AF682009C1B0D /* UIView+IBInspectable.swift */,
+				45F99D741D6D6CC10029EC08 /* CellSelfSized.swift */,
 			);
 			path = "UIKit+";
 			sourceTree = "<group>";
@@ -643,6 +649,7 @@
 				45FBD4181D587B1E00881DC9 /* AWSUserDefaults+.swift in Sources */,
 				45FBD3FD1D52F2F200881DC9 /* LoginViewController.swift in Sources */,
 				45FBD3FA1D52F2F200881DC9 /* ConfirmCodeViewController.swift in Sources */,
+				45F99D751D6D6CC10029EC08 /* CellSelfSized.swift in Sources */,
 				45FBD4281D59A6DC00881DC9 /* UIKit+.swift in Sources */,
 				45F99D6F1D6BF59D0029EC08 /* AWSModelHasCreationDate.swift in Sources */,
 				4553EB841D576DA70003368D /* AWSDynamoDB+Rx.swift in Sources */,
@@ -661,6 +668,7 @@
 				45F99D731D6C312E0029EC08 /* AddCommentViewController.swift in Sources */,
 				4553EBA11D5B787B0003368D /* AWSIdentityManager+Rx.swift in Sources */,
 				45FBD4241D596CF600881DC9 /* UIImageView+Rx.swift in Sources */,
+				45F99D771D6D73280029EC08 /* PhotoTableViewCell.swift in Sources */,
 				45FBD4021D52F2F200881DC9 /* PhotosCollectionViewController.swift in Sources */,
 				4553EB9D1D5B61C70003368D /* UserInfo.swift in Sources */,
 				4564475D1D6017DD000BC22A /* AWSDynamoDBObjectModelType.swift in Sources */,
