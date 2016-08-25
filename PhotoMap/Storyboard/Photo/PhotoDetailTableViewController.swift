@@ -83,6 +83,24 @@ class PhotoDetailTableViewController: UITableViewController {
         }
     }
     
+    @IBAction func toggleLikeState(sender: UIButton) {
+        
+        if !sender.selected {
+            Link.rx_insertLikeLink(to: photo)
+                .doOnError { [unowned self] error in self.title = "喜欢图片失败"; print(error) }
+                .subscribeCompleted { [unowned self] in self.title = "喜欢图片成功"; sender.selected = true }
+                .addDisposableTo(disposeBag)
+            
+        } else {
+            photo.rx_likePhotoLink
+                .filter { $0 != nil }
+                .flatMap { $0!.rx_delete() }
+                .doOnError { [unowned self] error in self.title = "取消喜欢图片失败"; print(error) }
+                .subscribeCompleted { [unowned self] in self.title = "取消喜欢图片成功"; sender.selected = false }
+                .addDisposableTo(disposeBag)
+
+        }
+    }
 }
 
 extension PhotoDetailTableViewController {

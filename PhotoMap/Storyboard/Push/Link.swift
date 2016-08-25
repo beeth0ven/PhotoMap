@@ -86,6 +86,17 @@ extension Link {
             }
             .flatMap { $0.rx_save() }
     }
+    
+    static func rx_insertLikeLink(to photo: Photo) -> Observable<Link> {
+        return rx_init()
+            .doOnNext {
+                $0.toUserReference = photo.userReference
+                $0.itemReference = photo.reference
+                $0.kind = .likePhoto
+            }
+            .flatMap { $0.rx_save() }
+        
+    }
 }
 
 extension Link {

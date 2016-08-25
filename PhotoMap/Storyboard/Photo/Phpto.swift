@@ -23,6 +23,22 @@ class Photo: AWSDynamoDBObjectModel {
     
     lazy var rx_user: Observable<UserInfo?> = UserInfo.rx_get(reference: self.userReference)
     lazy var recentComments: Observable<[Link]> = Link.rx_getComments(from: self, limit: 5)
+    
+    lazy var rx_likePhotoLink: Observable<Link?> = {
+        
+        return UserInfo.currentUserInfo.flatMap {  userInfo -> Observable<Link?> in
+            
+            let predicate = AWSDynamoDBQueryExpression()
+                .when(key: "itemReference", isEqualTo: self.reference!)
+                .filter(key: "fromUserReference", isEqualTo: userInfo!.reference!)
+                .filter(key: "kindRawValue", isEqualTo: Link.Kind.likePhoto.rawValue)
+            
+            return Link.rx_get(indexIdentifier: .item, predicate: predicate)
+                .map { $0.first }
+                .shareReplay(1)
+        }
+        
+    }()
 }
 
 extension Photo: AWSModelHasCreationDate {
@@ -50,6 +66,10 @@ extension Photo: AWSDynamoDBModeling {
     
     static func rangeKeyAttribute() -> String {
         return "creationTime"
+    }
+    
+    static func ignoreAttributes() -> [String] {
+        return ["likesCount", "commentsCount"]
     }
 }
 

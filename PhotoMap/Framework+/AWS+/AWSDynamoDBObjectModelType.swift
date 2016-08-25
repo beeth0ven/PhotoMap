@@ -36,6 +36,25 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
             }.observeOn(MainScheduler.instance)
     }
     
+    func rx_delete() -> Observable<Self> {
+        
+        return Observable.create { observer in
+            
+            Self.mapper.remove(self) { error in
+                switch error {
+                case let error?:
+                    observer.onError(error)
+                case nil:
+                    observer.onNext(self)
+                    observer.onCompleted()
+                }
+            }
+            
+            return NopDisposable.instance
+            
+            }.observeOn(MainScheduler.instance)
+    }
+    
     static func rx_getAll() -> Observable<[Self]> {
         
         return Observable.create { observer in
@@ -101,28 +120,6 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
             return result
         }
     }
-    
-//    static func rx_get(hashValues hashValues: [String]) -> Observable<[Self]> {
-//        let _references: [(hashValue: AnyObject, rangeValue: AnyObject?)] = hashValues.map { ($0, nil) }
-//        return rx_get(_references: _references)
-//    }
-//    
-//    
-//    static func rx_get(references references: [(hashValue: AnyObject, rangeValue: AnyObject)]) -> Observable<[Self]> {
-//        let _references: [(hashValue: AnyObject, rangeValue: AnyObject?)] = references.map { ($0.hashValue, $0.rangeValue) }
-//        return rx_get(_references: _references)
-//    }
-    
-//    private static func rx_get(_references _references: [(hashValue: AnyObject, rangeValue: AnyObject?)]) -> Observable<[Self]> {
-//        
-//        let rx_models = _references.map { rx_get(hashValue: $0.hashValue, rangeValue: $0.rangeValue) }
-//        
-//        return rx_models.combineLatest { models in
-//            
-//            models.flatMap { model in model }
-//            
-//            }.observeOn(MainScheduler.instance)
-//    }
     
     static func rx_get(reference reference: String?) -> Observable<Self?> {
         guard let reference = reference, parameters = NSJSONSerialization.parameters(from: reference), hashValue = parameters.element(at: 0) else {

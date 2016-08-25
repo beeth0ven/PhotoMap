@@ -7,7 +7,9 @@
 //
 
 import UIKit
-
+import RxSwift
+import RxCocoa
+import AWSDynamoDB
 
 class PhotoTableViewCell: RxTableViewCell {
     
@@ -19,6 +21,8 @@ class PhotoTableViewCell: RxTableViewCell {
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var likesCountLabel: UILabel!
     @IBOutlet weak private var commentsCountLabel: UILabel!
+    @IBOutlet weak private var likeButton: UIButton!
+    
     
     func updateUI() {
         
@@ -27,8 +31,14 @@ class PhotoTableViewCell: RxTableViewCell {
         likesCountLabel.text = "likes: \(photo.likesCount)"
         commentsCountLabel.text = "comments: \(photo.commentsCount)"
         
+        photo.rx_likePhotoLink
+            .doOnError {  error in print(error) }
+            .subscribeNext { [unowned self] link in
+                self.likeButton.enabled = true
+                self.likeButton.selected = (link != nil)
+            }
+            .addDisposableTo(prepareForReuseDisposeBag)
     }
-    
 }
 
 class UserInfoTableViewCell: RxTableViewCell {

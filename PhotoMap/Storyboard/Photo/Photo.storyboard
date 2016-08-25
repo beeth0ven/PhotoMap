@@ -232,9 +232,14 @@
                                                         </stackView>
                                                     </subviews>
                                                 </stackView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mj0-RO-NZV">
+                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mj0-RO-NZV">
                                                     <rect key="frame" x="0.0" y="300" width="560" height="52"/>
+                                                    <color key="tintColor" red="0.19376453757286072" green="0.50850099325180054" blue="0.85232251882553101" alpha="1" colorSpace="calibratedRGB"/>
                                                     <state key="normal" title="Like"/>
+                                                    <state key="selected" title="Liked"/>
+                                                    <connections>
+                                                        <action selector="toggleLikeState:" destination="QfU-dW-9iI" eventType="touchUpInside" id="GYl-xd-mZy"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                         </stackView>
@@ -248,6 +253,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="commentsCountLabel" destination="qI8-Xj-CZP" id="tNo-Iz-aJx"/>
+                                    <outlet property="likeButton" destination="Mj0-RO-NZV" id="Z8E-g3-Gi6"/>
                                     <outlet property="likesCountLabel" destination="RiZ-cr-Xau" id="7Au-wD-4VT"/>
                                     <outlet property="photoImageView" destination="YBj-Zt-CQf" id="W5P-H4-Ucb"/>
                                     <outlet property="titleLabel" destination="FuW-Cn-Yjs" id="wmi-RI-Kkn"/>
