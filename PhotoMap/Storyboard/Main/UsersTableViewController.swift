@@ -30,7 +30,7 @@ class UsersTableViewController: UITableViewController, HasMenuDetailController, 
         tableView?.delegate = nil
         tableView?.rx_setDelegate(self)
         
-        UserInfo.rx_getAll()
+//        UserInfo.rx_getAll()
         UserInfo.rx_get(references: [
             "[\"us-east-1:7982e028-e401-4dff-966b-af81de9fdb88\",1471233567.026141]",
             "[\"us-east-1:74a236f8-bac6-440f-8ff2-2c2a31c46c8b\",1471235499.02336]",

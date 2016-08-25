@@ -32,10 +32,18 @@ extension Link: AWSModelHasCreationDate {
         set { kindRawValue = NSNumber(integer: newValue.rawValue) }
     }
     
-    enum Kind: Int {
+    enum Kind: Int, CustomStringConvertible {
         case followUser
         case likePhoto
         case commentPhoto
+        
+        var description: String {
+            switch self {
+            case followUser:    return "followUser"
+            case likePhoto:     return "likePhoto"
+            case commentPhoto:  return "commentPhoto"
+            }
+        }
     }
 }
 
@@ -72,6 +80,20 @@ extension Link: AWSHasTableIndex {
         return rx_get(indexIdentifier: .item, predicate: predicate)
     }
     
+    static func rx_getFormCurrentUser() -> Observable<[Link]> {
+
+        return UserInfo.currentUserInfo
+            .map { $0?.reference }
+            .flatMap { reference -> Observable<[Link]> in
+                guard let reference = reference else { return Observable.just([]) }
+                
+                let predicate = AWSDynamoDBQueryExpression()
+                    .when(key: "toUserReference", isEqualTo: reference)
+                
+                return rx_get(indexIdentifier: .toUser, predicate: predicate)
+        }
+        
+    }
 }
 
 extension Link {

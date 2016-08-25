@@ -27,7 +27,25 @@ class PushNotificationTableViewController: UITableViewController, HasMenuDetailC
         }
         
         rx_bindToggleShowMenu()
-
+        setupRx()
+    }
+    
+    func setupRx() {
+        
+        title = "加载中..."
+        
+        tableView?.dataSource = nil
+        tableView?.delegate = nil
+        tableView?.rx_setDelegate(self)
+        
+        Link.rx_getFormCurrentUser()
+            .doOnError { [unowned self] error in self.title = "用户信息获取失败"; print(error) }
+            .doOnCompleted { [unowned self] in self.title = "用户信息获取成功" }
+            .bindTo(tableView!.rx_itemsWithCellIdentifier("UITableViewCell")) { index, link, cell in
+                cell.textLabel?.text = link.kind.description
+                cell.detailTextLabel?.text = link.creationDate.flatMap(NSDateFormatter.string)
+                
+            }.addDisposableTo(disposeBag)
     }
 }
 
@@ -36,7 +54,7 @@ extension PushNotificationTableViewController: AWSPushManagerDelegate {
     
     func pushManagerDidRegister(pushManager: AWSPushManager) {
         print(String(self.dynamicType), #function)
-        Queue.Main.execute { self.title = "推送通知注册成功" }
+//        Queue.Main.execute { self.title = "推送通知注册成功" }
         if let arn = pushManager.topicARNs?.first {
             let topic = pushManager.topicForTopicARN(arn)
             topic.subscribe()
@@ -45,22 +63,22 @@ extension PushNotificationTableViewController: AWSPushManagerDelegate {
     
     func pushManager(pushManager: AWSPushManager, didFailToRegisterWithError error: NSError) {
         print(String(self.dynamicType), #function, error)
-        Queue.Main.execute { self.title = "推送通知注册失败" }
+//        Queue.Main.execute { self.title = "推送通知注册失败" }
     }
     
     func pushManager(pushManager: AWSPushManager, didReceivePushNotification userInfo: [NSObject : AnyObject]) {
         print(String(self.dynamicType), #function)
-        Queue.Main.execute { self.title = "成功接收推送通知" }
+//        Queue.Main.execute { self.title = "成功接收推送通知" }
     }
     
     func pushManagerDidDisable(pushManager: AWSPushManager) {
         print(String(self.dynamicType), #function)
-        Queue.Main.execute { self.title = "推送通知注销成功" }
+//        Queue.Main.execute { self.title = "推送通知注销成功" }
     }
     
     func pushManager(pushManager: AWSPushManager, didFailToDisableWithError error: NSError) {
         print(String(self.dynamicType), #function)
-        Queue.Main.execute { self.title = "推送通知注销失败" }
+//        Queue.Main.execute { self.title = "推送通知注销失败" }
     }
 }
 
@@ -72,21 +90,21 @@ extension PushNotificationTableViewController: AWSPushTopicDelegate {
         print("topicARN:", topic.topicARN)
         print("subscriptionARN:", topic.subscriptionARN)
         print("endpointARN:", AWSPushManager.defaultPushManager().endpointARN)
-        Queue.Main.execute { self.title = "主题订阅成功" }
+//        Queue.Main.execute { self.title = "主题订阅成功" }
     }
     
     func topic(topic: AWSPushTopic, didFailToSubscribeWithError error: NSError) {
         print(String(self.dynamicType), #function)
-        Queue.Main.execute { self.title = "主题订阅失败" }
+//        Queue.Main.execute { self.title = "主题订阅失败" }
     }
     
     func topicDidUnsubscribe(topic: AWSPushTopic) {
         print(String(self.dynamicType), #function)
-        Queue.Main.execute { self.title = "主题退订成功" }
+//        Queue.Main.execute { self.title = "主题退订成功" }
     }
     
     func topic(topic: AWSPushTopic, didFailToUnsubscribeWithError error: NSError) {
         print(String(self.dynamicType), #function)
-        Queue.Main.execute { self.title = "主题退订失败" }
+//        Queue.Main.execute { self.title = "主题退订失败" }
     }
 }
