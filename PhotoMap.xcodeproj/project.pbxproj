@@ -77,6 +77,7 @@
 		45FBD4281D59A6DC00881DC9 /* UIKit+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBD4271D59A6DC00881DC9 /* UIKit+.swift */; };
 		45FBD42A1D59ADE000881DC9 /* MenuDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBD4291D59ADE000881DC9 /* MenuDetailController.swift */; };
 		45FBD42C1D59B3B700881DC9 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBD42B1D59B3B700881DC9 /* UIViewController+.swift */; };
+		45FC6B0D1D72880E0012D86E /* User.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45FC6B0C1D72880E0012D86E /* User.storyboard */; };
 		A3FE18D4CAA66A3632C6CC61 /* Pods_PhotoMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A07531829A51A2CC641C00 /* Pods_PhotoMap.framework */; };
 		E7A30F04126EE2D400000000 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E292E1B7F6500000000 /* UIKit.framework */; };
 		E7A30F04242D329B00000000 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29B4CF36DF00000000 /* Images.xcassets */; };
@@ -194,6 +195,7 @@
 		45FBD4271D59A6DC00881DC9 /* UIKit+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+.swift"; sourceTree = "<group>"; };
 		45FBD4291D59ADE000881DC9 /* MenuDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDetailController.swift; sourceTree = "<group>"; };
 		45FBD42B1D59B3B700881DC9 /* UIViewController+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
+		45FC6B0C1D72880E0012D86E /* User.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = User.storyboard; sourceTree = "<group>"; };
 		D7A07531829A51A2CC641C00 /* Pods_PhotoMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PhotoMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -291,6 +293,7 @@
 		45FBD3E91D52F2F200881DC9 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
+				45FC6B0B1D7287E20012D86E /* User */,
 				45FBD3F01D52F2F200881DC9 /* Main */,
 				4553EB891D58E43B0003368D /* Photo */,
 				45FBD3EA1D52F2F200881DC9 /* Login */,
@@ -314,13 +317,11 @@
 		45FBD3F01D52F2F200881DC9 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				4553EB9C1D5B61C70003368D /* UserInfo.swift */,
-				453D7F011D5D71B4009C1B0D /* UsersTableViewController.swift */,
 				45FBD3F21D52F2F200881DC9 /* Main.storyboard */,
-				4530E5891D59D31300A09AF0 /* MenuViewController.swift */,
-				45FBD4291D59ADE000881DC9 /* MenuDetailController.swift */,
-				453D7EFD1D5D601B009C1B0D /* DetailController.swift */,
 				453D7EFF1D5D6040009C1B0D /* HasMenuDetailController.swift */,
+				45FBD4291D59ADE000881DC9 /* MenuDetailController.swift */,
+				4530E5891D59D31300A09AF0 /* MenuViewController.swift */,
+				453D7EFD1D5D601B009C1B0D /* DetailController.swift */,
 				45FBD42B1D59B3B700881DC9 /* UIViewController+.swift */,
 			);
 			path = Main;
@@ -393,6 +394,16 @@
 				45F99D741D6D6CC10029EC08 /* CellSelfSized.swift */,
 			);
 			path = "UIKit+";
+			sourceTree = "<group>";
+		};
+		45FC6B0B1D7287E20012D86E /* User */ = {
+			isa = PBXGroup;
+			children = (
+				4553EB9C1D5B61C70003368D /* UserInfo.swift */,
+				45FC6B0C1D72880E0012D86E /* User.storyboard */,
+				453D7F011D5D71B4009C1B0D /* UsersTableViewController.swift */,
+			);
+			path = User;
 			sourceTree = "<group>";
 		};
 		B401C979355E524100000000 /* Frameworks */ = {
@@ -533,6 +544,7 @@
 				E7A30F045955AE8000000000 /* Launch Screen.storyboard in Resources */,
 				E7A30F04242D329B00000000 /* Images.xcassets in Resources */,
 				45FBD3FB1D52F2F200881DC9 /* Login.storyboard in Resources */,
+				45FC6B0D1D72880E0012D86E /* User.storyboard in Resources */,
 				45FBD4051D52F2F200881DC9 /* Push.storyboard in Resources */,
 				45FBD4001D52F2F200881DC9 /* Main.storyboard in Resources */,
 			);
