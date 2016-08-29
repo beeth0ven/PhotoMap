@@ -10,7 +10,6 @@ import UIKit
 
 class UsersTableViewController: UITableViewController{
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupRx()
