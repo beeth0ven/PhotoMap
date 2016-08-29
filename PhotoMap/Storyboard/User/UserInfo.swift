@@ -17,8 +17,12 @@ class UserInfo: AWSDynamoDBObjectModel {
     var creationTime: NSNumber?
     var displayName: String?
     var followersNumber: NSNumber?
+    var followingNumber: NSNumber?
     var imagePath: String?
+    var likedNumber: NSNumber?
+    var postedNumber: NSNumber?
     var snsTopicArn: String?
+    
 }
 
 extension UserInfo: AWSModelHasCreationDate {
@@ -26,6 +30,21 @@ extension UserInfo: AWSModelHasCreationDate {
     var followersCount: Int {
         get { return followersNumber?.integerValue ?? 0 }
         set { followersNumber = NSNumber(integer: newValue) }
+    }
+    
+    var followingCount: Int {
+        get { return followingNumber?.integerValue ?? 0 }
+        set { followingNumber = NSNumber(integer: newValue) }
+    }
+    
+    var likedCount: Int {
+        get { return likedNumber?.integerValue ?? 0 }
+        set { likedNumber = NSNumber(integer: newValue) }
+    }
+    
+    var postedCount: Int {
+        get { return postedNumber?.integerValue ?? 0 }
+        set { postedNumber = NSNumber(integer: newValue) }
     }
     
     var imageURL: NSURL? { return imagePath.flatMap(NSURL.init) }

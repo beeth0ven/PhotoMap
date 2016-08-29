@@ -8,9 +8,8 @@
 
 import UIKit
 
-class UsersTableViewController: UITableViewController, HasMenuDetailController, DetailChildViewControllerType {
+class UsersTableViewController: UITableViewController{
     
-    @IBOutlet weak var toggleMenuBarButtonItem: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +18,6 @@ class UsersTableViewController: UITableViewController, HasMenuDetailController, 
     
     private func setupRx() {
         rx_bindDataSource()
-        rx_bindToggleShowMenu()
     }
     
     func rx_bindDataSource() {

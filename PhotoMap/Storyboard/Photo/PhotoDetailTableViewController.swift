@@ -35,28 +35,20 @@ class PhotoDetailTableViewController: UITableViewController {
         return  Variable(sections)
         
     }()
-        
     
-    
-    
-    var rx_sections: Observable<[SectionModel<String, CellStyle>]> {
-        
-        let rx_photoSection = Observable.just(SectionModel(model: "Photo", items: [CellStyle.photo(photo)]))
-        
-        let rx_userSection = photo.rx_user
-            .map { userInfo in SectionModel(model: "UserInfo", items: [CellStyle.userInfo(userInfo!)] ) }
-
-        let rx_commentsSection = photo.recentComments
-            .map { comments in SectionModel(model: "Comments", items: comments.map { CellStyle.comment($0) } ) }
-        
-        return Observable.combineLatest(rx_photoSection, rx_userSection, rx_commentsSection) { [$0, $1, $2] }
-
+    var comments: [Link] {
+        get {
+            return sections.value[2].items.map {
+                guard case .comment(let comment) = $0 else { abort() }
+                return comment
+            }
+        }
+        set { sections.value[2].items = newValue.map { CellStyle.comment($0) } }
     }
-    
     
     private func setupRx() {
         
-        title = "加载中..."
+//        title = "加载中..."
         
         tableView?.dataSource = nil
         tableView?.delegate = nil
@@ -70,15 +62,15 @@ class PhotoDetailTableViewController: UITableViewController {
         
         photo.rx_user
             .subscribeNext { [unowned self] in
-                self.sections.value[1].items = $0.recentComments.map { CellStyle.comment($0) }
+                self.sections.value[1].items = [CellStyle.userInfo($0!)]
             }
             .addDisposableTo(disposeBag)
-
-//        rx_sections
-//            .doOnError { [unowned self] error in self.title = "评论获取失败"; print(error) }
-//            .doOnCompleted { [unowned self] in self.title = "评论获取成功" }
-//            .bindTo(tableView.rx_itemsWithDataSource(dataSource))
-//            .addDisposableTo(disposeBag)
+        
+        photo.recentComments
+            .subscribeNext { [unowned self] in
+                self.comments = $0
+            }
+            .addDisposableTo(disposeBag)
 
     }
     
@@ -125,7 +117,10 @@ extension PhotoDetailTableViewController {
         case "AddComment"?:
             let vc = segue.destinationViewController as! AddCommentViewController
             vc.photo = photo
-            vc.rx_comment.driveNext(<#T##onNext: Link -> Void##Link -> Void#>)
+            vc.rx_comment
+                .driveNext { [unowned self] in
+                    self.comments.insert($0, atIndex: 0)
+                }
                 .addDisposableTo(disposeBag)
 
         default:

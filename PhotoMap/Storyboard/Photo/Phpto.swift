@@ -23,7 +23,7 @@ class Photo: AWSDynamoDBObjectModel {
     var title: String?
     
     lazy var rx_user: Observable<UserInfo?> = UserInfo.rx_get(reference: self.userReference)
-    lazy var recentComments: Observable<[Link]> = Link.rx_getComments(from: self, limit: 5)
+    lazy var recentComments: Observable<[Link]> = Link.rx_getComments(from: self, limit: nil)
     
      lazy var rx_likePhotoLink: Observable<Link?> = {
         
