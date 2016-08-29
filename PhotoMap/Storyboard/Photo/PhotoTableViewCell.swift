@@ -23,13 +23,20 @@ class PhotoTableViewCell: RxTableViewCell {
     @IBOutlet weak private var commentsCountLabel: UILabel!
     @IBOutlet weak private var likeButton: UIButton!
     
-    
     func updateUI() {
         
         photoImageView.s3_setImage(key: photo.imageS3Key)
         titleLabel.text = photo.title
-        likesCountLabel.text = "likes: \(photo.likesCount)"
-        commentsCountLabel.text = "comments: \(photo.commentsCount)"
+        
+        photo.rx_likesCount.driveNext { [unowned self] count in
+            self.likesCountLabel.text = "likes: \(count)"
+            }
+            .addDisposableTo(prepareForReuseDisposeBag)
+        
+        photo.rx_commentsCount.driveNext { [unowned self] count in
+            self.commentsCountLabel.text = "comments: \(count)"
+            }
+            .addDisposableTo(prepareForReuseDisposeBag)
         
         photo.rx_likePhotoLink
             .doOnError {  error in print(error) }

@@ -24,6 +24,21 @@ class PhotoDetailTableViewController: UITableViewController {
     
     let dataSource = RxTableViewSectionedReloadDataSource<SectionModel<String, CellStyle>>()
     
+    lazy var sections: Variable<[SectionModel<String, CellStyle>]> = {
+        
+        let sections = [
+            SectionModel(model: "Photo", items: [CellStyle.photo(self.photo)]),
+            SectionModel(model: "UserInfo", items: []),
+            SectionModel(model: "Comments", items: []),
+        ]
+                
+        return  Variable(sections)
+        
+    }()
+        
+    
+    
+    
     var rx_sections: Observable<[SectionModel<String, CellStyle>]> {
         
         let rx_photoSection = Observable.just(SectionModel(model: "Photo", items: [CellStyle.photo(photo)]))
@@ -48,11 +63,22 @@ class PhotoDetailTableViewController: UITableViewController {
         
         configureDataSource()
         
-        rx_sections
-            .doOnError { [unowned self] error in self.title = "评论获取失败"; print(error) }
-            .doOnCompleted { [unowned self] in self.title = "评论获取成功" }
-            .bindTo(tableView.rx_itemsWithDataSource(dataSource))
+        sections
+            .asDriver()
+            .drive(tableView.rx_itemsWithDataSource(dataSource))
             .addDisposableTo(disposeBag)
+        
+        photo.rx_user
+            .subscribeNext { [unowned self] in
+                self.sections.value[1].items = $0.recentComments.map { CellStyle.comment($0) }
+            }
+            .addDisposableTo(disposeBag)
+
+//        rx_sections
+//            .doOnError { [unowned self] error in self.title = "评论获取失败"; print(error) }
+//            .doOnCompleted { [unowned self] in self.title = "评论获取成功" }
+//            .bindTo(tableView.rx_itemsWithDataSource(dataSource))
+//            .addDisposableTo(disposeBag)
 
     }
     
@@ -85,21 +111,10 @@ class PhotoDetailTableViewController: UITableViewController {
     
     @IBAction func toggleLikeState(sender: UIButton) {
         
-        if !sender.selected {
-            Link.rx_insertLikeLink(to: photo)
-                .doOnError { [unowned self] error in self.title = "喜欢图片失败"; print(error) }
-                .subscribeCompleted { [unowned self] in self.title = "喜欢图片成功"; sender.selected = true }
-                .addDisposableTo(disposeBag)
-            
-        } else {
-            photo.rx_likePhotoLink
-                .filter { $0 != nil }
-                .flatMap { $0!.rx_delete() }
-                .doOnError { [unowned self] error in self.title = "取消喜欢图片失败"; print(error) }
-                .subscribeCompleted { [unowned self] in self.title = "取消喜欢图片成功"; sender.selected = false }
-                .addDisposableTo(disposeBag)
-
-        }
+        photo.rx_setLike(!sender.selected)
+            .doOnError { [unowned self] error in self.title = "切换喜欢图片失败"; print(error) }
+            .subscribeCompleted { [unowned self] in self.title = "切换喜欢图片成功"; sender.selected = !sender.selected }
+            .addDisposableTo(disposeBag)
     }
 }
 
@@ -110,7 +125,9 @@ extension PhotoDetailTableViewController {
         case "AddComment"?:
             let vc = segue.destinationViewController as! AddCommentViewController
             vc.photo = photo
-            
+            vc.rx_comment.driveNext(<#T##onNext: Link -> Void##Link -> Void#>)
+                .addDisposableTo(disposeBag)
+
         default:
             break
         }

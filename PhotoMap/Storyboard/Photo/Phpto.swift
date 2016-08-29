@@ -10,6 +10,7 @@ import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 import RxSwift
+import RxCocoa
 
 class Photo: AWSDynamoDBObjectModel {
     
@@ -24,7 +25,7 @@ class Photo: AWSDynamoDBObjectModel {
     lazy var rx_user: Observable<UserInfo?> = UserInfo.rx_get(reference: self.userReference)
     lazy var recentComments: Observable<[Link]> = Link.rx_getComments(from: self, limit: 5)
     
-    lazy var rx_likePhotoLink: Observable<Link?> = {
+     lazy var rx_likePhotoLink: Observable<Link?> = {
         
         return UserInfo.currentUserInfo.flatMap {  userInfo -> Observable<Link?> in
             
@@ -51,6 +52,36 @@ extension Photo: AWSModelHasCreationDate {
     var commentsCount: Int {
         get { return commentsNumber?.integerValue ?? 0 }
         set { commentsNumber = NSNumber(integer: newValue) }
+    }
+    
+    var rx_likesCount: Driver<Int> {
+        return rx_observe(Int.self, "likesCount")
+            .map { $0! }
+            .asDriver(onErrorDriveWith: Driver.empty())
+    }
+    
+    var rx_commentsCount: Driver<Int> {
+        return rx_observe(Int.self, "commentsCount")
+            .map { $0! }
+            .asDriver(onErrorDriveWith: Driver.empty())
+    }
+    
+    func rx_setLike(liked: Bool) -> Observable<Link> {
+        
+        if liked {
+            return Link.rx_insertLikeLink(to: self)
+                .doOnNext {  _ in self.likesCount += 1 }
+        } else {
+            return rx_likePhotoLink
+                .filter { $0 != nil }
+                .flatMap { $0!.rx_delete() }
+                .doOnNext {  _ in self.likesCount += -1 }
+        }
+    }
+    
+    func rx_insertComment(content content: String?) -> Observable<Link> {
+        return Link.rx_insertComment(to: self, content: content)
+            .doOnNext { _ in self.commentsCount += 1 }
     }
 }
 

@@ -15,6 +15,8 @@ import RxCocoa
 class PhotosCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, HasMenuDetailController, DetailChildViewControllerType {
     
     @IBOutlet weak var toggleMenuBarButtonItem: UIBarButtonItem!
+    
+    let photos = Variable([Photo]())
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +38,11 @@ class PhotosCollectionViewController: UICollectionViewController, UICollectionVi
         Photo.rx_getAll()
             .doOnError { [unowned self] error in self.title = "图片获取失败"; print(error) }
             .doOnCompleted { [unowned self] in self.title = "图片获取成功" }
-            .bindTo(collectionView!.rx_itemsWithCellIdentifier("ImageCollectionViewCell", cellType: ImageCollectionViewCell.self)) { index, photo, cell in
+            .bindTo(photos)
+            .addDisposableTo(disposeBag)
+        
+        photos.asDriver()
+            .drive(collectionView!.rx_itemsWithCellIdentifier("ImageCollectionViewCell", cellType: ImageCollectionViewCell.self)) { index, photo, cell in
                 cell.photo = photo
             }.addDisposableTo(disposeBag)
     }
@@ -52,6 +58,13 @@ extension PhotosCollectionViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         switch segue.identifier {
+        case "UploadPhoto"?:
+            let vc = segue.destinationViewController as! UploadPhotoTableViewController
+            vc.rx_photo
+                .driveNext { [unowned self] in self.photos.value.insert($0, atIndex: 0) }
+                .addDisposableTo(disposeBag)
+
+            
         case "ShowPhoto"?:
             let vc = segue.destinationViewController as! PhotoDetailTableViewController,
             cell = sender as! ImageCollectionViewCell

@@ -150,7 +150,7 @@
                         <barButtonItem key="leftBarButtonItem" title="三" id="r5m-rc-Rc1"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="PKt-H3-rP2">
                             <connections>
-                                <segue destination="qdG-Dh-oJT" kind="show" id="d0j-Jv-Nj3"/>
+                                <segue destination="qdG-Dh-oJT" kind="show" identifier="UploadPhoto" id="d0j-Jv-Nj3"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

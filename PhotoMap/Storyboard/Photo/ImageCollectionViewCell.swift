@@ -16,7 +16,7 @@ class ImageCollectionViewCell: RxCollectionViewCell {
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var likesCountLabel: UILabel!
     @IBOutlet weak private var commentsCountLabel: UILabel!
-
+    
     @IBOutlet weak private var userImageView: UIImageView!
     @IBOutlet weak private var usernameLabel: UILabel!
     
@@ -28,8 +28,17 @@ class ImageCollectionViewCell: RxCollectionViewCell {
         
         imageView.s3_setImage(key: photo.thumbnailImageS3Key)
         titleLabel.text = photo.title
-        likesCountLabel.text = "likes: \(photo.likesCount)"
         commentsCountLabel.text = "comments: \(photo.commentsCount)"
+        
+        photo.rx_likesCount.driveNext { [unowned self] count in
+            self.likesCountLabel.text = "likes: \(count)"
+            }
+            .addDisposableTo(prepareForReuseDisposeBag)
+        
+        photo.rx_commentsCount.driveNext { [unowned self] count in
+            self.commentsCountLabel.text = "comments: \(count)"
+            }
+            .addDisposableTo(prepareForReuseDisposeBag)
         
         photo.rx_user
             .subscribeNext { [unowned self] userInfo in

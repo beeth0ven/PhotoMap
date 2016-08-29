@@ -8,8 +8,17 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 class UploadPhotoTableViewController: UITableViewController {
+    
+    var rx_photo: Driver<Photo> {
+        return photo.asDriver()
+            .skip(1)
+            .map { $0! }
+    }
+    
+    private var photo = Variable<Photo?>(nil)
     
     @IBOutlet weak var photoTitleTextField: UITextField!
     
@@ -30,8 +39,12 @@ class UploadPhotoTableViewController: UITableViewController {
         title = "保存中..."
         
         Photo.rx_insert(title: photoTitle, image: image)
+            .doOnNext { [unowned self] in self.photo.value = $0 }
             .doOnError { [unowned self] _ in self.title = "图片发布失败" }
-            .subscribeCompleted { [unowned self] in self.title = "图片发布成功" }
+            .subscribeCompleted { [unowned self] in
+                self.title = "图片发布成功";
+                self.navigationController?.popViewControllerAnimated(true)
+            }
             .addDisposableTo(disposeBag)
     }
 }

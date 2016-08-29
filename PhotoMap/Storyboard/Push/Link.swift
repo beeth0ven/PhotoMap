@@ -117,7 +117,6 @@ extension Link {
                 $0.kind = .likePhoto
             }
             .flatMap { $0.rx_save() }
-        
     }
 }
 
