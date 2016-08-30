@@ -10,6 +10,7 @@ import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 import RxSwift
+import RxCocoa
 
 extension AWSDynamoDBQueryExpression {
     
@@ -79,12 +80,23 @@ extension AWSHasTableIndex where
     Self: AWSDynamoDBModeling,
     Self.IndexIdentifier.RawValue == String {
     
-    static func rx_get(indexIdentifier indexIdentifier: IndexIdentifier, predicate: AWSDynamoDBQueryExpression) -> Observable<[Self]> {
-        predicate.indexName = indexIdentifier.rawValue
-        return rx_get(predicate: predicate)
+    static func rx_get(indexIdentifier indexIdentifier: IndexIdentifier, predicate: ((AWSDynamoDBQueryExpression) -> Void)) -> Observable<[Self]> {
+        let newPredicate = { (expression: AWSDynamoDBQueryExpression) -> Void in
+            expression.indexName = indexIdentifier.rawValue
+            predicate(expression)
+        }
+        return rx_get(predicate: newPredicate)
     }
     
 }
 
-
+extension AWSDynamoDBObjectModel {
+    
+    func rx_count(key key: String) -> Driver<Int> {
+        
+        return rx_observe(Int.self, key)
+            .map { $0! }
+            .asDriver(onErrorDriveWith: Driver.empty())
+    }
+}
 

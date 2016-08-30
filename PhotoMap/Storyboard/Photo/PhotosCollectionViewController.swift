@@ -14,7 +14,8 @@ import RxCocoa
 
 class PhotosCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, HasMenuDetailController, DetailChildViewControllerType {
     
-    @IBOutlet weak var toggleMenuBarButtonItem: UIBarButtonItem!
+    @IBOutlet var toggleMenuBarButtonItem: UIBarButtonItem!
+    var rx_getData: Observable<[Photo]>! = Photo.rx_getAll()
     
     let photos = Variable([Photo]())
 
@@ -35,7 +36,7 @@ class PhotosCollectionViewController: UICollectionViewController, UICollectionVi
         collectionView?.delegate = nil
         collectionView?.rx_setDelegate(self)
         
-        Photo.rx_getAll()
+        rx_getData
             .doOnError { [unowned self] error in self.title = "图片获取失败"; print(error) }
             .doOnCompleted { [unowned self] in self.title = "图片获取成功" }
             .bindTo(photos)

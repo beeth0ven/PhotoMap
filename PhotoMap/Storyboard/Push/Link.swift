@@ -71,13 +71,11 @@ extension Link: AWSHasTableIndex {
     
     static func rx_getComments(from photo: Photo, limit: Int? = nil) -> Observable<[Link]> {
         
-        let predicate = AWSDynamoDBQueryExpression()
-            .when(key: "itemReference", isEqualTo: photo.reference!)
-            .filter(key: "kindRawValue", isEqualTo: Kind.commentPhoto.rawValue)
-        
-        predicate.limit = limit.flatMap(NSNumber.init(integer:))
-        
-        return rx_get(indexIdentifier: .item, predicate: predicate)
+        return rx_get(indexIdentifier: .item) {
+            $0.when(key: "itemReference", isEqualTo: photo.reference!)
+                .filter(key: "kindRawValue", isEqualTo: Kind.commentPhoto.rawValue)
+            $0.limit = limit.flatMap(NSNumber.init(integer:))
+        }
     }
     
     static func rx_getFormCurrentUser() -> Observable<[Link]> {
@@ -87,10 +85,9 @@ extension Link: AWSHasTableIndex {
             .flatMap { reference -> Observable<[Link]> in
                 guard let reference = reference else { return Observable.just([]) }
                 
-                let predicate = AWSDynamoDBQueryExpression()
-                    .when(key: "toUserReference", isEqualTo: reference)
-                
-                return rx_get(indexIdentifier: .toUser, predicate: predicate)
+                return rx_get(indexIdentifier: .toUser) {
+                    $0.when(key: "toUserReference", isEqualTo: reference)
+                }
         }
         
     }
@@ -118,6 +115,16 @@ extension Link {
             }
             .flatMap { $0.rx_save() }
     }
+    
+    static func rx_insertFollowUserLink(to userInfo: UserInfo) -> Observable<Link> {
+        return rx_init()
+            .doOnNext {
+                $0.toUserReference = userInfo.reference
+                $0.kind = .followUser
+            }
+            .flatMap { $0.rx_save() }
+    }
+    
 }
 
 extension Link {

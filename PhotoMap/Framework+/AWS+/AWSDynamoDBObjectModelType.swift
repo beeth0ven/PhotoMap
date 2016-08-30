@@ -77,11 +77,12 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
             }.observeOn(MainScheduler.instance)
     }
     
-    static func rx_get(predicate predicate: AWSDynamoDBQueryExpression) -> Observable<[Self]> {
+    static func rx_get(predicate predicate: ((AWSDynamoDBQueryExpression) -> Void)) -> Observable<[Self]> {
         
         return Observable.create { observer in
-            
-            mapper.query(self, expression: predicate) { (output, error) in
+            let expression = AWSDynamoDBQueryExpression()
+            predicate(expression)
+            mapper.query(self, expression: expression) { (output, error) in
                 switch (output?.items, error) {
                 case let (_, error?):
                     observer.onError(error)
@@ -129,6 +130,10 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
     }
     
     static func rx_get(references references: [String]) -> Observable<[Self]> {
+        
+        guard references.count > 0 else {
+            return Observable.just([], scheduler: MainScheduler.instance)
+        }
         
         let rx_models = references.map { rx_get(reference: $0) }
         

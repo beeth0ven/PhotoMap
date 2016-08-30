@@ -25,16 +25,15 @@ class Photo: AWSDynamoDBObjectModel {
     lazy var rx_user: Observable<UserInfo?> = UserInfo.rx_get(reference: self.userReference)
     lazy var recentComments: Observable<[Link]> = Link.rx_getComments(from: self, limit: nil)
     
-     lazy var rx_likePhotoLink: Observable<Link?> = {
+    lazy var rx_likePhotoLink: Observable<Link?> = {
         
         return UserInfo.currentUserInfo.flatMap {  userInfo -> Observable<Link?> in
             
-            let predicate = AWSDynamoDBQueryExpression()
-                .when(key: "itemReference", isEqualTo: self.reference!)
-                .filter(key: "fromUserReference", isEqualTo: userInfo!.reference!)
-                .filter(key: "kindRawValue", isEqualTo: Link.Kind.likePhoto.rawValue)
-            
-            return Link.rx_get(indexIdentifier: .item, predicate: predicate)
+            return Link.rx_get(indexIdentifier: .item) {
+                $0.when(key: "itemReference", isEqualTo: self.reference!)
+                    .filter(key: "fromUserReference", isEqualTo: userInfo!.reference!)
+                    .filter(key: "kindRawValue", isEqualTo: Link.Kind.likePhoto.rawValue)
+                }
                 .map { $0.first }
                 .shareReplay(1)
         }
@@ -54,17 +53,9 @@ extension Photo: AWSModelHasCreationDate {
         set { commentsNumber = NSNumber(integer: newValue) }
     }
     
-    var rx_likesCount: Driver<Int> {
-        return rx_observe(Int.self, "likesCount")
-            .map { $0! }
-            .asDriver(onErrorDriveWith: Driver.empty())
-    }
+    var rx_likesCount: Driver<Int> { return rx_count(key: "likesCount") }
     
-    var rx_commentsCount: Driver<Int> {
-        return rx_observe(Int.self, "commentsCount")
-            .map { $0! }
-            .asDriver(onErrorDriveWith: Driver.empty())
-    }
+    var rx_commentsCount: Driver<Int> { return rx_count(key: "commentsCount") }
     
     func rx_setLike(liked: Bool) -> Observable<Link> {
         

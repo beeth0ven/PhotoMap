@@ -40,10 +40,9 @@ class ImageCollectionViewCell: RxCollectionViewCell {
             }
             .addDisposableTo(prepareForReuseDisposeBag)
         
-        photo.rx_user
-            .subscribeNext { [unowned self] userInfo in
-                self.usernameLabel.text = userInfo?.displayName
-                self.userImageView.rx_setImage(url: userInfo?.imageURL)
+        photo.rx_user.subscribeNext { [unowned self] userInfo in
+            self.usernameLabel.text = userInfo?.displayName
+            self.userImageView.rx_setImage(url: userInfo?.imageURL)
             }
             .addDisposableTo(prepareForReuseDisposeBag)
         

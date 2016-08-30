@@ -122,7 +122,13 @@ extension PhotoDetailTableViewController {
                     self.comments.insert($0, atIndex: 0)
                 }
                 .addDisposableTo(disposeBag)
-
+            
+        case "ShowUser"?:
+            let vc = segue.destinationViewController as! UserDetailTableViewController
+            let cell = sender as! UserInfoTableViewCell, userInfo = cell.userInfo
+            vc.rx_userInfo = Observable.just(userInfo).asFlatVariable()
+            vc.navigationItem.leftBarButtonItem = nil
+            
         default:
             break
         }
