@@ -26,6 +26,15 @@ class PushNotificationTableViewController: UITableViewController, HasMenuDetailC
             pushManager.registerTopicARNs(topicARNs)
         }
         
+        UserInfo.currentUserInfo
+            .map { $0?.snsTopicArn }
+            .subscribeNext { userARN in
+                let topicARNs = pushManager.topicARNs ?? [], userARNs = [userARN].flatMap { $0 }
+                print(topicARNs + userARNs)
+                pushManager.registerTopicARNs(topicARNs + userARNs)
+        }
+        .addDisposableTo(disposeBag)
+        
         rx_bindToggleShowMenu()
         setupRx()
     }
@@ -44,7 +53,6 @@ class PushNotificationTableViewController: UITableViewController, HasMenuDetailC
             .bindTo(tableView!.rx_itemsWithCellIdentifier("UITableViewCell")) { index, link, cell in
                 cell.textLabel?.text = link.kind.description
                 cell.detailTextLabel?.text = link.creationDate.flatMap(NSDateFormatter.string)
-                
             }.addDisposableTo(disposeBag)
     }
 }
@@ -55,8 +63,8 @@ extension PushNotificationTableViewController: AWSPushManagerDelegate {
     func pushManagerDidRegister(pushManager: AWSPushManager) {
         print(String(self.dynamicType), #function)
 //        Queue.Main.execute { self.title = "推送通知注册成功" }
-        if let arn = pushManager.topicARNs?.first {
-            let topic = pushManager.topicForTopicARN(arn)
+        pushManager.topics.forEach { topic in
+            print(topic.topicARN)
             topic.subscribe()
         }
     }
@@ -85,16 +93,16 @@ extension PushNotificationTableViewController: AWSPushManagerDelegate {
 extension PushNotificationTableViewController: AWSPushTopicDelegate {
     
     func topicDidSubscribe(topic: AWSPushTopic) {
-        print(String(self.dynamicType), #function, topic)
-        print("topicName:", topic.topicName)
-        print("topicARN:", topic.topicARN)
-        print("subscriptionARN:", topic.subscriptionARN)
-        print("endpointARN:", AWSPushManager.defaultPushManager().endpointARN)
+        print(String(self.dynamicType), #function, topic.topicARN)
+//        print("topicName:", topic.topicName)
+//        print("topicARN:", topic.topicARN)
+//        print("subscriptionARN:", topic.subscriptionARN)
+//        print("endpointARN:", AWSPushManager.defaultPushManager().endpointARN)
 //        Queue.Main.execute { self.title = "主题订阅成功" }
     }
     
     func topic(topic: AWSPushTopic, didFailToSubscribeWithError error: NSError) {
-        print(String(self.dynamicType), #function)
+        print(String(self.dynamicType), #function, error)
 //        Queue.Main.execute { self.title = "主题订阅失败" }
     }
     

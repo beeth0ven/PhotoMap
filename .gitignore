@@ -3,3 +3,5 @@ Podfile.lock
 PhotoMap.xcworkspace
 *.xcuserstate
 *.DS_Store 
+
+.DS_Store

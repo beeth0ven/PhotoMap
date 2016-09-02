@@ -11,7 +11,6 @@
 				<key>SNSConfiguredTopics</key>
 				<array>
 					<string>arn:aws:sns:us-east-1:649756765455:photomap_alldevices_MOBILEHUB_567053031</string>
-					<string></string>
 				</array>
 				<key>Region</key>
 				<string>us-east-1</string>
