@@ -20,7 +20,6 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     
     var passwordAuthenticationCompletion: AWSTaskCompletionSource!
-    var completionHandler: ((AnyObject, NSError) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,17 +29,22 @@ class LoginViewController: UIViewController {
         AWSGoogleSignInProvider.sharedInstance().setScopes(["profile", "openid"])
         AWSGoogleSignInProvider.sharedInstance().setViewControllerForGoogleSignIn(self)
         
-        usernameTextField.text = pool.getUser().username
+        usernameTextField.text = NSUserDefaults.standardUserDefaults().loginProviderLoginName
+        passwordTextField.text = NSUserDefaults.standardUserDefaults().loginProviderPassword
         
     }
         
     func setupRx() {
+        
         let usernameValid = usernameTextField
             .rx_text
+            .doOnNext { NSUserDefaults.standardUserDefaults().loginProviderLoginName = $0 }
             .map { !$0.isEmpty }
+        
         
         let passwordValid = passwordTextField
             .rx_text
+            .doOnNext { NSUserDefaults.standardUserDefaults().loginProviderPassword = $0 }
             .map { $0.characters.count > 7 }
         
         Observable
@@ -59,17 +63,18 @@ class LoginViewController: UIViewController {
         handleLogin(signInProvider: AWSGoogleSignInProvider.sharedInstance())
     }
     
-    @IBAction private func myLogin() {
+    @IBAction func myLogin() {
         handleLogin(signInProvider: LoginProvider.sharedInstance())
     }
     
     private func handleLogin(signInProvider signInProvider: AWSSignInProvider) {
+//        print(String(self.dynamicType), #function)
         title = "正在登录 ..."
         
         AWSIdentityManager.defaultIdentityManager().loginWithSignInProvider(signInProvider) { (result, error) in
-            print("defaultIdentityManager().loginWithSignInProvider")
-//            print("task.result:", result)
-//            print("task.error:", error)
+            print(String(self.dynamicType), #function)
+            print("task.result:", result)
+            print("task.error:", error)
             print("currentUser:", LoginProvider.sharedInstance().pool.currentUser())
             print("currentUser.username:", LoginProvider.sharedInstance().pool.currentUser()?.username)
             print("LoginProvider.loggedIn:", LoginProvider.sharedInstance().loggedIn)
@@ -78,10 +83,8 @@ class LoginViewController: UIViewController {
             print("userName:", AWSIdentityManager.defaultIdentityManager().userName)
             print("imageURL:", AWSIdentityManager.defaultIdentityManager().imageURL)
 
-
-            
             switch error {
-            case let error? where error.domain != "success":
+            case let error?:
                 print("Login failed.")
                 Queue.Main.execute { self.title = "\(signInProvider.identityProviderName)登录失败" }
                 print("登录失败:", error.localizedDescription)
@@ -97,55 +100,15 @@ extension LoginViewController: AWSCognitoIdentityPasswordAuthentication {
     
     func doLogin() {
         print(String(self.dynamicType), #function)
-        //        passwordAuthenticationCompletion?.setResult(AWSCognitoIdentityPasswordAuthenticationDetails(username: usernameTextField.text!, password: passwordTextField.text!))
         
-        pool.getUser(usernameTextField.text!).getSession(usernameTextField.text!, password: passwordTextField.text!, validationData: nil).continueWithBlock { task -> AnyObject? in
-            print("pool.getUser().getSession")
-            print("task.result:", task.result)
-            print("task.error:", task.error)
+        let username = NSUserDefaults.standardUserDefaults().loginProviderLoginName
+        let password = NSUserDefaults.standardUserDefaults().loginProviderPassword
+        
+        pool.getUser(username).getSession(username, password: password, validationData: nil).continueWithBlock { task -> AnyObject? in
             
-            if let session = task.result as? AWSCognitoIdentityUserSession {
-                
-                print("session.idToken:", session.idToken?.tokenString)
-                print("session.accessToken:", session.accessToken?.tokenString)
-                print("session.refreshToken:", session.refreshToken?.tokenString)
-                print("session.expirationTime:", session.expirationTime)
-                
-//                LoginProvider.sharedInstance().credentialsProvider.identityProvider.identityProviderManager?.logins().continueWithBlock { task -> AnyObject? in
-//                    print("credentialsProvider.logins()")
-//                    print("task.result:", task.result)
-//                    print("task.error:", task.error)
-////                    self.completionHandler?(task.result ?? "", task.error ?? NSError(domain: "success", code: -1, userInfo: nil))
-////                    self.completionHandler = nil
-//                    
-//                    LoginProvider.sharedInstance().credentialsProvider.getIdentityId().continueWithBlock({ task -> AnyObject? in
-//                        print("credentialsProvider.getIdentityId")
-//                        print("task.result:", task.result)
-//                        print("task.error:", task.error)
-//                        let token = session.accessToken!.tokenString
-//                        self.completionHandler?([LoginProvider.sharedInstance().identityProviderName: token], NSError(domain: "success", code: -1, userInfo: nil))
-//                        self.completionHandler = nil
-//                        return nil
-//                    })
-//
-//                    return nil
-//                }
-                
-                
-            }
-            
-            
-            switch (task.result, task.error) {
-            case let (_, error?):
-                self.completionHandler?("", error)
-                self.completionHandler = nil
-            case let (result?, _):
-//                let token = (result as! AWSCognitoIdentityUserSession).accessToken!.tokenString
+            if task.result != nil {
+                LoginProvider.sharedInstance().didLogin()
                 AWSIdentityManager.defaultIdentityManager().didLogin()
-
-                self.completionHandler?(result, NSError(domain: "success", code: -1, userInfo: nil))
-                self.completionHandler = nil
-            default: break
             }
             return nil
         }
@@ -160,31 +123,15 @@ extension LoginViewController: AWSCognitoIdentityPasswordAuthentication {
     
     func didCompletePasswordAuthenticationStepWithError(error: NSError?) {
         print(String(self.dynamicType), #function, error)
-        switch error {
-        case let error?:
-            Queue.Main.execute {
-                self.completionHandler?("", error)
-                self.completionHandler = nil
-            }
-        default:
-            break
-            //
-            //            pool.logins().continueWithBlock({ (task) -> AnyObject? in
-            //                Queue.Main.execute {
-            //                    print("pool.logins().continueWithBlock")
-            //                    print("task.result:", task.result)
-            //                    print("task.error:", task.error)
-            //
-            //                    self.completionHandler?(task.result ?? "", task.error ?? NSError(domain: "success", code: -1, userInfo: nil))
-            //                    self.completionHandler = nil
-            //                }
-            //                return nil
-            //            })
-            //            Queue.Main.execute {
-            //                self.completionHandler?("", NSError(domain: "success", code: -1, userInfo: nil))
-            //                self.completionHandler = nil
-            //            }
-        }
+//        switch error {
+//        case let error?:
+//            Queue.Main.execute {
+//                self.completionHandler?("", error)
+//                self.completionHandler = nil
+//            }
+//        default:
+//            break
+//        }
         
     }
     

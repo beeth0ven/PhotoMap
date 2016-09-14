@@ -49,11 +49,11 @@ FOUNDATION_EXPORT NSString *const AWSIdentityManagerDidSignOutNotification;
  
  *Swift*
  
-    let identityManager = AWSIdentityManager.defaultIdentityManager()
+ let identityManager = AWSIdentityManager.defaultIdentityManager()
  
  *Objective-C*
  
-    AWSIdentityManager *identityManager = [AWSIdentityManager defaultIdentityManager];
+ AWSIdentityManager *identityManager = [AWSIdentityManager defaultIdentityManager];
  */
 + (instancetype)defaultIdentityManager;
 

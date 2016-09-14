@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Sets the ViewController used for Google SignIn.
  Defaults to rootViewController in keyWindow during signin.
-*/
+ */
 - (void)setViewControllerForGoogleSignIn:(UIViewController *)signInViewController;
 
 @end

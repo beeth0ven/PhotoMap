@@ -13,7 +13,7 @@ import AWSMobileHubHelper
 
 extension AWSIdentityManager {
     
-    func rx_logout() {
+    func logout() {
         
         AWSIdentityManager.defaultIdentityManager().logoutWithCompletionHandler { (result, error) in
             print("rx_logout result:", result)

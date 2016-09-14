@@ -36,7 +36,9 @@ class PhotosCollectionViewController: UICollectionViewController, UICollectionVi
         collectionView?.delegate = nil
         collectionView?.rx_setDelegate(self)
         
-        rx_getData
+        observe(for: AWSIdentityManagerDidSignInNotification)
+            .throttle(0.5, scheduler: MainScheduler.instance)
+            .flatMap { [unowned self] _ in self.rx_getData }
             .doOnError { [unowned self] error in self.title = "图片获取失败"; print(error) }
             .doOnCompleted { [unowned self] in self.title = "图片获取成功" }
             .bindTo(photos)

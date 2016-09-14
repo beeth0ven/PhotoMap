@@ -29,9 +29,13 @@ class MenuViewController: UIViewController, HasMenuDetailController {
         print("identityId:", AWSIdentityManager.defaultIdentityManager().identityId)
         print("userName:", AWSIdentityManager.defaultIdentityManager().userName)
         print("imageURL:", AWSIdentityManager.defaultIdentityManager().imageURL)
-
+        
         if !identityManager.loggedIn {
-            Queue.Main.execute { self.presentViewController(LoginViewController.navigationController, animated: true, completion: nil) }
+            if LoginProvider.sharedInstance().loggedIn {
+                LoginViewController.sharedInstance.myLogin()
+            } else {
+                Queue.Main.execute { self.presentViewController(LoginViewController.navigationController, animated: true, completion: nil) }
+            }
         }
         
         observe(for: AWSIdentityManagerDidSignInNotification)
@@ -67,7 +71,7 @@ class MenuViewController: UIViewController, HasMenuDetailController {
             print("identityId:", AWSIdentityManager.defaultIdentityManager().identityId)
             print("userName:", AWSIdentityManager.defaultIdentityManager().userName)
             print("imageURL:", AWSIdentityManager.defaultIdentityManager().imageURL)
-            identityManager.rx_logout()
+            identityManager.logout()
         }
     }
     

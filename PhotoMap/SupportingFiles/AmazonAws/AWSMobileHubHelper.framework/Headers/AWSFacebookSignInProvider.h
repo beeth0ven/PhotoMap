@@ -30,8 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
  Sets the login behavior of the Facebook SignIn SDK.
  Choices are listed in enum FBSDKLoginBehavior.
  Default behaviors for iOS:
-     9+ SFSafariViewController used.
-     8  WebViewController used.
+ 9+ SFSafariViewController used.
+ 8  WebViewController used.
  @loginBehavior a FBSDKLoginBehavior enum entry
  */
 - (void)setLoginBehavior:(NSUInteger)loginBehavior;
