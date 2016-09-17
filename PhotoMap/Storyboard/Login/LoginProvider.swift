@@ -17,16 +17,16 @@ class LoginProvider: NSObject {
         return _sharedInstance
     }
     
-    static private let _sharedInstance = LoginProvider()
+    static fileprivate let _sharedInstance = LoginProvider()
     
     var pool: AWSCognitoIdentityUserPool!
     
     override init() {
         super.init()
         
-        let serviceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: nil)
+        let serviceConfiguration = AWSServiceConfiguration(region: .usEast1, credentialsProvider: nil)
         let poolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: "79bl6lftqc428qicgk6ks7sce0", clientSecret: "5ruegj6svqd46u9uvhh2evc3ctgsi7l1k54l9jkepf0plunrqmg", poolId: "us-east-1_Za9P8cJXp")
-        AWSCognitoIdentityUserPool.registerCognitoIdentityUserPoolWithConfiguration(serviceConfiguration, userPoolConfiguration: poolConfiguration, forKey: "UserPool")
+        AWSCognitoIdentityUserPool.register(with: serviceConfiguration, userPoolConfiguration: poolConfiguration, forKey: "UserPool")
         pool = AWSCognitoIdentityUserPool(forKey: "UserPool")
         pool.delegate = self
     }
@@ -35,7 +35,7 @@ class LoginProvider: NSObject {
 extension LoginProvider: AWSCognitoIdentityInteractiveAuthenticationDelegate {
     
     func startPasswordAuthentication() -> AWSCognitoIdentityPasswordAuthentication {
-        print(String(self.dynamicType), #function)
+        print(String(describing: type(of: self)), #function)
         return loginViewController
     }
     
@@ -43,7 +43,7 @@ extension LoginProvider: AWSCognitoIdentityInteractiveAuthenticationDelegate {
         fatalError("Identity MultiFactor Authentication Not Supportted!")
     }
     
-    private var loginViewController: LoginViewController {
+    fileprivate var loginViewController: LoginViewController {
         return LoginViewController.sharedInstance
     }
 }
@@ -54,58 +54,59 @@ extension LoginProvider: AWSIdentityProvider {
         return "cognito-idp.us-east-1.amazonaws.com/\(pool.userPoolConfiguration.poolId)"
     }
     
-    func token() -> AWSTask {
-        print(String(self.dynamicType), #function)
-        return pool.token()
+    func token() -> AWSTask<NSString> {
+        print(String(describing: type(of: self)), #function)
+        return pool.token() 
     }
 }
 
 extension LoginProvider: AWSSignInProvider {
     
-    var loggedIn: Bool {
+    
+    var isLoggedIn: Bool {
         @objc(isLoggedIn) get {
-            return NSUserDefaults.standardUserDefaults().loginProviderIsLoggedIn
+            return UserDefaults.standard.loginProviderIsLoggedIn
         }
     }
     
-    var imageURL: NSURL? {
-        return NSUserDefaults.standardUserDefaults().loginProviderImageURL
+    var imageURL: URL? {
+        return UserDefaults.standard.loginProviderImageURL
     }
     
     var userName: String? {
-        return NSUserDefaults.standardUserDefaults().loginProviderUserName
+        return UserDefaults.standard.loginProviderUserName
     }
     
-    func login(completionHandler: (AnyObject, NSError) -> Void) {
-        print(String(self.dynamicType), #function)
+    func login(_ completionHandler: @escaping (Any, Error) -> Void) {
+        print(String(describing: type(of: self)), #function)
         loginViewController.doLogin()
     }
     
     func logout() {
-        print(String(self.dynamicType), #function)
+        print(String(describing: type(of: self)), #function)
         currentUser?.signOut()
         didLogout()
     }
     
     func reloadSession() {
-        print(String(self.dynamicType), #function)
-        currentUser?.getSession().rx_result
-            .doOnError { print($0) }
-            .subscribeNext { _ in  AWSIdentityManager.defaultIdentityManager().didLogin() }
+        print(String(describing: type(of: self)), #function)
+        currentUser?.getSession().rx.result
+            .do(onError: { print($0) })
+            .subscribe(onNext: { _ in  AWSIdentityManager.default().didLogin() })
             .addDisposableTo(disposeBag)
     }
     
-    func interceptApplication(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
-        print(String(self.dynamicType), #function)
+    func interceptApplication(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any]? = nil) -> Bool {
+        print(String(describing: type(of: self)), #function)
         return true
     }
     
-    func interceptApplication(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-        print(String(self.dynamicType), #function)
+    func interceptApplication(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        print(String(describing: type(of: self)), #function)
         return false
     }
     
-    private var currentUser: AWSCognitoIdentityUser? {
+    fileprivate var currentUser: AWSCognitoIdentityUser? {
         return pool.currentUser()
     }
     
@@ -114,40 +115,40 @@ extension LoginProvider: AWSSignInProvider {
 extension LoginProvider {
     
     func didLogin() {
-        NSUserDefaults.standardUserDefaults().loginProviderIsLoggedIn = true
-        NSUserDefaults.standardUserDefaults().loginProviderUserName = currentUser?.username
+        UserDefaults.standard.loginProviderIsLoggedIn = true
+        UserDefaults.standard.loginProviderUserName = currentUser?.username
     }
     
     func didLogout() {
-        NSUserDefaults.standardUserDefaults().loginProviderIsLoggedIn = false
-        NSUserDefaults.standardUserDefaults().loginProviderUserName = nil
+        UserDefaults.standard.loginProviderIsLoggedIn = false
+        UserDefaults.standard.loginProviderUserName = nil
     }
 }
 
-extension NSUserDefaults {
+extension UserDefaults {
     
     var loginProviderIsLoggedIn: Bool {
-        get { return boolForKey("loginProviderIsLoggedIn") }
-        set { setBool(newValue, forKey: "loginProviderIsLoggedIn") }
+        get { return bool(forKey: "loginProviderIsLoggedIn") }
+        set { set(newValue, forKey: "loginProviderIsLoggedIn") }
     }
     
     var loginProviderUserName: String? {
-        get { return valueForKey("loginProviderUserName") as? String }
+        get { return value(forKey: "loginProviderUserName") as? String }
         set { setValue(newValue, forKey: "loginProviderUserName") }
     }
     
-    var loginProviderImageURL: NSURL? {
-        get { return (valueForKey("loginProviderImageURL") as? String).flatMap(NSURL.init) }
+    var loginProviderImageURL: URL? {
+        get { return (value(forKey: "loginProviderImageURL") as? String).flatMap(URL.init) }
         set { setValue(newValue?.path, forKey: "loginProviderImageURL") }
     }
     
     var loginProviderLoginName: String {
-        get { return valueForKey("loginProviderLoginName") as? String ?? "" }
+        get { return value(forKey: "loginProviderLoginName") as? String ?? "" }
         set { setValue(newValue, forKey: "loginProviderLoginName") }
     }
     
     var loginProviderPassword: String {
-        get { return valueForKey("loginProviderPassword") as? String ?? "" }
+        get { return value(forKey: "loginProviderPassword") as? String ?? "" }
         set { setValue(newValue, forKey: "loginProviderPassword") }
     }
 }

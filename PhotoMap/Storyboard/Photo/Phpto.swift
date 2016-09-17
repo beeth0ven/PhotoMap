@@ -30,9 +30,9 @@ class Photo: AWSDynamoDBObjectModel {
         return UserInfo.currentUserInfo.flatMap {  userInfo -> Observable<Link?> in
             
             return Link.rx_get(indexIdentifier: .item) {
-                $0.when(key: "itemReference", isEqualTo: self.reference!)
-                    .filter(key: "fromUserReference", isEqualTo: userInfo!.reference!)
-                    .filter(key: "kindRawValue", isEqualTo: Link.Kind.likePhoto.rawValue)
+                $0.when(key: "itemReference", isEqualTo: self.reference! as AnyObject)
+                    .filter(key: "fromUserReference", isEqualTo: userInfo!.reference! as AnyObject)
+                    .filter(key: "kindRawValue", isEqualTo: Link.Kind.likePhoto.rawValue as AnyObject)
                 }
                 .map { $0.first }
                 .shareReplay(1)
@@ -44,35 +44,35 @@ class Photo: AWSDynamoDBObjectModel {
 extension Photo: AWSModelHasCreationDate {
     
     var likesCount: Int {
-        get { return likesNumber?.integerValue ?? 0 }
-        set { likesNumber = NSNumber(integer: newValue) }
+        get { return likesNumber?.intValue ?? 0 }
+        set { likesNumber = NSNumber(value: newValue as Int) }
     }
     
     var commentsCount: Int {
-        get { return commentsNumber?.integerValue ?? 0 }
-        set { commentsNumber = NSNumber(integer: newValue) }
+        get { return commentsNumber?.intValue ?? 0 }
+        set { commentsNumber = NSNumber(value: newValue as Int) }
     }
     
     var rx_likesCount: Driver<Int> { return rx_count(key: "likesCount") }
     
     var rx_commentsCount: Driver<Int> { return rx_count(key: "commentsCount") }
     
-    func rx_setLike(liked: Bool) -> Observable<Link> {
+    func rx_setLike(_ liked: Bool) -> Observable<Link> {
         
         if liked {
             return Link.rx_insertLikeLink(to: self)
-                .doOnNext {  _ in self.likesCount += 1 }
+                .do(onNext: {  _ in self.likesCount += 1 })
         } else {
             return rx_likePhotoLink
                 .filter { $0 != nil }
                 .flatMap { $0!.rx_delete() }
-                .doOnNext {  _ in self.likesCount += -1 }
+                .do(onNext: {  _ in self.likesCount += -1 })
         }
     }
     
-    func rx_insertComment(content content: String?) -> Observable<Link> {
+    func rx_insertComment(content: String?) -> Observable<Link> {
         return Link.rx_insertComment(to: self, content: content)
-            .doOnNext { _ in self.commentsCount += 1 }
+            .do(onNext: { _ in self.commentsCount += 1 })
     }
 }
 
@@ -97,7 +97,7 @@ extension Photo: AWSDynamoDBModeling {
 
 extension Photo {
     
-    static func rx_insert(title title: String, image: UIImage) -> Observable<Photo> {
+    static func rx_insert(title: String, image: UIImage) -> Observable<Photo> {
         return Observable.combineLatest(image.rx_saveToS3(), image.thumbnailImage().rx_saveToS3()) { (imageS3Key: $0, thumbnailImageS3Key: $1) }
             .flatMap { keys in Photo.rx_init(title: title, imageS3Key: keys.imageS3Key, thumbnailImageS3Key: keys.thumbnailImageS3Key) }
             .flatMap { $0.rx_save() }
@@ -106,12 +106,12 @@ extension Photo {
 
 extension Photo {
     
-    static func rx_init(title title: String, imageS3Key: String, thumbnailImageS3Key: String) -> Observable<Photo> {
+    static func rx_init(title: String, imageS3Key: String, thumbnailImageS3Key: String) -> Observable<Photo> {
         
         return UserInfo.currentUserInfo.map {
-            let photo = Photo()
+            let photo = Photo()!
             photo.userReference = $0!.reference!
-            photo.creationDate = NSDate()
+            photo.creationDate = Date()
             photo.commentsNumber = 0
             photo.imageS3Key = imageS3Key
             photo.thumbnailImageS3Key = thumbnailImageS3Key

@@ -14,12 +14,12 @@ class MenuDetailController: UIViewController {
     
     let rx_showMenu = Variable(false)
     
-    @IBOutlet weak private var showMenuConstraint: NSLayoutConstraint!
-    @IBOutlet weak private var hideMenuConstraint: NSLayoutConstraint!
-    @IBOutlet weak private var maskButton: UIButton!
+    @IBOutlet weak fileprivate var showMenuConstraint: NSLayoutConstraint!
+    @IBOutlet weak fileprivate var hideMenuConstraint: NSLayoutConstraint!
+    @IBOutlet weak fileprivate var maskButton: UIButton!
     
     var rx_currentIndex: Variable<Int> {
-        return childViewControllerWithType(DetailController)!.rx_currentIndex
+        return childViewControllerWithType(DetailController.self)!.rx_currentIndex
     }
     
     override func viewDidLoad() {
@@ -28,18 +28,18 @@ class MenuDetailController: UIViewController {
         let rx_showMenuDriver = rx_showMenu
             .asDriver()
             .distinctUntilChanged()
-//            .doOnNext { print("rx_showMenu", $0) }
+//            .do(onNext: { print("rx_showMenu", $0) }
         
         rx_showMenuDriver
             .drive(rx_showMenuObserver)
             .addDisposableTo(disposeBag)
         
         rx_showMenuDriver
-            .map { $0 ? UIStatusBarStyle.LightContent : .Default }
+            .map { $0 ? UIStatusBarStyle.lightContent : .default }
             .drive(rx_preferredStatusBarStyle)
             .addDisposableTo(disposeBag)
         
-        maskButton.rx_tap
+        maskButton.rx.tap
             .asDriver()
             .drive(rx_toogleShowMenuObserver)
             .addDisposableTo(disposeBag)
@@ -55,12 +55,12 @@ class MenuDetailController: UIViewController {
         }).asObserver()
     }
     
-    private var rx_showMenuObserver: AnyObserver<Bool> {
+    fileprivate var rx_showMenuObserver: AnyObserver<Bool> {
         
         return UIBindingObserver(UIElement: self, binding: { (selfvc, show) in
             
-            selfvc.showMenuConstraint.active = show
-            selfvc.hideMenuConstraint.active = !show
+            selfvc.showMenuConstraint.isActive = show
+            selfvc.hideMenuConstraint.isActive = !show
             
 //            UIView.animateWithDuration(
 //                0.3,
@@ -75,7 +75,7 @@ class MenuDetailController: UIViewController {
 //                completion: nil
 //            )
             
-            UIView.animateWithDuration(0.3, animations: {
+            UIView.animate(withDuration: 0.3, animations: {
                 selfvc.maskButton.alpha = show ? 1 : 0
                 selfvc.view.layoutIfNeeded()
             })
@@ -83,15 +83,15 @@ class MenuDetailController: UIViewController {
         }).asObserver()
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    override var preferredStatusBarStyle : UIStatusBarStyle {
         return _preferredStatusBarStyle
     }
     
-    private var _preferredStatusBarStyle = UIStatusBarStyle.Default {
+    fileprivate var _preferredStatusBarStyle = UIStatusBarStyle.default {
         didSet { setNeedsStatusBarAppearanceUpdate() }
     }
     
-    private var rx_preferredStatusBarStyle: AnyObserver<UIStatusBarStyle> {
+    fileprivate var rx_preferredStatusBarStyle: AnyObserver<UIStatusBarStyle> {
         return UIBindingObserver(UIElement: self, binding: { (selfvc, style) in
             selfvc._preferredStatusBarStyle = style
         }).asObserver()

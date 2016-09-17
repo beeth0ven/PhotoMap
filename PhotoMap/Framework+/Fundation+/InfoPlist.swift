@@ -10,13 +10,13 @@ import Foundation
 
 enum InfoPlist {
     
-    static private let info = NSBundle.mainBundle().infoDictionary! as NSDictionary
+    static fileprivate let info = Bundle.main.infoDictionary! as NSDictionary
     
-    static func valueForKeyPath(keyPath: String) -> AnyObject? {
-        return info.valueForKeyPath(keyPath)
+    static func valueForKeyPath(_ keyPath: String) -> AnyObject? {
+        return info.value(forKeyPath: keyPath) as AnyObject?
     }
     
-    static func setValue(value: AnyObject?, forKeyPath keyPath: String) {
+    static func setValue(_ value: AnyObject?, forKeyPath keyPath: String) {
         info.setValue(value, forKeyPath: keyPath)
     }
 }

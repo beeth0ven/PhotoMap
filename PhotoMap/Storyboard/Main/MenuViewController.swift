@@ -13,69 +13,69 @@ import AWSMobileHubHelper
 
 class MenuViewController: UIViewController, HasMenuDetailController {
     
-    @IBOutlet weak private var userImageView: UIImageView!
-    @IBOutlet weak private var usernameLabel: UILabel!
+    @IBOutlet weak fileprivate var userImageView: UIImageView!
+    @IBOutlet weak fileprivate var usernameLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         updateUserInfoViews()
         
-        print(String(self.dynamicType), #function)
+        print(String(describing: type(of: self)), #function)
         print("currentUser:", LoginProvider.sharedInstance().pool.currentUser())
         print("currentUser.username:", LoginProvider.sharedInstance().pool.currentUser()?.username)
-        print("LoginProvider.loggedIn:", LoginProvider.sharedInstance().loggedIn)
-        print("AWSIdentityManager.loggedIn:", AWSIdentityManager.defaultIdentityManager().loggedIn)
-        print("identityId:", AWSIdentityManager.defaultIdentityManager().identityId)
-        print("userName:", AWSIdentityManager.defaultIdentityManager().userName)
-        print("imageURL:", AWSIdentityManager.defaultIdentityManager().imageURL)
+        print("LoginProvider.loggedIn:", LoginProvider.sharedInstance().isLoggedIn)
+        print("AWSIdentityManager.loggedIn:", AWSIdentityManager.default().isLoggedIn)
+        print("identityId:", AWSIdentityManager.default().identityId)
+        print("userName:", AWSIdentityManager.default().userName)
+        print("imageURL:", AWSIdentityManager.default().imageURL)
         
-        if !identityManager.loggedIn {
-            if LoginProvider.sharedInstance().loggedIn {
+        if !identityManager.isLoggedIn {
+            if LoginProvider.sharedInstance().isLoggedIn {
                 LoginViewController.sharedInstance.myLogin()
             } else {
-                Queue.Main.execute { self.presentViewController(LoginViewController.navigationController, animated: true, completion: nil) }
+                Queue.main.execute { self.present(LoginViewController.navigationController, animated: true, completion: nil) }
             }
         }
         
-        observe(for: AWSIdentityManagerDidSignInNotification)
-            .subscribeNext { [unowned self] _ in self.updateUserInfoViews() }
+        observe(for: .AWSIdentityManagerDidSignIn)
+            .subscribe(onNext: { [unowned self] _ in self.updateUserInfoViews() })
             .addDisposableTo(disposeBag)
         
-        observe(for: AWSIdentityManagerDidSignOutNotification)
-            .subscribeNext { [unowned self] _ in
+        observe(for: .AWSIdentityManagerDidSignOut)
+            .subscribe(onNext: { [unowned self] _ in
                 self.updateUserInfoViews()
-                self.presentViewController(LoginViewController.navigationController, animated: true, completion: nil)
-            }
+                self.present(LoginViewController.navigationController, animated: true, completion: nil)
+            })
             .addDisposableTo(disposeBag)
         
     }
     
-    private func updateUserInfoViews() {
+    fileprivate func updateUserInfoViews() {
         userImageView.rx_setImage(url: identityManager.imageURL)
         usernameLabel.text = identityManager.userName ?? "Guest"
     }
     
-    private var identityManager: AWSIdentityManager {
-        return AWSIdentityManager.defaultIdentityManager()
+    fileprivate var identityManager: AWSIdentityManager {
+        return AWSIdentityManager.default()
     }
     
-    @IBAction func logout(sender: UIButton) {
+    @IBAction func logout(_ sender: UIButton) {
         
-        if identityManager.loggedIn  {
-            print(String(self.dynamicType), #function)
+        if identityManager.isLoggedIn  {
+            print(String(describing: type(of: self)), #function)
             print("currentUser:", LoginProvider.sharedInstance().pool.currentUser())
             print("currentUser.username:", LoginProvider.sharedInstance().pool.currentUser()?.username)
-            print("LoginProvider.loggedIn:", LoginProvider.sharedInstance().loggedIn)
-            print("AWSIdentityManager.loggedIn:", AWSIdentityManager.defaultIdentityManager().loggedIn)
-            print("identityId:", AWSIdentityManager.defaultIdentityManager().identityId)
-            print("userName:", AWSIdentityManager.defaultIdentityManager().userName)
-            print("imageURL:", AWSIdentityManager.defaultIdentityManager().imageURL)
+            print("LoginProvider.loggedIn:", LoginProvider.sharedInstance().isLoggedIn)
+            print("AWSIdentityManager.loggedIn:", AWSIdentityManager.default().isLoggedIn)
+            print("identityId:", AWSIdentityManager.default().identityId)
+            print("userName:", AWSIdentityManager.default().userName)
+            print("imageURL:", AWSIdentityManager.default().imageURL)
             identityManager.logout()
         }
     }
     
-    @IBAction func showViewController(sender: UIButton) {
+    @IBAction func showViewController(_ sender: UIButton) {
         menuDetailController!.rx_currentIndex.value = sender.tag
         menuDetailController?.rx_showMenu.value = false
     }

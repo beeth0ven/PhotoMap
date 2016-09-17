@@ -10,12 +10,12 @@ import Foundation
 
 extension NSObject {
     
-    func objc_getValue(key key: UnsafePointer<Void>) -> AnyObject! {
+    func objc_getValue(key: UnsafeRawPointer) -> AnyObject! {
         
-        return objc_getAssociatedObject(self, key)
+        return objc_getAssociatedObject(self, key) as AnyObject!
     }
     
-    func objc_set(value value: AnyObject!, key: UnsafePointer<Void>, policy: objc_AssociationPolicy = .OBJC_ASSOCIATION_RETAIN_NONATOMIC) {
+    func objc_set(value: AnyObject!, key: UnsafeRawPointer, policy: objc_AssociationPolicy = .OBJC_ASSOCIATION_RETAIN_NONATOMIC) {
         
         objc_setAssociatedObject(self, key, value, policy)
     }

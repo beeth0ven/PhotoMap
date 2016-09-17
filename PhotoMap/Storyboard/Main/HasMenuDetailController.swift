@@ -16,7 +16,7 @@ extension HasMenuDetailController where Self: UIViewController {
     
     var menuDetailController: MenuDetailController? {
         
-        return parentViewControllerWithType(MenuDetailController)
+        return parentViewControllerWithType(MenuDetailController.self)
     }
 }
 
@@ -29,7 +29,7 @@ extension DetailChildViewControllerType where Self: HasMenuDetailController, Sel
     
     func rx_bindToggleShowMenu() {
         
-        toggleMenuBarButtonItem.rx_tap
+        toggleMenuBarButtonItem.rx.tap
             .asDriver()
             .drive(menuDetailController!.rx_toogleShowMenuObserver)
             .addDisposableTo(disposeBag)

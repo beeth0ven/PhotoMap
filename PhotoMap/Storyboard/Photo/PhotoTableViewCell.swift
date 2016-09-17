@@ -17,33 +17,32 @@ class PhotoTableViewCell: RxTableViewCell {
         didSet { updateUI() }
     }
     
-    @IBOutlet private weak var photoImageView: UIImageView!
-    @IBOutlet weak private var titleLabel: UILabel!
-    @IBOutlet weak private var likesCountLabel: UILabel!
-    @IBOutlet weak private var commentsCountLabel: UILabel!
-    @IBOutlet weak private var likeButton: UIButton!
+    @IBOutlet fileprivate weak var photoImageView: UIImageView!
+    @IBOutlet weak fileprivate var titleLabel: UILabel!
+    @IBOutlet weak fileprivate var likesCountLabel: UILabel!
+    @IBOutlet weak fileprivate var commentsCountLabel: UILabel!
+    @IBOutlet weak fileprivate var likeButton: UIButton!
     
     func updateUI() {
         
         photoImageView.s3_setImage(key: photo.imageS3Key)
         titleLabel.text = photo.title
         
-        photo.rx_likesCount.driveNext { [unowned self] count in
+        photo.rx_likesCount.drive(onNext: { [unowned self] count in
             self.likesCountLabel.text = "likes: \(count)"
-            }
+            })
             .addDisposableTo(prepareForReuseDisposeBag)
         
-        photo.rx_commentsCount.driveNext { [unowned self] count in
+        photo.rx_commentsCount.drive(onNext: { [unowned self] count in
             self.commentsCountLabel.text = "comments: \(count)"
-            }
-            .addDisposableTo(prepareForReuseDisposeBag)
+            })            .addDisposableTo(prepareForReuseDisposeBag)
         
         photo.rx_likePhotoLink
-            .doOnError {  error in print(error) }
-            .subscribeNext { [unowned self] link in
-                self.likeButton.enabled = true
-                self.likeButton.selected = (link != nil)
-            }
+            .do(onError: {  error in print(error) })
+            .subscribe(onNext: { [unowned self] link in
+                self.likeButton.isEnabled = true
+                self.likeButton.isSelected = (link != nil)
+            })
             .addDisposableTo(prepareForReuseDisposeBag)
     }
 }
@@ -54,8 +53,8 @@ class UserInfoTableViewCell: RxTableViewCell {
         didSet { updateUI() }
     }
 
-    @IBOutlet weak private var userImageView: UIImageView!
-    @IBOutlet weak private var usernameLabel: UILabel!
+    @IBOutlet weak fileprivate var userImageView: UIImageView!
+    @IBOutlet weak fileprivate var usernameLabel: UILabel!
     
     func updateUI() {
         usernameLabel.text = userInfo?.displayName
@@ -70,21 +69,21 @@ class CommentTableViewCell: RxTableViewCell {
         didSet { updateUI() }
     }
 
-    @IBOutlet weak private var userImageView: UIImageView!
-    @IBOutlet weak private var usernameLabel: UILabel!
-    @IBOutlet weak private var dateLabel: UILabel!
-    @IBOutlet weak private var contentLabel: UILabel!
+    @IBOutlet weak fileprivate var userImageView: UIImageView!
+    @IBOutlet weak fileprivate var usernameLabel: UILabel!
+    @IBOutlet weak fileprivate var dateLabel: UILabel!
+    @IBOutlet weak fileprivate var contentLabel: UILabel!
     
     func updateUI() {
         
         contentLabel.text = comment.content
-        dateLabel.text = comment.creationDate.flatMap(NSDateFormatter.string)
+        dateLabel.text = comment.creationDate.flatMap(DateFormatter.string)
         
         comment.rx_fromUser
-            .subscribeNext { [unowned self] userInfo in
+            .subscribe(onNext: { [unowned self] userInfo in
                 self.usernameLabel.text = userInfo?.displayName
                 self.userImageView.rx_setImage(url: userInfo?.imageURL)
-            }
+            })
             .addDisposableTo(prepareForReuseDisposeBag)
     }
 

@@ -28,7 +28,7 @@ class UserInfo: AWSDynamoDBObjectModel {
         guard let reference = self.reference else { return Observable.empty() }
         
         return Photo.rx_get() {
-            $0.when(key: "userReference", isEqualTo: reference)
+            $0.when(key: "userReference", isEqualTo: reference as AnyObject)
             }
             .shareReplay(1)
     }()
@@ -37,10 +37,10 @@ class UserInfo: AWSDynamoDBObjectModel {
         
         guard let reference = self.reference else { return Observable.empty() }
         
-        return Link.rx_get() {
-                $0.when(key: "fromUserReference", isEqualTo: reference)
-                .filter(key: "kindRawValue", isEqualTo: Link.Kind.likePhoto.rawValue)
-            }
+        return Link.rx_get(predicate: {
+            $0.when(key: "fromUserReference", isEqualTo: reference as AnyObject)
+                .filter(key: "kindRawValue", isEqualTo: Link.Kind.likePhoto.rawValue as AnyObject)
+            })
             .map { $0.flatMap { $0.itemReference } }
             .flatMap { Photo.rx_get(references: $0) }
             .shareReplay(1)
@@ -50,10 +50,10 @@ class UserInfo: AWSDynamoDBObjectModel {
         
         guard let reference = self.reference else { return Observable.empty() }
         print("rx_followerUsers", reference)
-
+        
         return Link.rx_get(indexIdentifier: .toUser) {
-            $0.when(key: "toUserReference", isEqualTo: reference)
-                .filter(key: "kindRawValue", isEqualTo: Link.Kind.followUser.rawValue)
+            $0.when(key: "toUserReference", isEqualTo: reference as AnyObject)
+                .filter(key: "kindRawValue", isEqualTo: Link.Kind.followUser.rawValue as AnyObject)
             }
             .map { $0.flatMap { $0.fromUserReference } }
             .flatMap { UserInfo.rx_get(references: $0) }
@@ -64,11 +64,11 @@ class UserInfo: AWSDynamoDBObjectModel {
         
         guard let reference = self.reference else { return Observable.empty() }
         print("rx_followingUsers", reference)
-
-        return Link.rx_get() {
-            $0.when(key: "fromUserReference", isEqualTo: reference)
-                .filter(key: "kindRawValue", isEqualTo: Link.Kind.followUser.rawValue)
-            }
+        
+        return Link.rx_get(predicate: {
+            $0.when(key: "fromUserReference", isEqualTo: reference as AnyObject)
+                .filter(key: "kindRawValue", isEqualTo: Link.Kind.followUser.rawValue as AnyObject)
+            })
             .map { $0.flatMap { $0.toUserReference } }
             .flatMap { UserInfo.rx_get(references: $0) }
             .shareReplay(1)
@@ -77,14 +77,14 @@ class UserInfo: AWSDynamoDBObjectModel {
     lazy var rx_followedByCurrentUserLink: Observable<Link?> = {
         
         guard let reference = self.reference else { return Observable.empty() }
-
+        
         return UserInfo.currentUserInfo.flatMap {  userInfo -> Observable<Link?> in
             
-            return Link.rx_get() {
-                $0.when(key: "fromUserReference", isEqualTo: userInfo!.reference!)
-                    .filter(key: "toUserReference", isEqualTo: reference)
-                    .filter(key: "kindRawValue", isEqualTo: Link.Kind.followUser.rawValue)
-                }
+            return Link.rx_get(predicate: {
+                $0.when(key: "fromUserReference", isEqualTo: userInfo!.reference! as AnyObject)
+                    .filter(key: "toUserReference", isEqualTo: reference as AnyObject)
+                    .filter(key: "kindRawValue", isEqualTo: Link.Kind.followUser.rawValue as AnyObject)
+                })
                 .map { $0.first }
                 .shareReplay(1)
         }
@@ -95,23 +95,23 @@ class UserInfo: AWSDynamoDBObjectModel {
 extension UserInfo: AWSModelHasCreationDate {
     
     var followersCount: Int {
-        get { return followersNumber?.integerValue ?? 0 }
-        set { followersNumber = NSNumber(integer: newValue) }
+        get { return followersNumber?.intValue ?? 0 }
+        set { followersNumber = NSNumber(value: newValue as Int) }
     }
     
     var followingCount: Int {
-        get { return followingNumber?.integerValue ?? 0 }
-        set { followingNumber = NSNumber(integer: newValue) }
+        get { return followingNumber?.intValue ?? 0 }
+        set { followingNumber = NSNumber(value: newValue as Int) }
     }
     
     var likedCount: Int {
-        get { return likedNumber?.integerValue ?? 0 }
-        set { likedNumber = NSNumber(integer: newValue) }
+        get { return likedNumber?.intValue ?? 0 }
+        set { likedNumber = NSNumber(value: newValue as Int) }
     }
     
     var postedCount: Int {
-        get { return postedNumber?.integerValue ?? 0 }
-        set { postedNumber = NSNumber(integer: newValue) }
+        get { return postedNumber?.intValue ?? 0 }
+        set { postedNumber = NSNumber(value: newValue as Int) }
     }
     
     var rx_followerCount: Driver<Int> { return rx_count(key: "followersCount") }
@@ -122,22 +122,22 @@ extension UserInfo: AWSModelHasCreationDate {
     
     var rx_postedCount: Driver<Int> { return rx_count(key: "postedCount") }
     
-    var imageURL: NSURL? { return imagePath.flatMap(NSURL.init) }
+    var imageURL: URL? { return imagePath.flatMap(URL.init) }
     
     var isMe: Bool {
-        return userId == AWSIdentityManager.defaultIdentityManager().identityId!
+        return userId == AWSIdentityManager.default().identityId!
     }
     
-    func rx_followUser(follow: Bool) -> Observable<Link> {
+    func rx_followUser(_ follow: Bool) -> Observable<Link> {
         
         if follow {
             return Link.rx_insertFollowUserLink(to: self)
-//                .doOnNext {  _ in self.likesCount += 1 }
+            //                .do(onNext: {  _ in self.likesCount += 1 }
         } else {
             return rx_followedByCurrentUserLink
                 .filter { $0 != nil }
                 .flatMap { $0!.rx_delete() }
-//                .doOnNext {  _ in self.likesCount += -1 }
+            //                .do(onNext: {  _ in self.likesCount += -1 }
         }
     }
 }
@@ -161,7 +161,7 @@ extension UserInfo {
     
     convenience init(displayName: String?, imagePath: String?) {
         self.init()
-        self.userId = AWSIdentityManager.defaultIdentityManager().identityId!
+        self.userId = AWSIdentityManager.default().identityId!
         self.creationTime = NSNumber.currentTimeNumber
         self.displayName = displayName
         self.followersNumber = 0
@@ -175,30 +175,30 @@ extension UserInfo {
 extension UserInfo {
     
     static var currentUserInfo: Observable<UserInfo?> {
-        let manager = AWSIdentityManager.defaultIdentityManager()
-        guard let userId = manager.identityId where manager.loggedIn == true else {
+        let manager = AWSIdentityManager.default()
+        guard let userId = manager.identityId, manager.isLoggedIn == true else {
             return Observable.just(nil, scheduler: MainScheduler.instance)
         }
         
-        switch cache.objectForKey(userId) {
-        case let result  as Observable<UserInfo?>:
+        switch cache.object(forKey: userId as NSString) {
+        case let result?:
             return result
             
         default:
             let result = rx_get() {
-                $0.when(key: "userId", isEqualTo: userId)
+                $0.when(key: "userId", isEqualTo: userId as AnyObject)
                 }
                 .map { $0.first }
                 .shareReplay(1)
             
-            cache.setObject(result, forKey: userId)
+            cache.setObject(result, forKey: userId as NSString)
             
             return result
         }
-
+        
     }
     
-    private static let cache = NSCache()
+    fileprivate static let cache = NSCache<NSString, Observable<UserInfo?>>()
     
 }
 

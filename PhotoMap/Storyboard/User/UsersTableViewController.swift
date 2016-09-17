@@ -19,7 +19,7 @@ class UsersTableViewController: UITableViewController{
         setupRx()
     }
     
-    private func setupRx() {
+    fileprivate func setupRx() {
         rx_bindDataSource()
     }
     
@@ -29,12 +29,12 @@ class UsersTableViewController: UITableViewController{
         
         tableView?.dataSource = nil
         tableView?.delegate = nil
-        tableView?.rx_setDelegate(self)
+        tableView?.rx.setDelegate(self).addDisposableTo(disposeBag)
         
         rx_getData
-            .doOnError { [unowned self] error in self.title = "用户信息获取失败"; print(error) }
-            .doOnNext { [unowned self] _ in self.title = "用户信息获取成功" }
-            .bindTo(tableView!.rx_itemsWithCellIdentifier("UITableViewCell")) { index, userInfo, cell in
+            .do(onError: { [unowned self] error in self.title = "用户信息获取失败"; print(error) })
+            .do(onNext: { [unowned self] _ in self.title = "用户信息获取成功" })
+            .bindTo(tableView!.rx.items(cellIdentifier: "UITableViewCell")) { index, userInfo, cell in
                 cell.textLabel?.text        = userInfo.displayName
                 cell.detailTextLabel?.text  = userInfo.userId
                 cell.imageView?.rx_setImage(url: userInfo.imageURL)

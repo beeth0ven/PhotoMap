@@ -12,9 +12,9 @@ import RxCocoa
 
 class FlatVariable<Element> {
     
-    private let _subject: BehaviorSubject<Element?>
-    private var _seed: Observable<Element>
-    private var _disposeBag: DisposeBag!
+    fileprivate let _subject: BehaviorSubject<Element?>
+    fileprivate var _seed: Observable<Element>
+    fileprivate var _disposeBag: DisposeBag!
 
     init(_ seed: Observable<Element>) {
         _seed = seed
@@ -32,7 +32,7 @@ class FlatVariable<Element> {
             }
         }
         set(newValue) {
-            _subject.on(.Next(newValue))
+            _subject.on(.next(newValue))
         }
     }
     
@@ -41,8 +41,8 @@ class FlatVariable<Element> {
         _disposeBag = DisposeBag()
         
         _seed
-            .doOnError { [unowned self] in self._subject.onError($0) }
-            .subscribeNext { [unowned self] in self._subject.onNext($0) }
+            .do(onError: { [unowned self] in self._subject.onError($0) })
+            .subscribe(onNext: { [unowned self] in self._subject.onNext($0) })
             .addDisposableTo(_disposeBag)
     }
     
@@ -50,9 +50,9 @@ class FlatVariable<Element> {
         return _subject
             .filter {
                 switch $0 {
-                case .Some:
+                case .some:
                     return true
-                case .None:
+                case .none:
                     return false
                 }
             }

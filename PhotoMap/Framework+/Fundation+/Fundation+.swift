@@ -21,7 +21,7 @@ extension Dictionary {
 extension NSNumber {
     
     static var currentTimeNumber: NSNumber {
-        return  NSNumber(double: NSDate().timeIntervalSince1970)
+        return  NSNumber(value: Date().timeIntervalSince1970 as Double)
     }
 }
 
@@ -36,25 +36,25 @@ extension Array {
     }
 }
 
-extension NSDate {
+extension Date {
     
     func toTimeIntervalNumber() -> NSNumber {
-        return NSNumber(double: timeIntervalSince1970)
+        return NSNumber(value: timeIntervalSince1970 as Double)
     }
     
-    convenience init(timeIntervalNumber: NSNumber) {
+    init(timeIntervalNumber: NSNumber) {
         self.init(timeIntervalSince1970: timeIntervalNumber.doubleValue)
     }
 }
 
 
-extension NSDateFormatter {
+extension DateFormatter {
     
-    static func string(from date: NSDate) -> String {
+    static func string(from date: Date) -> String {
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .ShortStyle
-        dateFormatter.timeStyle = .ShortStyle
-        return dateFormatter.stringFromDate(date)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: date)
     }
 }

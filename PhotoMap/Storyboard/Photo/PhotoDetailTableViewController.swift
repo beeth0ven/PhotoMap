@@ -46,7 +46,7 @@ class PhotoDetailTableViewController: UITableViewController {
         set { sections.value[2].items = newValue.map { CellStyle.comment($0) } }
     }
     
-    private func setupRx() {
+    fileprivate func setupRx() {
         
 //        title = "加载中..."
         
@@ -57,39 +57,39 @@ class PhotoDetailTableViewController: UITableViewController {
         
         sections
             .asDriver()
-            .drive(tableView.rx_itemsWithDataSource(dataSource))
+            .drive(tableView.rx.items(dataSource: dataSource))
             .addDisposableTo(disposeBag)
         
         photo.rx_user
-            .subscribeNext { [unowned self] in
+            .subscribe(onNext: { [unowned self] in
                 self.sections.value[1].items = [CellStyle.userInfo($0!)]
-            }
+            })
             .addDisposableTo(disposeBag)
         
         photo.recentComments
-            .subscribeNext { [unowned self] in
+            .subscribe(onNext: { [unowned self] in
                 self.comments = $0
-            }
+            })
             .addDisposableTo(disposeBag)
 
     }
     
-    private func configureDataSource() {
+    fileprivate func configureDataSource() {
         
         dataSource.configureCell = { dataSource, tableView, indexPath, cellStyle in
             switch cellStyle {
             case .photo(let photo):
-                let cell = tableView.dequeueReusableCellWithIdentifier("PhotoTableViewCell") as! PhotoTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoTableViewCell") as! PhotoTableViewCell
                 cell.photo = photo
                 return cell
 
             case .userInfo(let userInfo):
-                let cell = tableView.dequeueReusableCellWithIdentifier("UserInfoTableViewCell") as! UserInfoTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "UserInfoTableViewCell") as! UserInfoTableViewCell
                 cell.userInfo = userInfo
                 return cell
 
             case .comment(let comment):
-                let cell = tableView.dequeueReusableCellWithIdentifier("CommentTableViewCell") as! CommentTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CommentTableViewCell") as! CommentTableViewCell
                 cell.comment = comment
                 return cell
 
@@ -101,32 +101,32 @@ class PhotoDetailTableViewController: UITableViewController {
         }
     }
     
-    @IBAction func toggleLikeState(sender: UIButton) {
+    @IBAction func toggleLikeState(_ sender: UIButton) {
         
-        photo.rx_setLike(!sender.selected)
-            .doOnError { [unowned self] error in self.title = "切换喜欢图片失败"; print(error) }
-            .subscribeCompleted { [unowned self] in self.title = "切换喜欢图片成功"; sender.selected = !sender.selected }
+        photo.rx_setLike(!sender.isSelected)
+            .do(onError: { [unowned self] error in self.title = "切换喜欢图片失败"; print(error) })
+            .subscribe(onCompleted: { [unowned self] in self.title = "切换喜欢图片成功"; sender.isSelected = !sender.isSelected })
             .addDisposableTo(disposeBag)
     }
 }
 
 extension PhotoDetailTableViewController {
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "AddComment"?:
-            let vc = segue.destinationViewController as! AddCommentViewController
+            let vc = segue.destination as! AddCommentViewController
             vc.photo = photo
             vc.rx_comment
-                .driveNext { [unowned self] in
-                    self.comments.insert($0, atIndex: 0)
-                }
+                .drive(onNext: { [unowned self] in
+                    self.comments.insert($0, at: 0)
+                })
                 .addDisposableTo(disposeBag)
             
         case "ShowUser"?:
-            let vc = segue.destinationViewController as! UserDetailTableViewController
+            let vc = segue.destination as! UserDetailTableViewController
             let cell = sender as! UserInfoTableViewCell, userInfo = cell.userInfo
-            vc.rx_userInfo = Observable.just(userInfo).asFlatVariable()
+            vc.rx_userInfo = Observable.just(userInfo!).asFlatVariable()
             vc.navigationItem.leftBarButtonItem = nil
             
         default:

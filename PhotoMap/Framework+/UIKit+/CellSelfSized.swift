@@ -34,7 +34,7 @@ extension UICollectionView {
         get {
             
             guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else { return false }
-            return layout.estimatedItemSize != CGSizeZero
+            return layout.estimatedItemSize != CGSize.zero
         }
         set(enable) {
             if enable {

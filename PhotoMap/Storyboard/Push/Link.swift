@@ -28,8 +28,8 @@ class Link: AWSDynamoDBObjectModel {
 extension Link: AWSModelHasCreationDate {
     
     var kind: Kind! {
-        get { return Kind(rawValue: kindRawValue!.integerValue) }
-        set { kindRawValue = NSNumber(integer: newValue.rawValue) }
+        get { return Kind(rawValue: kindRawValue!.intValue) }
+        set { kindRawValue = NSNumber(value: newValue.rawValue as Int) }
     }
     
     enum Kind: Int, CustomStringConvertible {
@@ -39,9 +39,9 @@ extension Link: AWSModelHasCreationDate {
         
         var description: String {
             switch self {
-            case followUser:    return "followUser"
-            case likePhoto:     return "likePhoto"
-            case commentPhoto:  return "commentPhoto"
+            case .followUser:    return "followUser"
+            case .likePhoto:     return "likePhoto"
+            case .commentPhoto:  return "commentPhoto"
             }
         }
     }
@@ -72,9 +72,9 @@ extension Link: AWSHasTableIndex {
     static func rx_getComments(from photo: Photo, limit: Int? = nil) -> Observable<[Link]> {
         
         return rx_get(indexIdentifier: .item) {
-            $0.when(key: "itemReference", isEqualTo: photo.reference!)
-                .filter(key: "kindRawValue", isEqualTo: Kind.commentPhoto.rawValue)
-            $0.limit = limit.flatMap(NSNumber.init(integer:))
+            $0.when(key: "itemReference", isEqualTo: photo.reference! as AnyObject)
+                .filter(key: "kindRawValue", isEqualTo: Kind.commentPhoto.rawValue as AnyObject)
+                .limit = limit.flatMap(NSNumber.init(value:))
         }
     }
     
@@ -86,7 +86,7 @@ extension Link: AWSHasTableIndex {
                 guard let reference = reference else { return Observable.just([]) }
                 
                 return rx_get(indexIdentifier: .toUser) {
-                    $0.when(key: "toUserReference", isEqualTo: reference)
+                    $0.when(key: "toUserReference", isEqualTo: reference as AnyObject)
                 }
         }
         
@@ -97,31 +97,31 @@ extension Link {
     
     static func rx_insertComment(to photo: Photo, content: String?) -> Observable<Link> {
         return rx_init()
-            .doOnNext {
+            .do(onNext: {
                 $0.toUserReference = photo.userReference
                 $0.itemReference = photo.reference
                 $0.kind = .commentPhoto
                 $0.content = content
-            }
+            })
             .flatMap { $0.rx_save() }
     }
     
     static func rx_insertLikeLink(to photo: Photo) -> Observable<Link> {
         return rx_init()
-            .doOnNext {
+            .do(onNext: {
                 $0.toUserReference = photo.userReference
                 $0.itemReference = photo.reference
                 $0.kind = .likePhoto
-            }
+            })
             .flatMap { $0.rx_save() }
     }
     
     static func rx_insertFollowUserLink(to userInfo: UserInfo) -> Observable<Link> {
         return rx_init()
-            .doOnNext {
+            .do(onNext: {
                 $0.toUserReference = userInfo.reference
                 $0.kind = .followUser
-            }
+            })
             .flatMap { $0.rx_save() }
     }
     
@@ -131,8 +131,8 @@ extension Link {
     
     static func rx_init() -> Observable<Link> {
         return UserInfo.currentUserInfo.map {
-            let result = Link()
-            result.creationDate = NSDate()
+            let result = Link()!
+            result.creationDate = Date()
             result.fromUserReference = $0!.reference!
             return result
         }

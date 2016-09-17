@@ -31,24 +31,24 @@ import Foundation
  */
 
 public enum Queue: ExcutableQueue {
-    case Main
-    case UserInteractive
-    case UserInitiated
-    case Utility
-    case Background
+    case main
+    case userInteractive
+    case userInitiated
+    case utility
+    case background
     
-    public var queue: dispatch_queue_t {
+    public var queue: DispatchQueue {
         switch self {
-        case .Main:
-            return dispatch_get_main_queue()
-        case .UserInteractive:
-            return dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)
-        case .UserInitiated:
-            return dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)
-        case .Utility:
-            return dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)
-        case .Background:
-            return dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)
+        case .main:
+            return DispatchQueue.main
+        case .userInteractive:
+            return DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive)
+        case .userInitiated:
+            return DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated)
+        case .utility:
+            return DispatchQueue.global(qos: DispatchQoS.QoSClass.utility)
+        case .background:
+            return DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         }
     }
 }
@@ -59,25 +59,25 @@ public enum SerialQueue: String, ExcutableQueue {
     case DownLoadImage = "ovfun.Education.SerialQueue.DownLoadImage"
     case UpLoadFile = "ovfun.Education.SerialQueue.UpLoadFile"
 
-    public var queue: dispatch_queue_t {
-        return dispatch_queue_create(rawValue, DISPATCH_QUEUE_SERIAL)
+    public var queue: DispatchQueue {
+        return DispatchQueue(label: rawValue, attributes: [])
     }
 }
 
 /// 给 Queue 提供默认的执行能力
 public protocol ExcutableQueue {
    
-    var queue: dispatch_queue_t { get }
+    var queue: DispatchQueue { get }
 }
 
 extension ExcutableQueue {
   
-    public func execute(closure: () -> Void) {
-        dispatch_async(queue, closure)
+    public func execute(_ closure: @escaping () -> Void) {
+        queue.async(execute: closure)
     }
     
-    public func executeAfter(seconds seconds: NSTimeInterval, closure: () -> Void) {
-        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
-        dispatch_after(delay, queue, closure)
+    public func executeAfter(seconds: TimeInterval, closure: @escaping () -> Void) {
+        let delay = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        queue.asyncAfter(deadline: delay, execute: closure)
     }
 }

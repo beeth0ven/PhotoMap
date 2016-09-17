@@ -31,7 +31,7 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
                 }
             }
             
-            return NopDisposable.instance
+            return Disposables.create()
             
             }.observeOn(MainScheduler.instance)
     }
@@ -50,7 +50,7 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
                 }
             }
             
-            return NopDisposable.instance
+            return Disposables.create()
             
             }.observeOn(MainScheduler.instance)
     }
@@ -72,16 +72,17 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
                 }
             }
             
-            return NopDisposable.instance
+            return Disposables.create()
             
             }.observeOn(MainScheduler.instance)
     }
     
-    static func rx_get(predicate predicate: ((AWSDynamoDBQueryExpression) -> Void)) -> Observable<[Self]> {
+    static func rx_get(predicate: ((AWSDynamoDBQueryExpression) -> Void)) -> Observable<[Self]> {
+        
+        let expression = AWSDynamoDBQueryExpression()
+        predicate(expression)
         
         return Observable.create { observer in
-            let expression = AWSDynamoDBQueryExpression()
-            predicate(expression)
             mapper.query(self, expression: expression) { (output, error) in
                 switch (output?.items, error) {
                 case let (_, error?):
@@ -94,42 +95,43 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
                 }
             }
             
-            return NopDisposable.instance
+            return Disposables.create()
             
             }.observeOn(MainScheduler.instance)
     }
     
-    static func rx_get(hashValue hashValue: AnyObject, rangeValue: AnyObject? = nil) -> Observable<Self?> {
+    static func rx_get(hashValue: AnyObject, rangeValue: AnyObject? = nil) -> Observable<Self?> {
         
-        let cacheKey = String(self) + "/" + hashValue.description! + "/" + (rangeValue?.description ?? "")
+        let rangeDescription = rangeValue?.description ?? ""
+        let cacheKey = String(describing: self) + "/" + hashValue.description! + "/" + rangeDescription
         
-        switch cache.objectForKey(cacheKey) {
+        switch cache.object(forKey: cacheKey as NSString) {
         case let result as Observable<Self?>:
-            print(String(self), "from cache.")
+            print(String(describing: self), "from cache.")
             return result
         default:
-            print(String(self), "from AWS.")
+            print(String(describing: self), "from AWS.")
             
             let result =  mapper.load(self, hashKey: hashValue, rangeKey: rangeValue)
-                .rx_result
-                .doOnError { print("mapper.load.error:", $0) }
+                .rx.result
+                .do(onError: { print("mapper.load.error:", $0) })
                 .map { $0 as? Self }
                 .shareReplay(1)
                 .observeOn(MainScheduler.instance)
             
-            cache.setObject(result, forKey: cacheKey)
+            cache.setObject(result, forKey: cacheKey as NSString)
             return result
         }
     }
     
-    static func rx_get(reference reference: String?) -> Observable<Self?> {
-        guard let reference = reference, parameters = NSJSONSerialization.parameters(from: reference), hashValue = parameters.element(at: 0) else {
+    static func rx_get(reference: String?) -> Observable<Self?> {
+        guard let reference = reference, let parameters = JSONSerialization.parameters(from: reference), let hashValue = parameters.element(at: 0) else {
             return Observable.just(nil, scheduler: MainScheduler.instance)
         }
         return rx_get(hashValue: hashValue, rangeValue: parameters.element(at: 1))
     }
     
-    static func rx_get(references references: [String]) -> Observable<[Self]> {
+    static func rx_get(references: [String]) -> Observable<[Self]> {
         
         guard references.count > 0 else {
             return Observable.just([], scheduler: MainScheduler.instance)
@@ -146,14 +148,14 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
     
     var reference: String? {
         
-        let hashKey = self.dynamicType.hashKeyAttribute(), rangeKey = self.dynamicType.rangeKeyAttribute?()
+        let hashKey = type(of: self).hashKeyAttribute(), rangeKey = type(of: self).rangeKeyAttribute?()
         
-        switch (valueForKey(hashKey), rangeKey) {
+        switch (value(forKey: hashKey), rangeKey) {
         case let (hashValue?, nil):
-            return NSJSONSerialization.string(from: [hashValue])
+            return JSONSerialization.string(from: [hashValue as AnyObject])
         case let (hashValue?, rangeKey?):
-            let rangeValue = valueForKey(rangeKey)
-            return rangeValue.flatMap { NSJSONSerialization.string(from: [hashValue, $0]) }
+            let rangeValue = value(forKey: rangeKey)
+            return rangeValue.flatMap { JSONSerialization.string(from: [hashValue as AnyObject, $0 as AnyObject]) }
         default:
             return nil
         }
@@ -161,10 +163,10 @@ extension AWSDynamoDBObjectModelType where Self: AWSDynamoDBObjectModel, Self: A
     }
     
     static var mapper: AWSDynamoDBObjectMapper {
-        return AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        return AWSDynamoDBObjectMapper.default()
     }
 }
 
-private let cache = NSCache()
+private let cache = NSCache<NSString, AnyObject>()
 
 

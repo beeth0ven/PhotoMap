@@ -22,9 +22,9 @@ class AWSMobileClient: NSObject {
     
     // Shared instance of this class
     static let sharedInstance = AWSMobileClient()
-    private var isInitialized: Bool
+    fileprivate var isInitialized: Bool
     
-    private override init() {
+    fileprivate override init() {
         isInitialized = false
         super.init()
         handleLogin()
@@ -45,9 +45,9 @@ class AWSMobileClient: NSObject {
      * - parameter annotation: from application delegate.
      * - returns: true if call was handled by this component
      */
-    func withApplication(application: UIApplication, withURL url: NSURL, withSourceApplication sourceApplication: String?, withAnnotation annotation: AnyObject) -> Bool {
+    func withApplication(_ application: UIApplication, withURL url: URL, withSourceApplication sourceApplication: String?, withAnnotation annotation: AnyObject) -> Bool {
         print("withApplication:withURL")
-        AWSIdentityManager.defaultIdentityManager().interceptApplication(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        AWSIdentityManager.default().interceptApplication(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
         
         if (!isInitialized) {
             isInitialized = true
@@ -62,12 +62,12 @@ class AWSMobileClient: NSObject {
      *
      * - parameter application: from application delegate.
      */
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         print("applicationDidBecomeActive:")
     }
     
-    func applicationDidEnterBackground(application: UIApplication) {
-        print(String(self.dynamicType), #function)
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        print(String(describing: type(of: self)), #function)
     }
     
     /**
@@ -75,8 +75,8 @@ class AWSMobileClient: NSObject {
     * - parameter application: application
     * - parameter deviceToken: device token
     */
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        AWSPushManager.defaultPushManager().interceptApplication(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        AWSPushManager.default().interceptApplication(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
     }
     
     /**
@@ -84,16 +84,16 @@ class AWSMobileClient: NSObject {
      * - parameter application: application
      * - parameter error: error
      */
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        AWSPushManager.defaultPushManager().interceptApplication(application, didFailToRegisterForRemoteNotificationsWithError: error)
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        AWSPushManager.default().interceptApplication(application, didFailToRegisterForRemoteNotificationsWithError: error)
     }
     
     /**
      * Handles a received push notification.
      * - parameter userInfo: push notification contents
      */
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        AWSPushManager.defaultPushManager().interceptApplication(application, didReceiveRemoteNotification: userInfo)
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        AWSPushManager.default().interceptApplication(application, didReceiveRemoteNotification: userInfo)
     }
     
     /**
@@ -102,20 +102,20 @@ class AWSMobileClient: NSObject {
     * - parameter application: instance from application delegate.
     * - parameter launchOptions: from application delegate.
     */
-    func didFinishLaunching(application: UIApplication, withOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+    func didFinishLaunching(_ application: UIApplication, withOptions launchOptions: [AnyHashable: Any]?) -> Bool {
         print("didFinishLaunching:")
 
-        var didFinishLaunching: Bool = AWSIdentityManager.defaultIdentityManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
-        didFinishLaunching = didFinishLaunching && AWSPushManager.defaultPushManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
+        var didFinishLaunching: Bool = AWSIdentityManager.default().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
+        didFinishLaunching = didFinishLaunching && AWSPushManager.default().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
 
         if (!isInitialized) {
-            AWSIdentityManager.defaultIdentityManager().resumeSessionWithCompletionHandler({(result: AnyObject?, error: NSError?) -> Void in
+            AWSIdentityManager.default().resumeSession(completionHandler: {(result: AnyObject?, error: NSError?) -> Void in
 //                print("Result: \(result) \n Error:\(error)")
-            })
+            } as! (Any?, Error?) -> Void)
             isInitialized = true
         }
         
-        AWSLogger.defaultLogger().logLevel = .Error
+        AWSLogger.default().logLevel = .error
         
         return didFinishLaunching
     }

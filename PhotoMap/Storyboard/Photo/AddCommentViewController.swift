@@ -20,30 +20,30 @@ class AddCommentViewController: UIViewController {
             .map { $0! }
     }
     
-    private var comment = Variable<Link?>(nil)
+    fileprivate var comment = Variable<Link?>(nil)
     
-    @IBOutlet private weak var inputTextView: UITextView!
-    @IBOutlet private weak var doneBarButtonItem: UIBarButtonItem!
+    @IBOutlet fileprivate weak var inputTextView: UITextView!
+    @IBOutlet fileprivate weak var doneBarButtonItem: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        inputTextView.rx_text
+        inputTextView.rx.textInput.text
             .map { !$0.isEmpty }
-            .bindTo(doneBarButtonItem.rx_enabled)
+            .bindTo(doneBarButtonItem.rx.enabled)
             .addDisposableTo(disposeBag)
         
         inputTextView.becomeFirstResponder()
     }
     
-    @IBAction private func done(sender: UIBarButtonItem) {
+    @IBAction fileprivate func done(_ sender: UIBarButtonItem) {
         
         photo.rx_insertComment(content: inputTextView.text)
-            .doOnNext { [unowned self] in self.comment.value = $0 }
-            .doOnError { [unowned self] error in self.title = "评论发布失败"; print(error) }
-            .subscribeCompleted { [unowned self] in self.title = "评论发布成功"
-                self.navigationController?.popViewControllerAnimated(true)
-            }
+            .do(onNext: { [unowned self] in self.comment.value = $0 })
+            .do(onError: { [unowned self] error in self.title = "评论发布失败"; print(error) })
+            .subscribe(onCompleted: { [unowned self] in self.title = "评论发布成功"
+                _ = self.navigationController?.popViewController(animated: true)
+            })
             .addDisposableTo(disposeBag)
         
     }

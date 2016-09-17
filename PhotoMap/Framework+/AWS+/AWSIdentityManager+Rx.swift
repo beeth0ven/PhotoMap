@@ -15,7 +15,7 @@ extension AWSIdentityManager {
     
     func logout() {
         
-        AWSIdentityManager.defaultIdentityManager().logoutWithCompletionHandler { (result, error) in
+        AWSIdentityManager.default().logout { (result, error) in
             print("rx_logout result:", result)
             print("rx_logout error:", error)
         }
@@ -34,7 +34,7 @@ extension AWSIdentityManager {
 //                }
 //            }
 //            
-//            return NopDisposable.instance
+//            return Disposables.create()
 //            
 //        }).observeOn(MainScheduler.instance)
     }

@@ -32,17 +32,17 @@ class ConfirmCodeViewController: UIViewController {
     func setupRx() {
         
         codeTextField
-            .rx_text
+            .rx.textInput.text
             .map { $0.characters.count == 6 }
-            .bindTo(confirmButton.rx_enabled)
+            .bindTo(confirmButton.rx.enabled)
             .addDisposableTo(disposeBag)
         
-        confirmButton.rx_tap
-            .subscribeNext { [unowned self] in self.confirm() }
+        confirmButton.rx.tap
+            .subscribe(onNext: { [unowned self] in self.confirm() })
             .addDisposableTo(disposeBag)
         
-        resentCodeButton.rx_tap
-            .subscribeNext { [unowned self] in self.resentCode() }
+        resentCodeButton.rx.tap
+            .subscribe(onNext: { [unowned self] in self.resentCode() })
             .addDisposableTo(disposeBag)
     }
     
@@ -52,8 +52,8 @@ class ConfirmCodeViewController: UIViewController {
         
         title = "正在验证..."
         
-        user.confirmSignUp(codeTextField.text!).continueWithBlock { task in
-            Queue.Main.execute {
+        user.confirmSignUp(codeTextField.text!).continue({ task in
+            Queue.main.execute {
                 switch task.error {
                 case let error?:
                     self.title = "验证失败..."
@@ -62,12 +62,12 @@ class ConfirmCodeViewController: UIViewController {
                 case nil:
                     self.title = "验证成功"
                     (self.navigationController?.viewControllers.first as? LoginViewController)?.usernameTextField.text = self.user.username
-                    self.navigationController?.popToRootViewControllerAnimated(true)
+                    _ = self.navigationController?.popToRootViewController(animated: true)
                     
                 }
             }
             return nil
-        }
+        })
         
     }
     
@@ -75,8 +75,8 @@ class ConfirmCodeViewController: UIViewController {
         
         title = "正在重新发送验证码..."
         
-        user.resendConfirmationCode().continueWithBlock { task in
-            Queue.Main.execute {
+        user.resendConfirmationCode().continue({ task in
+            Queue.main.execute {
                 switch task.error {
                 case let error?:
                     self.title = "验证码发送失败..."
@@ -88,7 +88,7 @@ class ConfirmCodeViewController: UIViewController {
                 }
             }
             return nil
-        }
+        })
     }
     
     func updateUI() {

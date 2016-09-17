@@ -12,34 +12,34 @@ import RxCocoa
 
 extension UIImageView {
     
-    static private let cache = NSCache()
+    static fileprivate let cache = NSCache<NSString, NSData>()
     
-    func rx_setImage(url url: NSURL?, placeholder: UIImage? = nil) {
+    func rx_setImage(url: URL?, placeholder: UIImage? = nil) {
 
         rx_setImageDisposeBag = DisposeBag()
         image = placeholder
         guard let url = url else { return }
         
-        if let data = UIImageView.cache.objectForKey(url.absoluteString) as? NSData, cachedImage = UIImage(data: data) {
+        if let data = UIImageView.cache.object(forKey: url.absoluteString as NSString) as? Data, let cachedImage = UIImage(data: data) {
             image = cachedImage
         } else {
-            NSURLSession.sharedSession().rx_data(url: url)
+            URLSession.shared.rx.data(url: url)
                 .observeOn(MainScheduler.instance)
-                .doOnError { error in print(error) }
-                .subscribeNext { [unowned self] data in
+                .do(onError: { error in print(error) })
+                .subscribe(onNext: { [unowned self] data in
                     if let image = UIImage(data: data) {
-                        UIImageView.cache.setObject(data, forKey: url.absoluteString)
+                        UIImageView.cache.setObject(data as NSData, forKey: url.absoluteString as NSString)
                         self.image = image
                     } else {
                         print("Data can not be converted to image!")
                     }
-                }
+                })
                 .addDisposableTo(rx_setImageDisposeBag)
         }
         
     }
     
-    private var rx_setImageDisposeBag: DisposeBag {
+    fileprivate var rx_setImageDisposeBag: DisposeBag {
         get {
             if let disposeBag = objc_getAssociatedObject(self, &AssociatedKeys.rx_setImageDisposeBag) as? DisposeBag {
                 return disposeBag
@@ -53,15 +53,16 @@ extension UIImageView {
         }
     }
     
-    private enum AssociatedKeys {
+    fileprivate enum AssociatedKeys {
         static var rx_setImageDisposeBag = "rx_setImageDisposeBag"
     }
 }
 
-extension NSURLSession {
+
+extension Reactive where Base: URLSession {
     
-    func rx_data(url url: NSURL) -> Observable<NSData> {
-        let request = NSURLRequest(URL: url)
-        return rx_data(request)
+    func data(url: URL) -> Observable<Data> {
+        let request = URLRequest(url: url)
+        return data(request)
     }
 }

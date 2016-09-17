@@ -8,16 +8,17 @@
 
 import Foundation
 import AWSMobileHubHelper
+import AWSCognitoIdentityProvider
 import RxSwift
 import RxCocoa
 
-extension AWSTask {
+extension Reactive where Base: AWSTask<AnyObject> {
     
-    var rx_result: Observable<AnyObject?> {
+    var result: Observable<AnyObject?> {
         
         return Observable.create { (observer) -> Disposable in
             
-            self.continueWithBlock { task -> AnyObject? in
+            self.base.continue({ task -> Any? in
                 
                 switch task.error {
                 case let error?:
@@ -28,10 +29,39 @@ extension AWSTask {
                 }
                 
                 return nil
-            }
+            })
             
-            return NopDisposable.instance
+            return Disposables.create()
             
             }.observeOn(MainScheduler.instance)
     }
+
+}
+
+
+
+extension Reactive where Base: AWSTask<AWSCognitoIdentityUserSession> {
+    
+    var result: Observable<AWSCognitoIdentityUserSession?> {
+        
+        return Observable.create { (observer) -> Disposable in
+            
+            self.base.continue({ task -> Any? in
+                
+                switch task.error {
+                case let error?:
+                    observer.onError(error)
+                default:
+                    observer.onNext(task.result)
+                    observer.onCompleted()
+                }
+                
+                return nil
+            })
+            
+            return Disposables.create()
+            
+            }.observeOn(MainScheduler.instance)
+    }
+    
 }

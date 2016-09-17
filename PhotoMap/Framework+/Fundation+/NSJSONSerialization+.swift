@@ -8,12 +8,12 @@
 
 import Foundation
 
-extension NSJSONSerialization {
+extension JSONSerialization {
     
     static func parameters(from string: String) -> [AnyObject]? {
         if let
-            data = string.dataUsingEncoding(NSUTF8StringEncoding),
-            parameters = (try? JSONObjectWithData(data, options: [])) as? [AnyObject] {
+            data = string.data(using: String.Encoding.utf8),
+            let parameters = (try? jsonObject(with: data, options: [])) as? [AnyObject] {
             return parameters
         }
         return nil
@@ -21,8 +21,8 @@ extension NSJSONSerialization {
     
     static func string(from parameters: [AnyObject]) -> String? {
         if let
-            data = try? dataWithJSONObject(parameters, options: []) {
-            return String(data: data, encoding: NSUTF8StringEncoding)
+            data = try? data(withJSONObject: parameters, options: []) {
+            return String(data: data, encoding: String.Encoding.utf8)
         }
         return nil
     }

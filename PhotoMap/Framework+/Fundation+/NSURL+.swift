@@ -8,17 +8,17 @@
 
 import Foundation
 
-extension NSURL {
+extension URL {
     
     static func string(from parameters: [String: String]) -> String? {
-        let items = parameters.map { NSURLQueryItem(name: $0, value: $1) }
-        let components = NSURLComponents()
+        let items = parameters.map { URLQueryItem(name: $0, value: $1) }
+        var components = URLComponents()
         components.queryItems = items
-        return components.URL?.absoluteString
+        return components.url?.absoluteString
     }
     
     static func parameters(from string: String) -> [String: String] {
-        let items = NSURLComponents(string: string)?.queryItems?.map { ($0.name, $0.value!) } ?? []
+        let items = URLComponents(string: string)?.queryItems?.map { ($0.name, $0.value!) } ?? []
         return Dictionary(keyValues: items)
     }
 }

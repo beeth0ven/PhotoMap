@@ -27,32 +27,32 @@ class SignUpViewController: UIViewController {
     func setupRx() {
         
         let usernameValid = usernameTextField
-            .rx_text
+            .rx.textInput.text
             .map { !$0.isEmpty }
         
         let passwordValid = passwordTextField
-            .rx_text
+            .rx.textInput.text
             .map { $0.characters.count > 7 }
         
         let phoneValid = phoneTextField
-            .rx_text
+            .rx.textInput.text
             .map { !$0.isEmpty }
         
         let emailValid = emailTextField
-            .rx_text
+            .rx.textInput.text
             .map { !$0.isEmpty }
         
         Observable
             .combineLatest(usernameValid, passwordValid, phoneValid, emailValid) { $0 && $1 && $2 && $3 }
-            .bindTo(signUpButton.rx_enabled)
+            .bindTo(signUpButton.rx.enabled)
             .addDisposableTo(disposeBag)
         
-        signUpButton.rx_tap
-            .subscribeNext { [unowned self] in self.signUp() }
+        signUpButton.rx.tap
+            .subscribe(onNext: { [unowned self] in self.signUp() })
             .addDisposableTo(disposeBag)
     }
     
-    let pool = LoginProvider.sharedInstance().pool
+    let pool = LoginProvider.sharedInstance().pool!
 
     func signUp() {
         
@@ -65,30 +65,30 @@ class SignUpViewController: UIViewController {
             ]
         
         pool.signUp(usernameTextField.text!, password: passwordTextField.text!, userAttributes: attributes, validationData: nil)
-            .continueWithBlock { task in
+            .continue({ task in
                 print("task.error", task.error)
                 print("task.result", task.result)
                 switch (task.error, task.result) {
                 case let (error?, _):
-                    Queue.Main.execute { self.title = "注册失败..." }
+                    Queue.main.execute { self.title = "注册失败..." }
                     print(error.localizedDescription)
-                case let (_, result?) where result.user.confirmedStatus != .Confirmed :
-                    Queue.Main.execute {
+                case let (_, result?) where result.user.confirmedStatus != .confirmed :
+                    Queue.main.execute {
                         self.title = "请输入验证码."
-                        self.performSegueWithIdentifier("ConfirmCode", sender: result.codeDeliveryDetails??.destination)
+                        self.performSegue(withIdentifier: "ConfirmCode", sender: result.codeDeliveryDetails?.destination)
                     }
                 default:
-                    Queue.Main.execute { self.title = "注册成功" }
+                    Queue.main.execute { self.title = "注册成功" }
                 }
                 
                 return nil
-        }
+        })
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ConfirmCode" {
-            let ccvc = segue.destinationViewController as! ConfirmCodeViewController
+            let ccvc = segue.destination as! ConfirmCodeViewController
             ccvc.user = pool.getUser(usernameTextField.text!)
             ccvc.sentTo = sender as? String
         }

@@ -14,7 +14,8 @@ import RxCocoa
 
 extension AWSDynamoDBQueryExpression {
     
-    func when(key key: String, isEqualTo object: AnyObject) -> AWSDynamoDBQueryExpression {
+    @discardableResult
+    func when(key: String, isEqualTo object: AnyObject) -> AWSDynamoDBQueryExpression {
         
         switch keyConditionExpression {
         case nil:
@@ -41,7 +42,8 @@ extension AWSDynamoDBQueryExpression {
         return self
     }
     
-    func filter(key key: String, isEqualTo object: AnyObject) -> AWSDynamoDBQueryExpression {
+    @discardableResult
+    func filter(key: String, isEqualTo object: AnyObject) -> AWSDynamoDBQueryExpression {
         
         switch filterExpression {
         case nil:
@@ -80,9 +82,9 @@ extension AWSHasTableIndex where
     Self: AWSDynamoDBModeling,
     Self.IndexIdentifier.RawValue == String {
     
-    static func rx_get(indexIdentifier indexIdentifier: IndexIdentifier, predicate: ((AWSDynamoDBQueryExpression) -> Void)) -> Observable<[Self]> {
+    static func rx_get(indexIdentifier: IndexIdentifier? = nil, predicate: @escaping ((AWSDynamoDBQueryExpression) -> Void)) -> Observable<[Self]> {
         let newPredicate = { (expression: AWSDynamoDBQueryExpression) -> Void in
-            expression.indexName = indexIdentifier.rawValue
+            expression.indexName = indexIdentifier?.rawValue
             predicate(expression)
         }
         return rx_get(predicate: newPredicate)
@@ -92,9 +94,9 @@ extension AWSHasTableIndex where
 
 extension AWSDynamoDBObjectModel {
     
-    func rx_count(key key: String) -> Driver<Int> {
+    func rx_count(key: String) -> Driver<Int> {
         
-        return rx_observe(Int.self, key)
+        return rx.observe(Int.self, key)
             .map { $0! }
             .asDriver(onErrorDriveWith: Driver.empty())
     }

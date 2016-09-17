@@ -17,7 +17,7 @@ class RxCollectionViewCell: UICollectionViewCell {
         prepareForReuseDisposeBag = DisposeBag()
     }
     
-    private(set) var prepareForReuseDisposeBag = DisposeBag()
+    fileprivate(set) var prepareForReuseDisposeBag = DisposeBag()
 }
 
 class RxTableViewCell: UITableViewCell {
@@ -27,6 +27,6 @@ class RxTableViewCell: UITableViewCell {
         prepareForReuseDisposeBag = DisposeBag()
     }
     
-    private(set) var prepareForReuseDisposeBag = DisposeBag()
+    fileprivate(set) var prepareForReuseDisposeBag = DisposeBag()
 
 }

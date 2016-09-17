@@ -14,18 +14,18 @@ import RxCocoa
 
 extension UIImageView {
     
-    func s3_setImage(key key: String?, placeholder: UIImage? = nil) {
+    func s3_setImage(key: String?, placeholder: UIImage? = nil) {
         s3_setImageDisposeBag = DisposeBag()
         image = placeholder
         guard let key = key else { return }
         UIImage.rx_getFromS3(key: key)
-            .doOnError { error in print(error) }
-            .subscribeNext { [unowned self] image in self.image = image }
+            .do(onError: { error in print(error) })
+            .subscribe(onNext: { [unowned self] image in self.image = image })
             .addDisposableTo(s3_setImageDisposeBag)
         
     }
     
-    private var s3_setImageDisposeBag: DisposeBag {
+    fileprivate var s3_setImageDisposeBag: DisposeBag {
         get {
             switch objc_getValue(key: &AssociatedKeys.s3_setImageDisposeBag) {
             case let result as DisposeBag:
@@ -41,27 +41,27 @@ extension UIImageView {
         }
     }
     
-    private enum AssociatedKeys {
+    fileprivate enum AssociatedKeys {
         static var s3_setImageDisposeBag = "s3_setImageDisposeBag"
     }
 }
 
 protocol S3DataConvertible {
-    init?(data: NSData)
-    func toData() -> NSData?
+    init?(data: Data)
+    func toData() -> Data?
     var extensionName: String { get }
 }
 
 extension S3DataConvertible {
     
-    static func rx_getFromS3(key key: String) -> Observable<Self> {
+    static func rx_getFromS3(key: String) -> Observable<Self> {
         
         return Observable.create { observer in
             
-            let manager = AWSUserFileManager.defaultUserFileManager()
-            let content = manager.contentWithKey(key)
+            let manager = AWSMobileHubHelper.AWSUserFileManager.default() as AWSUserFileManager
+            let content = manager.content(withKey: key)
             
-            content.downloadWithDownloadType(.IfNotCached, pinOnCompletion: true, progressBlock: { _, progress in print("progressBlock", progress.percent) }) { _, data, error in
+            content.download(with: .ifNotCached, pinOnCompletion: true, progressBlock: { _, progress in print("progressBlock", progress.percent) }) { _, data, error in
                 switch (error, data) {
                 case let (error?, _):
                     observer.onError(error)
@@ -77,7 +77,7 @@ extension S3DataConvertible {
                 }
             }
             
-            return NopDisposable.instance
+            return Disposables.create()
             
             }.observeOn(MainScheduler.instance)
     }
@@ -86,15 +86,14 @@ extension S3DataConvertible {
         
         return Observable.create { observer in
             
-            let manager = AWSUserFileManager.defaultUserFileManager()
-            
+            let manager = AWSMobileHubHelper.AWSUserFileManager.default()
             let data = self.toData()
             
             let filename = NSDate().timeIntervalSince1970.description + self.extensionName, key = "public/\(filename)"
             
-            let content = manager.localContentWithData(data, key: key)
+            let content = manager.localContent(with: data, key: key)
 
-            content.uploadWithPinOnCompletion(true, progressBlock: { _, progress in print("progressBlock", progress.percent) }) { (_, error) in
+            content.uploadWithPin(onCompletion: true, progressBlock: { _, progress in print("progressBlock", progress.percent) }) { (_, error) in
                 switch error {
                 case let error?:
                     observer.onError(error)
@@ -104,7 +103,7 @@ extension S3DataConvertible {
                 }
             }
             
-            return NopDisposable.instance
+            return Disposables.create()
             
             }.observeOn(MainScheduler.instance)
     }
@@ -114,7 +113,7 @@ extension S3DataConvertible {
 
 extension UIImage: S3DataConvertible {
     
-    func toData() -> NSData? {
+    func toData() -> Data? {
         return UIImageJPEGRepresentation(self, 0.1)
     }
     
@@ -125,9 +124,9 @@ extension UIImage: S3DataConvertible {
 
 extension String {
     
-    func toS3URL(s3bucket s3bucket: String = InfoPlist.s3Bucket!) -> NSURL? {
+    func toS3URL(s3bucket: String = InfoPlist.s3Bucket!) -> URL? {
         let path = "https://s3.amazonaws.com/\(s3bucket)/\(self)"
-        return NSURL(string: path)
+        return URL(string: path)
     }
 }
 
@@ -138,12 +137,12 @@ extension InfoPlist {
     }
 }
 
-extension NSProgress {
+extension Progress {
     
     var percent: String {
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .PercentStyle
-        return formatter.stringFromNumber(NSNumber(double: fractionCompleted))!
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .percent
+        return formatter.string(from: NSNumber(value: fractionCompleted as Double))!
     }
 }
 

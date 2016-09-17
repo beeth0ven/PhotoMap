@@ -16,13 +16,13 @@ extension UIViewController {
      ```
      Above code shows how to get viewController's parent LoginContainerViewController
      */
-    func parentViewControllerWithType<VC: UIViewController>(type: VC.Type) -> VC? {
-        var parentViewController = self.parentViewController
+    func parentViewControllerWithType<VC: UIViewController>(_ type: VC.Type) -> VC? {
+        var parentViewController = self.parent
         while parentViewController != nil {
             if let viewController = parentViewController as? VC {
                 return viewController
             }
-            parentViewController = parentViewController!.parentViewController
+            parentViewController = parentViewController!.parent
         }
         return nil
     }
@@ -34,7 +34,7 @@ extension UIViewController {
      ```
      Above code shows how to get viewController's child QQPlayerViewController
      */
-    func childViewControllerWithType<ViewController: UIViewController>(type: ViewController.Type) -> ViewController? {
+    func childViewControllerWithType<ViewController: UIViewController>(_ type: ViewController.Type) -> ViewController? {
         /**
          recursion to get childViewController.
          here is exmple to show the search order number:
@@ -47,7 +47,7 @@ extension UIViewController {
                 return viewController
             }
             
-            if let viewController = childViewController.childViewControllerWithType(ViewController) {
+            if let viewController = childViewController.childViewControllerWithType(ViewController.self) {
                 return viewController
             }
         }

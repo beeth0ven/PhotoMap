@@ -13,13 +13,13 @@ import RxCocoa
 
 extension NSObject {
     
-    func observe(for name: String) -> Observable<NSNotification> {
-        return NSNotificationCenter.defaultCenter().rx_notification(name)
+    func observe(for name: Notification.Name) -> Observable<Notification> {
+        return NotificationCenter.default.rx.notification(name)
     }
     
-    func postNotification(for name: String, object: AnyObject? = nil, userInfo: [NSObject : AnyObject]? = nil) {
+    func postNotification(for name: Notification.Name, object: AnyObject? = nil, userInfo: [AnyHashable: Any]? = nil) {
         let object = object ?? self
-        NSNotificationCenter.defaultCenter().postNotificationName(name, object: object, userInfo: userInfo)
+        NotificationCenter.default.post(name: name, object: object, userInfo: userInfo)
     }
 }
 
@@ -38,7 +38,7 @@ extension NSObject {
         }
     }
     
-    private enum AssociatedKeys {
+    fileprivate enum AssociatedKeys {
         static var disposeBag = "disposeBag"
     }
 }

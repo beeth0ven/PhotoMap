@@ -15,8 +15,8 @@ protocol AWSModelHasCreationDate: NSObjectProtocol {
 
 extension AWSModelHasCreationDate {
     
-    var creationDate: NSDate? {
-        get { return creationTime.flatMap(NSDate.init) }
+    var creationDate: Date? {
+        get { return creationTime.flatMap(Date.init) }
         set { creationTime = newValue?.toTimeIntervalNumber() }
     }
 }
